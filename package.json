@@ -1,0 +1,36 @@
+{
+  "name": "matematika2",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "parcel": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "react-use": "^12.2.2"
+  },
+  "dependencies": {
+    "@inlet/react-pixi": "^1.1.2",
+    "@storeon/localstorage": "^0.6.2",
+    "array-move": "^2.1.0",
+    "modern-normalize": "^0.5.0",
+    "pixi.js": "^5.1.5",
+    "preact": "^10.0.0-rc.3",
+    "prop-types": "^15.5.4",
+    "react": "^16.8.3",
+    "react-dnd": "^9.4.0",
+    "react-dnd-html5-backend": "^9.4.0",
+    "react-dom": "^16.8.3",
+    "react-drag-and-drop": "^3.0.0",
+    "react-drag-elements": "^0.1.2",
+    "react-howler": "^3.7.4",
+    "react-modal-hook": "^2.0.0",
+    "react-responsive-spritesheet": "^2.3.9",
+    "react-sortable-hoc": "^1.10.1",
+    "react-string-replace": "^0.4.4",
+    "storeon": "^0.9.5",
+    "styled-components": "^5.0.0-beta.9",
+    "wouter": "^2.2.1"
+  }
+}
