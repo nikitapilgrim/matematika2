@@ -20,6 +20,7 @@ const setting = {
             heightFrame: 450,
         },
         idle: {
+            start: 0,
             end: 19,
             fps: 10,
         },
@@ -30,91 +31,75 @@ const setting = {
         }
     },
     girl: {
+        options: {
+            steps: 260,
+            image: sprites.girl,
+            widthFrame: 230,
+            heightFrame: 379,
+        },
         idle: [
             {
-                image: sprites.girl,
-                widthFrame: 230,
-                heightFrame: 379,
-                steps: 185,
-                startAt: 184,
+                end: 185,
+                start: 184,
                 fps: 2,
             },
             {
-                image: sprites.girl,
-                widthFrame: 230,
-                heightFrame: 379,
-                steps: 260,
-                startAt: 245,
+                end: 260,
+                start: 245,
                 fps: 5,
             },
         ],
         right: [
             {
-                image: sprites.girl,
-                widthFrame: 230,
-                heightFrame: 379,
-                steps: 53,
+                end: 53,
+                fps: 24,
+                start: 0
+            },
+            {
+                end: 120,
+                start: 62,
                 fps: 24,
             },
             {
-                image: sprites.girl,
-                widthFrame: 230,
-                heightFrame: 379,
-                steps: 120,
-                startAt: 62,
-                fps: 24,
-            },
-            {
-                image: sprites.girl,
-                widthFrame: 230,
-                heightFrame: 379,
-                steps: 183,
-                startAt: 123,
+                end: 183,
+                start: 123,
                 fps: 24,
             }
         ]
     },
     boy: {
+        options: {
+            steps: 383,
+            image: sprites.boy,
+            widthFrame: 230,
+            heightFrame: 350,
+        },
         right: [
             {
-                image: sprites.boy,
-                widthFrame: 230,
-                heightFrame: 350,
-                steps: 57,
+                start: 0,
+                end: 57,
                 fps: 24,
             },
             {
-                image: sprites.boy,
-                widthFrame: 230,
-                heightFrame: 350,
-                steps: 148,
-                startAt: 90,
+                end: 148,
+                start: 90,
                 fps: 24,
             },
             {
-                image: sprites.boy,
-                widthFrame: 230,
-                heightFrame: 350,
-                steps: 268,
-                startAt: 179,
+                end: 268,
+                start: 179,
                 fps: 24,
             },
         ],
         idle: [
             {
-                image: sprites.boy,
-                widthFrame: 230,
-                heightFrame: 350,
-                steps: 269,
-                startAt: 268,
+                end: 269,
+                start: 268,
                 fps: 2,
             },
             {
-                image: sprites.boy,
-                widthFrame: 230,
-                heightFrame: 350,
-                steps: 383,
-                startAt: 357,
+                end: 383,
+                start: 357,
                 fps: 10,
             },
         ]
@@ -145,28 +130,33 @@ const Position = styled.div`
 }}
 `;
 
-const useAnimateConfig = (config, state, stage) => {
+const useAnimateConfig = (config, animate) => {
     const [animateConfig, setAnimateConfig] = useState(null);
-    const getConfigForState = (state, stage) => {
-        setAnimateConfig(config.options)
-        if (Array.isArray(config[state])) {
-            setAnimateConfig(config[state][stage])
+    const {name, stage} = animate;
+    const getConfigForState = (name, stage) => {
+        if (Array.isArray(config[name])) {
+            setAnimateConfig(config[name][stage])
         } else {
-            setAnimateConfig(config[state])
+            setAnimateConfig(config[name])
         }
     };
-    useEffect(() => getConfigForState(state, stage), [state]);
+    useEffect(() => getConfigForState(name, stage), [animate]);
 
     return [config.options, animateConfig];
 };
 
 const creatorPerson = (setting, name) => {
-    return (props) => {
+    return ({animate, onLoopComplete}) => {
         const [ref, setRef] = useState(null);
-        const [settings, animateConfig] = useAnimateConfig(setting[name], props.state, props.stage);
+        const [settings, animateConfig] = useAnimateConfig(setting[name], animate);
+
+        const handlerLoop = (sprite) => (name, state) => {
+          onLoopComplete(name, state, sprite)
+        };
 
         useEffect(() => {
             if (animateConfig && ref) {
+                console.log(animateConfig, 'config', name)
                 const methods = {
                     start: 'setStartAt',
                     end: 'setEndAt',
@@ -176,10 +166,10 @@ const creatorPerson = (setting, name) => {
                     const [key, value] = pair;
                     const method = methods[key];
                     ref[method](value);
+                    if (key === 'start') {
+                       ref.goToAndPlay(value)
+                    }
                 });
-                ref.setEndAt(animateConfig.end);
-                ref.setFps(animateConfig.end)
-
             }
         }, [animateConfig, ref]);
         return (
@@ -189,6 +179,7 @@ const creatorPerson = (setting, name) => {
                 <Spritesheet getInstance={(ref) => {
                     setRef(ref)
                 }}
+                             onLoopComplete={handlerLoop}
                              style={{width: '20rem'}}
                              onClick={e => console.log(e)}
                              isResponsive={true}
@@ -205,7 +196,10 @@ const Teacher = creatorPerson(setting, 'teacher');
 
 
 export const AnimatedContainer = ({animate, children}) => {
-    const [state, setState] = useState({name: 'idle', state: 1});
+    const [state, setState] = useState({name: 'idle', stage: 1});
+    const handlerLoopComplete = (name, state, spritee) => {
+        console.log(name, state, 'complete', spritee)
+    };
 
     useEffect(() => {
         if (animate) {
@@ -215,16 +209,16 @@ export const AnimatedContainer = ({animate, children}) => {
 
     return (
         <>
-            <Position left={-10}>
-                <Teacher state={state.name} stage={state.stage}/>
-            </Position>
-            {/*<Position right={0}>
-                <Boy state={state.name} stage={state.stage}/>
+            <Position left={-2}>
+                <Teacher onLoopComplete={handlerLoopComplete} animate={state}/>
             </Position>
             {children}
+            <Position right={0}>
+                <Boy onLoopComplete={handlerLoopComplete} animate={state}/>
+            </Position>
             <Position right={-2}>
-                <Girl state={state.name} stage={state.stage}/>
-            </Position>*/}
+                <Girl onLoopComplete={handlerLoopComplete} animate={state}/>
+            </Position>
         </>
     )
 };

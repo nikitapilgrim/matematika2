@@ -64,7 +64,7 @@ const WithProviders = () => {
                 stage: 1,
                 name: 'idle'
             })
-        }, 10000)
+        }, 2000)
     }, [combo, stage]);
 
     return (

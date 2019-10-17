@@ -111,7 +111,6 @@ class Spritesheet extends Component {
 
     init = () => {
         const { image, widthFrame, heightFrame, autoplay, getInstance, onInit } = this.props;
-        console.log(this, 'fdf')
         this._this = this;
 
         let imgLoadSprite = new Image();
