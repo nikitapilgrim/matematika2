@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import Spritesheet from 'react-responsive-spritesheet';
+import Spritesheet from '../lib/Spritesheet';
 import teacher from '../assets/img/teacherSprites.png'
 import girl from '../assets/img/girlSprites.png';
 import boy from '../assets/img/boySprites.png'
@@ -13,22 +13,20 @@ const sprites = {
 
 const setting = {
     teacher: {
-        idle: {
+        options: {
+            steps: 65,
             image: sprites.teacher,
             widthFrame: 165,
             heightFrame: 450,
-            steps: 19,
+        },
+        idle: {
+            end: 19,
             fps: 10,
-            loop: true
         },
         right: {
-            image: sprites.teacher,
-            widthFrame: 165,
-            heightFrame: 450,
-            startAt: 43,
-            steps: 65,
+            start: 43,
+            end: 65,
             fps: 15,
-            loop: true
         }
     },
     girl: {
@@ -40,7 +38,6 @@ const setting = {
                 steps: 185,
                 startAt: 184,
                 fps: 2,
-                loop: true
             },
             {
                 image: sprites.girl,
@@ -49,7 +46,6 @@ const setting = {
                 steps: 260,
                 startAt: 245,
                 fps: 5,
-                loop: true
             },
         ],
         right: [
@@ -59,7 +55,6 @@ const setting = {
                 heightFrame: 379,
                 steps: 53,
                 fps: 24,
-                loop: true
             },
             {
                 image: sprites.girl,
@@ -68,7 +63,6 @@ const setting = {
                 steps: 120,
                 startAt: 62,
                 fps: 24,
-                loop: true
             },
             {
                 image: sprites.girl,
@@ -77,7 +71,6 @@ const setting = {
                 steps: 183,
                 startAt: 123,
                 fps: 24,
-                loop: true
             }
         ]
     },
@@ -89,7 +82,6 @@ const setting = {
                 heightFrame: 350,
                 steps: 57,
                 fps: 24,
-                loop: true
             },
             {
                 image: sprites.boy,
@@ -98,7 +90,6 @@ const setting = {
                 steps: 148,
                 startAt: 90,
                 fps: 24,
-                loop: true
             },
             {
                 image: sprites.boy,
@@ -107,7 +98,6 @@ const setting = {
                 steps: 268,
                 startAt: 179,
                 fps: 24,
-                loop: true
             },
         ],
         idle: [
@@ -118,7 +108,6 @@ const setting = {
                 steps: 269,
                 startAt: 268,
                 fps: 2,
-                loop: true
             },
             {
                 image: sprites.boy,
@@ -127,7 +116,6 @@ const setting = {
                 steps: 383,
                 startAt: 357,
                 fps: 10,
-                loop: true
             },
         ]
     }
@@ -160,6 +148,7 @@ const Position = styled.div`
 const useAnimateConfig = (config, state, stage) => {
     const [animateConfig, setAnimateConfig] = useState(null);
     const getConfigForState = (state, stage) => {
+        setAnimateConfig(config.options)
         if (Array.isArray(config[state])) {
             setAnimateConfig(config[state][stage])
         } else {
@@ -167,76 +156,56 @@ const useAnimateConfig = (config, state, stage) => {
         }
     };
     useEffect(() => getConfigForState(state, stage), [state]);
-    return [animateConfig, state];
+
+    return [config.options, animateConfig];
 };
-/*
 
 const creatorPerson = (setting, name) => {
-    const [animateConfig, setAnimateConfig] = useState(null);
-    return ({stage, state}) => {
+    return (props) => {
+        const [ref, setRef] = useState(null);
+        const [settings, animateConfig] = useAnimateConfig(setting[name], props.state, props.stage);
+
         useEffect(() => {
-            if (Array.isArray(setting[name][state])) {
-                setAnimateConfig(setting[name][state][stage])
-            } else {
-                setAnimateConfig(setting[name][state])
+            if (animateConfig && ref) {
+                const methods = {
+                    start: 'setStartAt',
+                    end: 'setEndAt',
+                    fps: 'setFps'
+                };
+                Object.entries(animateConfig).forEach((pair) => {
+                    const [key, value] = pair;
+                    const method = methods[key];
+                    ref[method](value);
+                });
+                ref.setEndAt(animateConfig.end);
+                ref.setFps(animateConfig.end)
+
             }
-        }, [state, stage]);
+        }, [animateConfig, ref]);
         return (
             <>
-                {animateConfig && <Spritesheet style={{width: '20rem'}} onClick={e => console.log(e)}
-                                               isResponsive={true} {...animateConfig}/>}
+                {settings &&
+                animateConfig &&
+                <Spritesheet getInstance={(ref) => {
+                    setRef(ref)
+                }}
+                             style={{width: '20rem'}}
+                             onClick={e => console.log(e)}
+                             isResponsive={true}
+                             loop={true}
+                             {...settings}/>}
             </>
         )
     }
 };
-*/
 
-const Girl = ({state, stage}) => {
-    const [animateConfig, setAnimateConfig] = useState(null);
-    useEffect(() => {
-        if (Array.isArray(setting.girl[state])) {
-            setAnimateConfig(setting.girl[state][stage])
-        } else {
-            setAnimateConfig(setting.girl[state])
-        }
-    }, [state]);
-    useEffect(() => {
-        console.log(animateConfig)
-    }, [animateConfig])
-
-    const handlerFrame = (m) => {
-        console.log(m)
-    }
-
-    return (
-        <>
-            {animateConfig && <Spritesheet onEachFrame={handlerFrame} style={{width: '20rem'}} onClick={e => console.log(e)}
-                                           isResponsive={true} {...animateConfig}/>}
-        </>
-    )
-};
-const Boy = ({state, stage}) => {
-    const [animateConfig, s] = useAnimateConfig(setting.boy, state, stage);
-    return (
-        <>
-            {animateConfig && <Spritesheet style={{width: '20rem'}} onClick={e => console.log(e)}
-                                           isResponsive={true} {...animateConfig}/>}
-        </>
-    )
-};
-const Teacher = ({state, stage}) => {
-    const [animateConfig] = useAnimateConfig(setting.teacher, state, stage);
-    return (
-        <>
-            {animateConfig && <Spritesheet style={{width: '20rem'}} onClick={e => console.log(e)}
-                                           isResponsive={true} {...animateConfig}/>}
-        </>
-    )
-};
+const Girl = creatorPerson(setting, 'girl');
+const Boy = creatorPerson(setting, 'boy');
+const Teacher = creatorPerson(setting, 'teacher');
 
 
 export const AnimatedContainer = ({animate, children}) => {
-    const [state, setState] = useState({name: 'idle', stage: 1});
+    const [state, setState] = useState({name: 'idle', state: 1});
 
     useEffect(() => {
         if (animate) {
@@ -249,13 +218,13 @@ export const AnimatedContainer = ({animate, children}) => {
             <Position left={-10}>
                 <Teacher state={state.name} stage={state.stage}/>
             </Position>
-            <Position right={0}>
+            {/*<Position right={0}>
                 <Boy state={state.name} stage={state.stage}/>
             </Position>
             {children}
             <Position right={-2}>
                 <Girl state={state.name} stage={state.stage}/>
-            </Position>
+            </Position>*/}
         </>
     )
 };

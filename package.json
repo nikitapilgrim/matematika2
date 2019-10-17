@@ -7,8 +7,15 @@
     "build": "parcel build ./src/index.html"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.3",
-    "react-use": "^12.2.2"
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-react": "^7.6.3",
+    "parcel-bundler": "^1.12.4",
+    "react-use": "^12.6.0"
+  },
+  "alias": {
+    "react": "preact/compat",
+    "react-dom": "preact/compat"
   },
   "dependencies": {
     "@inlet/react-pixi": "^1.1.2",
@@ -16,12 +23,13 @@
     "array-move": "^2.1.0",
     "modern-normalize": "^0.5.0",
     "pixi.js": "^5.1.5",
-    "preact": "^10.0.0-rc.3",
+    "preact": "^10.0.0",
     "prop-types": "^15.5.4",
-    "react": "^16.8.3",
+    "random-id": "^1.0.3",
+    "react": "^16.10.2",
     "react-dnd": "^9.4.0",
     "react-dnd-html5-backend": "^9.4.0",
-    "react-dom": "^16.8.3",
+    "react-dom": "^16.10.2",
     "react-drag-and-drop": "^3.0.0",
     "react-drag-elements": "^0.1.2",
     "react-howler": "^3.7.4",
@@ -30,7 +38,7 @@
     "react-sortable-hoc": "^1.10.1",
     "react-string-replace": "^0.4.4",
     "storeon": "^0.9.5",
-    "styled-components": "^5.0.0-beta.9",
-    "wouter": "^2.2.1"
+    "styled-components": "^5.0.0-beta.8-groupsizefix",
+    "wouter": "^2.3.1"
   }
 }
