@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
+import Slide from 'react-reveal/Slide';
 import styled from 'styled-components';
 import Spritesheet from '../lib/Spritesheet';
+import {Speech} from "./Speech";
 import teacher from '../assets/img/teacherSprites.png'
 import girl from '../assets/img/girlSprites.png';
 import boy from '../assets/img/boySprites.png'
@@ -106,18 +108,9 @@ const setting = {
     }
 };
 
-const Wrapper = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
 const Position = styled.div`
   z-index: 1;
+  width: 40%;
   position: absolute;
   bottom: 0;
   ${(props) => {
@@ -146,17 +139,16 @@ const useAnimateConfig = (config, animate) => {
 };
 
 const creatorPerson = (setting, name) => {
-    return ({animate, onLoopComplete}) => {
+    return ({animate, onLoopComplete, children}) => {
         const [ref, setRef] = useState(null);
         const [settings, animateConfig] = useAnimateConfig(setting[name], animate);
 
-        const handlerLoop = (sprite) => (name, state) => {
-          onLoopComplete(name, state, sprite)
+        const handlerLoop = (state) => {
+          onLoopComplete(name, animate.name, state)
         };
 
         useEffect(() => {
             if (animateConfig && ref) {
-                console.log(animateConfig, 'config', name)
                 const methods = {
                     start: 'setStartAt',
                     end: 'setEndAt',
@@ -174,13 +166,14 @@ const creatorPerson = (setting, name) => {
         }, [animateConfig, ref]);
         return (
             <>
+                {children}
                 {settings &&
                 animateConfig &&
                 <Spritesheet getInstance={(ref) => {
                     setRef(ref)
                 }}
                              onLoopComplete={handlerLoop}
-                             style={{width: '20rem'}}
+                             style={{width: '100%'}}
                              onClick={e => console.log(e)}
                              isResponsive={true}
                              loop={true}
@@ -195,10 +188,21 @@ const Boy = creatorPerson(setting, 'boy');
 const Teacher = creatorPerson(setting, 'teacher');
 
 
-export const AnimatedContainer = ({animate, children}) => {
+export const AnimatedContainer = React.memo(({animate, data}) => {
     const [state, setState] = useState({name: 'idle', stage: 1});
-    const handlerLoopComplete = (name, state, spritee) => {
-        console.log(name, state, 'complete', spritee)
+    const [teacherPhrase, setTeacherPhrase] = useState(null);
+
+    useEffect(() => {
+        if (data.layout === 'speech') {
+            setTeacherPhrase(data.phrase)
+        } else  {
+            setTeacherPhrase(null)
+        }
+    }, [data]);
+    const handlerLoopComplete = (name, animateName) => {
+        if (animateName !== 'idle') {
+            setState({name: 'idle', stage: 1})
+        }
     };
 
     useEffect(() => {
@@ -209,16 +213,21 @@ export const AnimatedContainer = ({animate, children}) => {
 
     return (
         <>
-            <Position left={-2}>
-                <Teacher onLoopComplete={handlerLoopComplete} animate={state}/>
-            </Position>
-            {children}
-            <Position right={0}>
-                <Boy onLoopComplete={handlerLoopComplete} animate={state}/>
-            </Position>
-            <Position right={-2}>
-                <Girl onLoopComplete={handlerLoopComplete} animate={state}/>
-            </Position>
+            <Slide left>
+                <Position left={-14}>
+                    <Teacher onLoopComplete={handlerLoopComplete} animate={state}>
+                        <Speech phrase={teacherPhrase}/>
+                    </Teacher>
+                </Position>
+            </Slide>
+            <Slide right>
+                <Position right={-4}>
+                    <Boy onLoopComplete={handlerLoopComplete} animate={state}/>
+                </Position>
+                <Position right={-10}>
+                    <Girl onLoopComplete={handlerLoopComplete} animate={state}/>
+                </Position>
+            </Slide>
         </>
     )
-};
+});

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import createMemo from 'react-use/lib/createMemo';
 import reactStringReplace from 'react-string-replace';
@@ -35,28 +35,42 @@ const Input = styled.input`
     text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);  
 `;
 
-const parseQuestion = (question, handler) => {
+const InputWithState = ({question, handler}) => {
+    const [value, setValue] = useState('');
+    const handlerInput = (e) => {
+      const value = e.target.value;
+      setValue(value);
+    };
+
+
+    useEffect(() => {
+        setValue('')
+    }, [question]);
+
+    useEffect(() => {
+       value && handler(value);
+    }, [value]);
+
 
     return (
         <>
             {reactStringReplace(question, /{{([^}]+)}}/g, (match, i) => {
-                    return (
-                        <Input key={i} onKeyUp={(e) => handler(e.target.value)}/>
-                    )
+                return (
+                    <Input value={value} key={i} onKeyUp={handlerInput}/>
+                )
             })}
         </>
     )
 };
 
-const useMemoParseQueston = createMemo(parseQuestion);
+
 
 export const Simple = ({question, handlerInput}) => {
-    const Template = useMemoParseQueston(question, handlerInput);
 
     return (
         <Wrapper>
             <Question>
-                {Template}
+                <InputWithState question={question} handler={handlerInput}/>
             </Question>
         </Wrapper>
     )

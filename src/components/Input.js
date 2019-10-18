@@ -10,12 +10,13 @@ export const Input = styled.input`
     padding: 0px 10px;
     margin: 0;
     margin-left: 10px;
-    width: 6rem;
-    height: 6rem;
+    width: 25%;
+    height: 25%;
     text-align: center;
     background-color: #5a5f3f;
     border: dashed #fff 5px;
     outline: none;
     color: #fff;
     text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);  
+    
 `;

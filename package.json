@@ -26,6 +26,7 @@
     "@inlet/react-pixi": "^1.1.2",
     "@storeon/localstorage": "^0.6.2",
     "array-move": "^2.1.0",
+    "howler": "^2.1.2",
     "modern-normalize": "^0.5.0",
     "pixi.js": "^5.1.5",
     "preact": "^10.0.0",
@@ -40,8 +41,10 @@
     "react-howler": "^3.7.4",
     "react-modal-hook": "^2.0.0",
     "react-responsive-spritesheet": "^2.3.9",
+    "react-reveal": "^1.2.2",
     "react-sortable-hoc": "^1.10.1",
     "react-string-replace": "^0.4.4",
+    "soundmanager2": "^2.97.20170602",
     "storeon": "^0.9.5",
     "styled-components": "^5.0.0-beta.8-groupsizefix",
     "wouter": "^2.3.1"

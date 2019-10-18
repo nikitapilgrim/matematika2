@@ -3,10 +3,15 @@ export const LAYOUTS = {
     manyInputs: 'manyInputs',
     dragAndDrop: 'dragAndDrop',
     sortable: 'sortable',
-    choice: 'choice'
+    choice: 'choice',
+    speech: 'speech'
 };
 
 export default [
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Dobrodošao! Odigraj jednu rundu matematike!`
+    },
     {
         layout: LAYOUTS.simple,
         question: "4 + 5 = {{input}}",
@@ -169,11 +174,6 @@ export default [
         answer: 12
     },
     //
-    {
-        layout: LAYOUTS.simple,
-        question: "16 {{input}}",
-        answer: 'SESNAEST'
-    },
     {
         layout: LAYOUTS.simple,
         question: "16 {{input}}",
