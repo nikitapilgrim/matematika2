@@ -13,6 +13,10 @@ export default [
         phrase: `Dobrodošao! Odigraj jednu rundu matematike!`
     },
     {
+        layout: LAYOUTS.speech,
+        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`
+    },
+    {
         layout: LAYOUTS.simple,
         question: "4 + 5 = {{input}}",
         answer: 9
@@ -123,6 +127,10 @@ export default [
         answer: 0
     },
     {
+        layout: LAYOUTS.speech,
+        phrase: `U kvadratić upiši odgovarajući broj i klikni na "Dalje" ili pritisni ENTER.`
+    },
+    {
         layout: LAYOUTS.simple,
         question: "{{input}}-7=3",
         answer: 10
@@ -149,6 +157,10 @@ export default [
     },
     //{},
     {
+        layout: LAYOUTS.speech,
+        phrase: `Upiši znamenkama (ciframa) broj u kvadratić i klikni na "Dalje" ili pritisni ENTER.`
+    },
+    {
         layout: LAYOUTS.simple,
         question: "Petnaest {{input}}",
         answer: 15
@@ -173,7 +185,10 @@ export default [
         question: "Dvanaest {{input}}",
         answer: 12
     },
-    //
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Napiši riječima brojeve koje vidiš u kvadrat i klikni na "Dalje" ili pritisni ENTER. `
+    },
     {
         layout: LAYOUTS.simple,
         question: "16 {{input}}",
@@ -198,6 +213,10 @@ export default [
         layout: LAYOUTS.simple,
         question: "19 {{input}}",
         answer: 'DEVETNAEST'
+    },
+    {
+        layout: LAYOUTS.speech,
+        phrase: `U kvadrate upiši nedostajuće brojeve i klikni na "Dalje" ili pritisni ENTER.`
     },
     {
         layout: LAYOUTS.manyInputs,
@@ -229,6 +248,10 @@ export default [
         ],
     },
     {
+        layout: LAYOUTS.speech,
+        phrase: `Poredaj po veličini brojeve od manjeg ka većem.`
+    },
+    {
         layout: LAYOUTS.sortable,
         items: [
             {value: 19, id: 1},
@@ -239,6 +262,10 @@ export default [
             {value: 11, id: 6}
         ],
         answer: [9, 10, 11, 12, 17, 19]
+    },
+    {
+        layout: LAYOUTS.speech,
+        phrase: `U kvadrate upiši nedostajuće brojeve i klikni na "Dalje" ili pritisni ENTER.`
     },
     {
         layout: LAYOUTS.manyInputs,
@@ -297,6 +324,10 @@ export default [
                 answer: 20
             },
         ],
+    },
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Klikni na najmanji broj u kvadratu.`
     },
     {
         layout: LAYOUTS.choice,
@@ -403,6 +434,11 @@ export default [
                 right: false
             },
         ],
+    },
+    //
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`
     },
     {
         layout: LAYOUTS.simple,
@@ -514,7 +550,10 @@ export default [
         question: "8+7={{input}}",
         answer: 15
     },
-
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`
+    },
     {
         layout: LAYOUTS.simple,
         question: "{{input}}+13=20",
@@ -556,7 +595,11 @@ export default [
         question: "{{input}}+13=20",
         answer: 7
     },
-
+//
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Oduzimanje u drugoj desetici. Ukucaj rješenje i klikni na "Dalje" ili pritisni ENTER.`
+    },
     {
         layout: LAYOUTS.simple,
         question: "17-5={{input}}",
@@ -675,6 +718,10 @@ export default [
         answer: 9
     },
 
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Stavi odgovarajući znak u kvadratić i klikni na "Dalje" ili pritisni ENTER.`
+    },
     {
         layout: LAYOUTS.dragAndDrop,
         question: "15-9{{drop(<)}}8",

@@ -6,7 +6,6 @@ const Wrapper = styled.div`
     max-width: 400px;
     max-height: 100px;
     position: absolute;
-    right: -28rem;
     top: 6rem;
     padding: 15px;
     z-index: 300;
@@ -20,7 +19,7 @@ const Wrapper = styled.div`
         filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0.87));
         content: '';
         position: absolute;
-        left: -1.4rem; top: 1rem; /* Положение треугольника */
+        left: -20px; top: 1rem; /* Положение треугольника */
         border: 10px solid transparent; /* Прозрачные границы */
         border-right: 10px solid white; /* Добавляем треугольник */
     }

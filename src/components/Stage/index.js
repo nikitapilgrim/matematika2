@@ -7,6 +7,8 @@ import {DragAndDrop} from "./DragAndDrop";
 import {Sortable} from "./Sortable";
 import {Choice} from "./Choice";
 import {LAYOUTS} from "../../data/stages";
+import {Speech} from "../Speech";
+
 
 const NextButton = styled.button`
     margin-top: 20px;
@@ -40,6 +42,18 @@ export const Stage = ({data, onNext}) => {
     };
     useKeyPressEvent('Enter', handlerNext);
 
+    useEffect(() => {
+        const handlerClickWindow = (e) => {
+            if (data.layout === LAYOUTS.speech) {
+                handlerNext();
+            }
+        };
+        window.addEventListener("click", handlerClickWindow);
+        return () => {
+            window.removeEventListener("click", handlerClickWindow);
+        };
+    }, [data]);
+
 
     const handlerInput = (value) => {
         if (typeof data.answer === 'number') {
@@ -68,8 +82,6 @@ export const Stage = ({data, onNext}) => {
         setAnswer(values)
     };
 
-
-
     return (
         <>
             {data.layout === LAYOUTS.simple &&
@@ -78,7 +90,8 @@ export const Stage = ({data, onNext}) => {
             {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data}/>}
             {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerManyInputs}/>}
             {data.layout === LAYOUTS.choice && <Choice data={data}/>}
-            <NextButton onClick={handlerNext}>Dalje</NextButton>
+            {data.layout === LAYOUTS.speech && <Speech phrase={data.phrase}/>}
+            {data.layout !== LAYOUTS.speech && <NextButton onClick={handlerNext}>Dalje</NextButton>}
         </>
     )
 };

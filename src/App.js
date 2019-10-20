@@ -1,21 +1,11 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import StoreContext from 'storeon/react/context';
-import ReactHowler from 'react-howler'
-import useStoreon from 'storeon/react';
-//#if _DEBUG
-import HotManager from './HotManager';
-//#endif
-import useWindowSize from "react-use/lib/useWindowSize";
-import {useResizeGame} from "./hooks/useResizeGame";
-import {store} from './store/store';
-import stagesData from './data/stages'
-import {Stage} from "./components/Stage";
 import {GameView} from "./components/GameView";
 
 const Wrapper = styled.div`
-  height: ${(props) => props.sisez ? props.sisez.height + 'px' : '100vh'};
-  width: ${(props) => props.sisez ? props.sisez.width + 'px' : '100wv'};
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +14,7 @@ const Wrapper = styled.div`
 
 const WithProviders = () => {
     return (
-        <StoreContext.Provider value={store}>
+        <StoreContext.Provider >
             <Wrapper >
                 <GameView/>
             </Wrapper>
@@ -33,8 +23,4 @@ const WithProviders = () => {
 };
 
 export default WithProviders;
-
-//#if _DEBUG
-HotManager.register(module.id);
-//#endif
 

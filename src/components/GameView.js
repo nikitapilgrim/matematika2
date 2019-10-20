@@ -5,8 +5,6 @@ import desk from '../assets/image/classroom_blackboard_cube.png'
 import styled from "styled-components";
 import {AnimatedContainer} from "./AnimatedContainer";
 import stagesData from "../data/stages";
-import useWindowSize from "react-use/lib/useWindowSize";
-import {useResizeGame} from "../hooks/useResizeGame";
 import {Stage} from "./Stage";
 import {Answer} from "./Answer";
 import {sounds} from "../sounds";
@@ -14,7 +12,7 @@ import {sounds} from "../sounds";
 const Wrapper = styled.div`
     width: 50rem;
     min-width: 300px;
-    max-width: 850px;
+    max-width: 450px;
     display: flex;
     justify-content: center;
     position: relative;
@@ -52,58 +50,67 @@ export const GameView = () => {
     const [stage, setStage] = useState(stagesData[currentStage]);
     const [combo, setCombo] = useState(0);
     const [animate, setAnimate] = useState(null);
-    const {width, height} = useWindowSize();
-    const sizes = useResizeGame(width, height);
     const [answer, setAnswer] = useState(null);
     const [isReady, cancel, reset] = useTimeout(200);
+    const [animationDone, setAnimationDone] = useState(null);
+    const [spriteLoaded, setSpriteLoaded] = useState(null);
 
-    // cancel animation wrong answer
-    useEffect(() => {
-        if (answer) {
-            setTimeout(() => {
-                reset();
-                setAnswer(null)
-            }, 1000)
-        }
-    }, [answer]);
 
-    useEffect(() => {
-        setStage(stagesData[currentStage])
-    }, [currentStage]);
+     // cancel animation wrong answer
+     useEffect(() => {
+         if (answer) {
+             setTimeout(() => {
+                 reset();
+                 setAnswer(null)
+             }, 1000)
+         }
+     }, [answer]);
 
-    const handlerAnswer = (answer) => {
-        if (true/*isReady()*/) {
-            setAnswer(answer);
-            if (answer.right === true) {
-                setCombo(prev => prev + 1);
-                sounds.success.play()
-            } else {
-                setCombo(0)
-            }
-            setCurrentStage(prev => prev + 1);
-        }
-    };
+     useEffect(() => {
+         setStage(stagesData[currentStage])
+     }, [currentStage]);
 
-    useEffect(() => {
-        if (combo >= 3) {
-            setAnimate({
-                stage: 2,
-                name: 'right'
-            })
-        }
-        if (combo === 2) {
-            setAnimate({
-                stage: 1,
-                name: 'right'
-            })
-        }
-        if (combo === 1) {
-            setAnimate({
-                stage: 0,
-                name: 'right'
-            })
-        }
-    }, [combo, stage]);
+     const handlerAnswer = (answer) => {
+         if (true/*isReady()*/) {
+             setAnswer(answer);
+             if (answer.right === true) {
+                 setCombo(prev => prev + 1);
+                 sounds.success.play()
+             } else {
+                 setCombo(0)
+             }
+             setCurrentStage(prev => prev + 1);
+         }
+     };
+
+     useEffect(() => {
+         if (combo >= 3) {
+             setAnimate({
+                 stage: 2,
+                 name: 'right'
+             })
+         }
+         if (combo === 2) {
+             setAnimate({
+                 stage: 1,
+                 name: 'right'
+             })
+         }
+         if (combo === 1) {
+             setAnimate({
+                 stage: 0,
+                 name: 'right'
+             })
+         }
+     }, [combo, stage]);
+
+     const handlerAnimationEnd = (state) => {
+         setAnimationDone(true);
+     };
+
+     const handlerSpriteLoaded = () => {
+         setSpriteLoaded(true);
+     };
 
     return (
         <Wrapper>
@@ -111,7 +118,7 @@ export const GameView = () => {
                 <Slide bottom>
                     <img src={desk} alt="desk"/>
                 </Slide>
-                <AnimatedContainer data={stage} animate={animate} combo={combo}/>
+                <AnimatedContainer onLoadedSprites={handlerSpriteLoaded} data={stage} animate={animate} onAnimationEnd={handlerAnimationEnd}/>
                 <Inner>
                     <Stage onNext={handlerAnswer} data={stage}/>
                 </Inner>
