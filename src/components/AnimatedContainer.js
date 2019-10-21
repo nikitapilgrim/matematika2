@@ -150,7 +150,7 @@ const useAnimateConfig = (config, animate) => {
 };
 
 const creatorPerson = (setting, name) => {
-    return ({animate, onLoopComplete, children, onLoaded}) => {
+    return ({animate, onLoopComplete, children, onLoaded, pause}) => {
         const [ref, setRef] = useState(null);
         const [settings, animateConfig] = useAnimateConfig(setting[name], animate);
 
@@ -159,7 +159,13 @@ const creatorPerson = (setting, name) => {
         };
 
         useEffect(() => {
-            if (animateConfig && ref) {
+            if (pause && ref) {
+                ref.pause();
+            }
+        }, [pause, ref]);
+
+        useEffect(() => {
+            if (animateConfig && ref && !pause) {
                 const methods = {
                     start: 'setStartAt',
                     end: 'setEndAt',
@@ -174,7 +180,7 @@ const creatorPerson = (setting, name) => {
                     }
                 });
             }
-        }, [animateConfig, ref]);
+        }, [animateConfig, ref, pause]);
         return (
             <>
                 {children}
@@ -183,12 +189,14 @@ const creatorPerson = (setting, name) => {
                 <Spritesheet getInstance={(ref) => {
                     setRef(ref)
                 }}
-                             onPlay={onLoaded}
+                             autoplay={false}
+                             onInit={onLoaded}
                              onLoopComplete={handlerLoop}
                              style={{width: '100%'}}
                              onClick={e => console.log(e)}
                              isResponsive={true}
                              loop={true}
+                             fps={2}
                              {...settings}/>}
             </>
         )
@@ -220,7 +228,7 @@ const Quiz = ({onLoaded}) => {
     return (
                 <Spritesheet getInstance={(ref) => {
                 }}
-                             onPlay={onLoaded}
+                             onInit={onLoaded}
                              onLoopComplete={handlerEndAnimation}
                              style={{width: '100%'}}
                              onClick={e => console.log(e)}
@@ -236,7 +244,7 @@ const Boy = creatorPerson(setting, 'boy');
 const Teacher = creatorPerson(setting, 'teacher');
 
 
-export const AnimatedContainer = React.memo(({animate, data, onAnimationEnd, onLoadedSprites}) => {
+export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEnd, onLoadedSprites}) => {
     const [state, setState] = useState({name: 'idle', stage: 0});
     const [animations, setAnimations] = useState({
         teacher: null,
@@ -270,8 +278,7 @@ export const AnimatedContainer = React.memo(({animate, data, onAnimationEnd, onL
             setTimeout(() => {
                 setAllSpriteLoaded(true);
                 onLoadedSprites(spriteLoaded)
-                console.log(spriteLoaded)
-            }, 500)
+            }, 0)
         }
     }, [spriteLoaded]);
 
@@ -303,13 +310,16 @@ export const AnimatedContainer = React.memo(({animate, data, onAnimationEnd, onL
                 <Position left={-14}>
                     <Teacher onLoaded={handlerSpriteLoaded('teacher')}
                              onLoopComplete={handlerLoopComplete}
-                             animate={state}/>
+                             animate={state}
+                             pause={!spritePlay}
+                    />
                 </Position>
             </Slide>
             <QuizWrapper>
                 <QuizInner>
             <Zoom when={allSpriteLoaded} onReveal={handlerAnimationEnd('quiz')}>
-                <Quiz onLoaded={handlerSpriteLoaded('quiz')}/>
+                <Quiz onLoaded={handlerSpriteLoaded('quiz')}
+                />
             </Zoom>
                 </QuizInner>
             </QuizWrapper>
@@ -317,12 +327,16 @@ export const AnimatedContainer = React.memo(({animate, data, onAnimationEnd, onL
                 <Position right={-4}>
                     <Boy onLoaded={handlerSpriteLoaded('boy')}
                          onLoopComplete={handlerLoopComplete}
-                         animate={state}/>
+                         animate={state}
+                         pause={!spritePlay}
+                    />
                 </Position>
                 <Position right={-10}>
                     <Girl onLoaded={handlerSpriteLoaded('girl')}
                           onLoopComplete={handlerLoopComplete}
-                          animate={state}/>
+                          animate={state}
+                          pause={!spritePlay}
+                    />
                 </Position>
             </Slide>
         </>

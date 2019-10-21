@@ -54,7 +54,8 @@ export const GameView = () => {
     const [isReady, cancel, reset] = useTimeout(200);
     const [animationDone, setAnimationDone] = useState(null);
     const [spriteLoaded, setSpriteLoaded] = useState(null);
-
+    const [spritePlay, setSpritePlay] = useState(null);
+    const [deskAnimationEnd, setDeskAnimationEnd] = useState(null);
 
      // cancel animation wrong answer
      useEffect(() => {
@@ -112,13 +113,32 @@ export const GameView = () => {
          setSpriteLoaded(true);
      };
 
+     const handlerDeskShow = () => {
+         setTimeout(() => {
+             setDeskAnimationEnd(true)
+         }, 1000);
+     };
+
+     useEffect(() => {
+         //console.log(animationDone, spriteLoaded)
+     }, [animationDone, spriteLoaded])
+
+    useEffect(() => {
+        if (animationDone && deskAnimationEnd) {
+            setTimeout(() => {
+                setSpritePlay(true);
+            }, 0)
+        }
+    }, [animationDone, deskAnimationEnd]);
+
+
     return (
         <Wrapper>
             <DeskWrapper>
-                <Slide bottom>
+                <Slide when={spriteLoaded} bottom onReveal={handlerDeskShow}>
                     <img src={desk} alt="desk"/>
                 </Slide>
-                <AnimatedContainer onLoadedSprites={handlerSpriteLoaded} data={stage} animate={animate} onAnimationEnd={handlerAnimationEnd}/>
+                <AnimatedContainer spritePlay={spritePlay} onLoadedSprites={handlerSpriteLoaded} data={stage} animate={animate} onAnimationEnd={handlerAnimationEnd}/>
                 <Inner>
                     <Stage onNext={handlerAnswer} data={stage}/>
                 </Inner>
