@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import useMount from "react-use/lib/useMount";
 import styled from "styled-components";
 import {Howl, Howler} from 'howler';
 
@@ -26,17 +27,19 @@ const Wrapper = styled.div`
 `;
 
 export const Speech = ({phrase, audio}) => {
-    const [sound, setSound] = useState(null);
-    const [finish, setFinish] = useState(null);
 
     useEffect(() => {
         if (audio) {
-            setSound(new Howl({
+            const howl = new Howl({
                 src: audio,
                 autoplay: true,
                 volume: 0.5,
-                onend: () => setFinish(true)
-            }));
+            });
+            howl.play();
+            return (() => {
+                howl.stop();
+                Howler._howls = Howler._howls.filter(h => h !== howl)
+            })
         }
     }, [audio]);
 
