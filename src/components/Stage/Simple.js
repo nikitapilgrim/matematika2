@@ -53,6 +53,7 @@ const InputWithState = ({question,answer, handler}) => {
     const [value, setValue] = useState('');
     const handlerInput = (e) => {
         const value = e.target.value;
+        console.log(value)
         setValue(value);
     };
 
@@ -71,7 +72,7 @@ const InputWithState = ({question,answer, handler}) => {
                 return (
                     <InputWrapper key={i}>
                         <HiddenAnswer ref={ref}>{answer}</HiddenAnswer>
-                        <Input width={width} height={height} value={value} onKeyUp={handlerInput}/>
+                        <Input width={width} height={height} value={value} onChange={handlerInput}/>
                     </InputWrapper>
                 )
             })}

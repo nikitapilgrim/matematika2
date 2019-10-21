@@ -14,7 +14,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`
+        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`,
+        audio: [require('../assets/sound/speech/speech2.mp3'), require('../assets/sound/speech/speech2.aac')]
     },
     {
         layout: LAYOUTS.simple,
@@ -39,11 +40,6 @@ export default [
     {
         layout: LAYOUTS.simple,
         question: "4 + 6 = {{input}}",
-        answer: 10
-    },
-    {
-        layout: LAYOUTS.simple,
-        question: "5 + 5 = {{input}}",
         answer: 10
     },
     {
@@ -128,7 +124,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `U kvadratić upiši odgovarajući broj i klikni na "Dalje" ili pritisni ENTER.`
+        phrase: `U kvadratić upiši odgovarajući broj i klikni na "Dalje" ili pritisni ENTER.`,
+        audio: [require('../assets/sound/speech/speech3.mp3'), require('../assets/sound/speech/speech3.aac')]
     },
     {
         layout: LAYOUTS.simple,
@@ -158,7 +155,8 @@ export default [
     //{},
     {
         layout: LAYOUTS.speech,
-        phrase: `Upiši znamenkama (ciframa) broj u kvadratić i klikni na "Dalje" ili pritisni ENTER.`
+        phrase: `Upiši znamenkama (ciframa) broj u kvadratić i klikni na "Dalje" ili pritisni ENTER.`,
+        audio: [require('../assets/sound/speech/speech4.mp3'), require('../assets/sound/speech/speech4.aac')]
     },
     {
         layout: LAYOUTS.simple,
@@ -187,7 +185,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Napiši riječima brojeve koje vidiš u kvadrat i klikni na "Dalje" ili pritisni ENTER. `
+        phrase: `Napiši riječima brojeve koje vidiš u kvadrat i klikni na "Dalje" ili pritisni ENTER. `,
+        audio: [require('../assets/sound/speech/speech5.mp3'), require('../assets/sound/speech/speech5.aac')]
     },
     {
         layout: LAYOUTS.simple,
@@ -216,7 +215,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `U kvadrate upiši nedostajuće brojeve i klikni na "Dalje" ili pritisni ENTER.`
+        phrase: `U kvadrate upiši nedostajuće brojeve i klikni na "Dalje" ili pritisni ENTER.`,
+        audio: [require('../assets/sound/speech/speech3.mp3'), require('../assets/sound/speech/speech3.aac')]
     },
     {
         layout: LAYOUTS.manyInputs,
@@ -249,7 +249,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Poredaj po veličini brojeve od manjeg ka većem.`
+        phrase: `Poredaj po veličini brojeve od manjeg ka većem.`,
+        audio: [require('../assets/sound/speech/speech7.mp3'), require('../assets/sound/speech/speech7.aac')]
     },
     {
         layout: LAYOUTS.sortable,
@@ -290,7 +291,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `U kvadrate upiši nedostajuće brojeve i klikni na "Dalje" ili pritisni ENTER.`
+        phrase: `U kvadrate upiši nedostajuće brojeve i klikni na "Dalje" ili pritisni ENTER.`,
+        audio: [require('../assets/sound/speech/speech3.mp3'), require('../assets/sound/speech/speech3.aac')]
     },
     {
         layout: LAYOUTS.manyInputs,
@@ -352,7 +354,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Klikni na najmanji broj u kvadratu.`
+        phrase: `Klikni na najmanji broj u kvadratu.`,
+        audio: [require('../assets/sound/speech/speech9.mp3'), require('../assets/sound/speech/speech9.aac')]
     },
     {
         layout: LAYOUTS.choice,
@@ -463,7 +466,8 @@ export default [
     //
     {
         layout: LAYOUTS.speech,
-        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`
+        phrase: `Sabiranje u drugoj desetici. Ukucaj broj i klikni na "Dalje" ili pritisni ENTER.`,
+        audio: [require('../assets/sound/speech/speech10.mp3'), require('../assets/sound/speech/speech10.aac')]
     },
     {
         layout: LAYOUTS.simple,
@@ -577,7 +581,8 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`
+        phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`,
+        audio: [require('../assets/sound/speech/speech10.mp3'), require('../assets/sound/speech/speech10.aac')]
     },
     {
         layout: LAYOUTS.simple,
@@ -623,7 +628,8 @@ export default [
 //
     {
         layout: LAYOUTS.speech,
-        phrase: `Oduzimanje u drugoj desetici. Ukucaj rješenje i klikni na "Dalje" ili pritisni ENTER.`
+        phrase: `Oduzimanje u drugoj desetici. Ukucaj rješenje i klikni na "Dalje" ili pritisni ENTER.`,
+        audio: [require('../assets/sound/speech/speech10.mp3'), require('../assets/sound/speech/speech12.aac')]
     },
     {
         layout: LAYOUTS.simple,
@@ -745,7 +751,8 @@ export default [
 
     {
         layout: LAYOUTS.speech,
-        phrase: `Stavi odgovarajući znak u kvadratić i klikni na "Dalje" ili pritisni ENTER.`
+        phrase: `Stavi odgovarajući znak u kvadratić i klikni na "Dalje" ili pritisni ENTER.`,
+        audio: [require('../assets/sound/speech/speech13.mp3'), require('../assets/sound/speech/speech13.aac')]
     },
     {
         layout: LAYOUTS.dragAndDrop,

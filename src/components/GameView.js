@@ -8,6 +8,7 @@ import stagesData from "../data/stages";
 import {Stage} from "./Stage";
 import {Answer} from "./Answer";
 import {sounds} from "../sounds";
+import {Sound} from "./Sound";
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -23,7 +24,7 @@ const DeskWrapper = styled.div`
   width: 100%;
   padding-top: 56.25%;
   position: relative;
-  top: -15vmax;
+  top: 1rem;
   //top: -7rem;
   pointer-events: auto;
   img {
@@ -42,6 +43,15 @@ const Inner = styled.div`
     width: 91%;
     height: 49%;
     pointer-events: auto;
+`;
+
+const CurrentStage = styled.div`
+  position: fixed;
+  top: 3vh;
+  right: 3vw;
+  font-size: 40px;
+  color: red;
+  opacity: 0.8;
 `;
 
 
@@ -127,33 +137,38 @@ export const GameView = () => {
         if (animationDone && deskAnimationEnd) {
             setTimeout(() => {
                 setSpritePlay(true);
-            }, 0)
+            }, 500)
         }
     }, [animationDone, deskAnimationEnd]);
 
 
     return (
         <Wrapper>
+            <Sound/>
+            <CurrentStage>{currentStage}</CurrentStage>
             <DeskWrapper>
                 <Slide when={spriteLoaded} bottom onReveal={handlerDeskShow}>
                     <img src={desk} alt="desk"/>
                 </Slide>
                 <AnimatedContainer spritePlay={spritePlay} onLoadedSprites={handlerSpriteLoaded} data={stage} animate={animate} onAnimationEnd={handlerAnimationEnd}/>
                 <Inner>
-                    <Stage onNext={handlerAnswer} data={stage}/>
+                    {deskAnimationEnd && <Stage onNext={handlerAnswer} data={stage}/>}
                 </Inner>
             </DeskWrapper>
-            <input style={{
+            <input value={currentStage} style={{
                 position: 'fixed',
                 zIndex: '999',
                 top: 0,
                 right: 0
-            }} type="text" onKeyUp={(e) => {
+            }} type="text" onChange={(e) => {
                 if (+e.target.value) {
                     const value = e.target.value;
                     if (stagesData[+value]) {
-                        setCurrentStage(value);
+                        setCurrentStage(+value);
                     }
+                }
+                if (!e.target.value) {
+                    setCurrentStage(0)
                 }
             }}/>
             <Answer answer={answer}/>

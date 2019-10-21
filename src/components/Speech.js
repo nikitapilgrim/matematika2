@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import {Howl, Howler} from 'howler';
 
 const Wrapper = styled.div`
     background-color:#fff;
     max-width: 400px;
-    max-height: 100px;
     position: absolute;
     top: 6rem;
     padding: 15px;
@@ -25,7 +25,21 @@ const Wrapper = styled.div`
     }
 `;
 
-export const Speech = ({phrase}) => {
+export const Speech = ({phrase, audio}) => {
+    const [sound, setSound] = useState(null);
+    const [finish, setFinish] = useState(null);
+
+    useEffect(() => {
+        if (audio) {
+            setSound(new Howl({
+                src: audio,
+                autoplay: true,
+                volume: 0.5,
+                onend: () => setFinish(true)
+            }));
+        }
+    }, [audio]);
+
   return (
       <>
           {phrase && <Wrapper>
