@@ -261,7 +261,38 @@ export default [
             {value: 10, id: 5},
             {value: 11, id: 6}
         ],
-        answer: [9, 10, 11, 12, 17, 19]
+        answer: [
+            {
+                placeholder: '1',
+                value: 9,
+                id: 1,
+            },
+            {
+                placeholder: '2',
+                value: 10,
+                id:  2,
+            },
+            {
+                placeholder: '3',
+                value: 11,
+                id: 3,
+            },
+            {
+                placeholder: '4',
+                value: 12,
+                id: 4,
+            },
+            {
+                placeholder: '5',
+                value: 17,
+                id: 5,
+            },
+            {
+                placeholder: '6',
+                value: 19,
+                id: 6
+            },
+        ]
     },
     {
         layout: LAYOUTS.speech,

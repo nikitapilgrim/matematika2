@@ -22,10 +22,6 @@
     "postcss-preset-env": "^6.7.0",
     "react-use": "^12.6.0"
   },
-  "alias": {
-    "react": "preact/compat",
-    "react-dom": "preact/compat"
-  },
   "dependencies": {
     "@inlet/react-pixi": "^1.1.2",
     "@rehooks/component-size": "^1.0.3",

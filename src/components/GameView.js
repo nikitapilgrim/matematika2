@@ -129,9 +129,11 @@ export const GameView = () => {
                 top: 0,
                 right: 0
             }} type="text" onKeyUp={(e) => {
-                const value = e.target.value;
-                if (stagesData[+value]) {
-                    setCurrentStage(value);
+                if (+e.target.value) {
+                    const value = e.target.value;
+                    if (stagesData[+value]) {
+                        setCurrentStage(value);
+                    }
                 }
             }}/>
             <Answer answer={answer}/>
