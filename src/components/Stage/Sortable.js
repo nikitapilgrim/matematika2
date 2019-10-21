@@ -98,6 +98,16 @@ export const Sortable = ({data, handler}) => {
     };
 
     const handlerItemsOnDrop = e => {
+        const {payload} = e;
+        console.log(e)
+        if (e.addedIndex) {
+            const newState = Object.entries(resultItems).reduce((acc, pair) => {
+                const [key, value] = pair;
+                if (value === payload) return acc;
+                return {...acc, [key]: value}
+            }, {});
+            setResultItems(newState);
+        }
         setItems(applyDrag(items, e))
     };
     useEffect(() => {
@@ -114,10 +124,7 @@ export const Sortable = ({data, handler}) => {
                             {item.placeholder}
                             <Container orientation='horizontal'
                                        groupName='1'
-                                       getChildPayload={i => {
-                                           //console.log(i, item.id, item)
-                                           //return resultItems[item.id]
-                                       }}
+                                       getChildPayload={_ => resultItems[index]}
                                        onDrop={handleResultOnDrop(index)}>
 
                                 {resultItems[index] &&
@@ -135,7 +142,7 @@ export const Sortable = ({data, handler}) => {
             <Container orientation='horizontal' groupName='1' getChildPayload={i => items[i]}
                        onDrop={handlerItemsOnDrop}
             >
-                {items.map(item => {
+                {items.map((item, i) => {
                     return (
                         <Draggable key={item.id}>
                             <DraggableElem>
