@@ -264,33 +264,27 @@ export default [
         answer: [
             {
                 placeholder: '1',
-                value: 9,
-                id: 1,
-            },
-            {
-                placeholder: '2',
-                value: 10,
-                id:  2,
-            },
-            {
-                placeholder: '3',
-                value: 11,
                 id: 3,
             },
             {
+                placeholder: '2',
+                id:  5,
+            },
+            {
+                placeholder: '3',
+                id: 6,
+            },
+            {
                 placeholder: '4',
-                value: 12,
                 id: 4,
             },
             {
                 placeholder: '5',
-                value: 17,
-                id: 5,
+                id: 2,
             },
             {
                 placeholder: '6',
-                value: 19,
-                id: 6
+                id: 1
             },
         ]
     },

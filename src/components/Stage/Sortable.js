@@ -1,10 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import {SortableContainer, SortableElement} from 'react-sortable-hoc';
-import arrayMove from 'array-move';
-import useMount from "react-use/lib/useMount";
 import {Container, Draggable} from 'react-smooth-dnd';
-
 
 const Wrapper = styled.div`
   height: 100%;
@@ -33,6 +29,7 @@ const DraggableElem = styled.div`
 `;
 
 const DroppedContainer = styled.div`
+  display: flex;
   position: relative;
   width: 200px;
   height: 50px;
@@ -55,22 +52,8 @@ const DroppedPlaceholder = styled.div`
     border: dashed #fff 3px;
 `;
 
-const SortableItem = SortableElement(({value}) => <DraggableElem>{value}</DraggableElem>);
-
-const SortableList = SortableContainer(({items}) => {
-    return (
-        <Wrapper>
-            {items.map((item, index) => {
-                return (
-                    <SortableItem key={item.id} value={item.value} index={index}/>
-                )
-            })}
-        </Wrapper>
-    );
-});
-
 const applyDrag = (arr, dragResult) => {
-    const { removedIndex, addedIndex, payload } = dragResult;
+    const {removedIndex, addedIndex, payload} = dragResult;
     if (removedIndex === null && addedIndex === null) return arr;
 
     const result = [...arr];
@@ -91,8 +74,10 @@ export const Sortable = ({data, handler}) => {
     const [items, setItems] = useState(data.items);
     const [resultItems, setResultItems] = useState([]);
 
-    const onSortEnd = ({oldIndex, newIndex}) => {
-        setItems((items) => arrayMove(items, oldIndex, newIndex));
+
+    const shouldAnimateDrop = (sourceContainerOptions, payload) => {
+        //console.log(sourceContainerOptions, payload);
+        return false;
     };
 
     useEffect(() => {
@@ -101,41 +86,61 @@ export const Sortable = ({data, handler}) => {
         handler(flatValues);
     }, [items]);
 
-    const handleResultOnDrop =  (e) => {
-        setResultItems(applyDrag(resultItems, e))
+    // change if elem have
+    const handleResultOnDrop = id => (e) => {
+        //console.log(e, id)
+        if (e.addedIndex === 0 && resultItems[id]) {
+            setItems([...items, resultItems[id]]);
+        }
+        if (e.addedIndex === 0) {
+            setResultItems(prev => ({...prev, [id]: e.payload}))
+        }
     };
 
     const handlerItemsOnDrop = e => {
         setItems(applyDrag(items, e))
     };
+    useEffect(() => {
+        //console.log(resultItems, 'result')
+    }, [resultItems])
 
 
     return (
         <>
-            <SortableList items={items} axis='x' onSortEnd={onSortEnd}/>
             <DroppedContainer>
-                <DroppedPlaceholderWrapper>
-                    {data.answer.map(item => <DroppedPlaceholder>{item.placeholder}</DroppedPlaceholder>)}
-                </DroppedPlaceholderWrapper>
-                <Container orientation='horizontal'
-                           groupName='1'
-                           getChildPayload={i => resultItems[i]}
-                           onDrop={handleResultOnDrop}>
+                {data.answer.map((item, index) => {
+                    return (
+                        <DroppedPlaceholder key={item.id}>
+                            {item.placeholder}
+                            <Container orientation='horizontal'
+                                       groupName='1'
+                                       getChildPayload={i => {
+                                           //console.log(i, item.id, item)
+                                           //return resultItems[item.id]
+                                       }}
+                                       onDrop={handleResultOnDrop(index)}>
 
-                    {resultItems.map(item => {
-                        return (
-                            <Draggable key={item.id}>
-                                {item.value}
-                            </Draggable>
-                        );
-                    })}
-                </Container>
+                                {resultItems[index] &&
+                                <Draggable>
+                                    <DraggableElem>
+                                        {resultItems[index].value}
+                                    </DraggableElem>
+                                </Draggable>
+                                }
+                            </Container>
+                        </DroppedPlaceholder>
+                    )
+                })}
             </DroppedContainer>
-            <Container orientation='horizontal' groupName='1' getChildPayload={i => items[i]} onDrop={handlerItemsOnDrop}>
+            <Container orientation='horizontal' groupName='1' getChildPayload={i => items[i]}
+                       onDrop={handlerItemsOnDrop}
+            >
                 {items.map(item => {
                     return (
                         <Draggable key={item.id}>
-                            {item.value}
+                            <DraggableElem>
+                                {item.value}
+                            </DraggableElem>
                         </Draggable>
                     );
                 })}
