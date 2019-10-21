@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import useMount from "react-use/lib/useMount";
 import styled from "styled-components";
 import {Howl, Howler} from 'howler';
 
