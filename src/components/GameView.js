@@ -61,6 +61,7 @@ const CurrentStage = styled.div`
 const TopPanel = styled.div`
   position: fixed;
   display: flex;
+  z-index: 2;
   padding: 2rem;
   top: 0;
   left: 0;
