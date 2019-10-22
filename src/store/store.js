@@ -5,7 +5,14 @@ const stage = store => {
   store.on('@init', () => ({
     stage: 0,
     final: false,
+    quiz: false,
   }));
+  store.on('quiz/show', ({quiz}, state) => {
+    return ({quiz: true});
+  });
+  store.on('quiz/hide', ({quiz}, state) => {
+    return ({quiz: false});
+  });
   store.on('stage/final', ({final}, state) => {
     return ({final: state});
   });

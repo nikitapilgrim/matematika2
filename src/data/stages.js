@@ -4,7 +4,8 @@ export const LAYOUTS = {
     dragAndDrop: 'dragAndDrop',
     sortable: 'sortable',
     choice: 'choice',
-    speech: 'speech'
+    speech: 'speech',
+    quiz: 'quiz'
 };
 
 export default [
@@ -152,7 +153,7 @@ export default [
         question: "5+{{input}}=5",
         answer: 0
     },
-    //{},
+    {layout: LAYOUTS.quiz},
     {
         layout: LAYOUTS.speech,
         phrase: `Upiši znamenkama (ciframa) broj u kvadratić i klikni na "Dalje" ili pritisni ENTER.`,
@@ -463,7 +464,7 @@ export default [
             },
         ],
     },
-    //
+    {layout: LAYOUTS.quiz},
     {
         layout: LAYOUTS.speech,
         phrase: `Sabiranje u drugoj desetici. Ukucaj broj i klikni na "Dalje" ili pritisni ENTER.`,
@@ -625,7 +626,7 @@ export default [
         question: "{{input}}+13=20",
         answer: 7
     },
-//
+    {layout: LAYOUTS.quiz},
     {
         layout: LAYOUTS.speech,
         phrase: `Oduzimanje u drugoj desetici. Ukucaj rješenje i klikni na "Dalje" ili pritisni ENTER.`,
@@ -929,7 +930,7 @@ export default [
         ],
         answer: [9, 10, 11, 12, 17, 19]
     },
-    // todo
+    {layout: LAYOUTS.quiz},
     {
         layout: LAYOUTS.sortable,
         items: [

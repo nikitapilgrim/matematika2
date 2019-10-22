@@ -73,7 +73,7 @@ const TopPanel = styled.div`
 
 
 export const GameView = () => {
-    const { dispatch, stage } = useStoreon('stage');
+    const { dispatch, stage, quiz } = useStoreon('stage', 'quiz');
     const [stageData, setStageData] = useState(stagesData[stage]);
     const [combo, setCombo] = useState(0);
     const [animate, setAnimate] = useState(null);

@@ -28,6 +28,9 @@ const style = {
         boxShadow: 'none',
         padding: '0px !important',
     },
+    closeButton: {
+        opacity: 0
+    }
 };
 
 export const Menu = () => {
