@@ -125,7 +125,7 @@ const Position = styled.div`
   z-index: 1;
   width: 40%;
   position: absolute;
-  bottom: 0;
+  bottom: ${props => props.bottom ? `${props.bottom}rem` : '0'};
   ${(props) => {
     if (props.left !== undefined) {
         return `left: ${props.left + 'rem'}`
@@ -156,7 +156,7 @@ const PersonDropShadow = styled.div`
 `;
 
 const creatorPerson = (setting, name) => {
-    return ({animate, onLoopComplete, children, onLoaded, pause}) => {
+    return ({animate, onLoopComplete, children, onLoaded, pause, scale}) => {
         const [ref, setRef] = useState(null);
         const [settings, animateConfig] = useAnimateConfig(setting[name], animate);
 
@@ -201,27 +201,27 @@ const creatorPerson = (setting, name) => {
                                  autoplay={false}
                                  onInit={onLoaded}
                                  onLoopComplete={handlerLoop}
-                                 style={{width: '100%'}}
+                                 style={{width: scale ? `${100 * scale}%` : '100%'}}
                                  onClick={e => console.log(e)}
                                  isResponsive={true}
                                  loop={true}
                                  fps={0.30}
                                  onEachFrame={spritesheet => {
-                                    if (animate.name === 'idle') {
-                                        if (name === 'teacher') {
-                                            if (spritesheet.getInfo('frame') !== 1) {
-                                                spritesheet.setFps(2)
-                                            } else {
-                                                spritesheet.setFps(0.30)
-                                            }
-                                            return false
-                                        }
-                                        if (spritesheet.getInfo('frame') !== animateConfig.start) {
-                                            spritesheet.setFps(2)
-                                        } else {
-                                            spritesheet.setFps(0.30)
-                                        }
-                                    }
+                                     if (animate.name === 'idle') {
+                                         if (name === 'teacher') {
+                                             if (spritesheet.getInfo('frame') !== 1) {
+                                                 spritesheet.setFps(2)
+                                             } else {
+                                                 spritesheet.setFps(0.30)
+                                             }
+                                             return false
+                                         }
+                                         if (spritesheet.getInfo('frame') !== animateConfig.start) {
+                                             spritesheet.setFps(2)
+                                         } else {
+                                             spritesheet.setFps(0.30)
+                                         }
+                                     }
                                  }}
                                  {...settings}/>
                 </PersonDropShadow>
@@ -352,18 +352,20 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
                 </QuizInner>
             </QuizWrapper>
             <Slide when={allSpriteLoaded} right onReveal={handlerAnimationEnd('child')}>
-                <Position right={-4}>
+                <Position right={-4} bottom={-1}>
                     <Boy onLoaded={handlerSpriteLoaded('boy')}
                          onLoopComplete={handlerLoopComplete}
                          animate={state}
                          pause={!spritePlay}
+                         scale={1.2}
                     />
                 </Position>
-                <Position right={-10}>
+                <Position right={-10} bottom={-1}>
                     <Girl onLoaded={handlerSpriteLoaded('girl')}
                           onLoopComplete={handlerLoopComplete}
                           animate={state}
                           pause={!spritePlay}
+                          scale={1.2}
                     />
                 </Position>
             </Slide>
