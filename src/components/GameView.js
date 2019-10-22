@@ -30,9 +30,9 @@ const DeskWrapper = styled.div`
   top: 1rem;
   //top: -7rem;
   pointer-events: auto;
-  filter: drop-shadow(0 0 3px);
   img {
     display: inline-block;
+    filter: drop-shadow(0 0 3px);
     max-width: 100%;
   }
 `;

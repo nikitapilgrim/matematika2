@@ -6,22 +6,30 @@ const Wrapper = styled.div`
     background-color:#fff;
     max-width: 400px;
     position: absolute;
-    top: 6rem;
+    top: -50px;
     padding: 15px;
     z-index: 300;
     font-family: 'Zilla Slab', serif;
     font-size: 20px;
     color:#000;
     border-radius: 10px;
-    border: solid 1px#000;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.87));
+    //border: solid 1px#000;
+    //filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.87));
     &:before {
-        filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0.87));
+        //filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0.87));
         content: '';
         position: absolute;
-        left: -20px; top: 1rem; /* Положение треугольника */
-        border: 10px solid transparent; /* Прозрачные границы */
-        border-right: 10px solid white; /* Добавляем треугольник */
+        bottom: 0;
+        left: 10%;
+        width: 0;
+        height: 0;
+        border: 1.5em solid transparent;
+        border-top-color: white;
+        border-bottom: 0;
+        border-left: 0;
+        margin-left: -0.75em;
+        margin-bottom: -1.5em;
+}
     }
 `;
 
