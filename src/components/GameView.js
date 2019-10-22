@@ -65,8 +65,12 @@ const TopPanel = styled.div`
   top: 0;
   left: 0;
   & > div {
+    transition: all 0.2s ease;
+    &:hover {
+      transform: scale(1.2);
+    }
     &:not(:first-child) {
-      margin-left: 1.5rem;
+      margin-left: 0.5rem;
     }
   }
 `;
