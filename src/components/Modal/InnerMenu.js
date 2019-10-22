@@ -13,7 +13,7 @@ const Buttons = styled.div`
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 0.3rem;
+    grid-gap: 0.2rem;
 `;
 
 const stagesColor = {
