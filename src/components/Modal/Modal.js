@@ -4,23 +4,27 @@ import useStoreon from "storeon/react";
 
 export const Modal = ({children, style, inner}) => {
     const {dispatch, modal} = useStoreon('modal');
+    const [isOpen, setIsOpen] = useState(modal);
 
-    const onOpenModal = () => {
-        dispatch('modal/show')
-    };
+    const onOpenModal = () => setIsOpen(true);
+    const onCloseModal = () =>  setIsOpen(false);
 
-    const onCloseModal = () => {
-        dispatch('modal/hide')
-    };
     useEffect(() => {
         const root = document.querySelector('#root');
-        if (modal) {
+        if (isOpen) {
             root.style.filter = 'blur(10px) brightness(0.70) saturate(130%)';
         } else {
             root.style.filter = 'none';
             root.style.transform = 'none';
         }
-    }, [modal]);
+    }, [isOpen]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            isOpen && dispatch('modal/show');
+            !isOpen && dispatch('modal/hide')
+        }, 1000) // blur animation wait
+    }, [isOpen]);
 
 
     return (
@@ -28,7 +32,7 @@ export const Modal = ({children, style, inner}) => {
             <div onClick={onOpenModal}>
                 {children}
             </div>
-            <ResponsiveModal open={modal} onClose={onCloseModal} center styles={style}>
+            <ResponsiveModal open={isOpen} onClose={onCloseModal} center styles={style}>
                 {inner}
             </ResponsiveModal>
         </>

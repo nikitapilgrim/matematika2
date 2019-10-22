@@ -64,7 +64,7 @@ export const Stage = ({data, onNext}) => {
         return () => {
             window.removeEventListener("click", handlerClickWindow);
         };
-    }, [data]);
+    }, [data, modal]);
 
 
     const handlerInput = (value) => {
