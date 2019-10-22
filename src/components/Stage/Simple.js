@@ -24,6 +24,7 @@ const InputWrapper = styled.span`
 `;
 
 const Input = styled.input`
+    font-family: 'Roboto Condensed', sans-serif;
     display: inline-block;
     padding: 0px 10px;
     margin: 0;

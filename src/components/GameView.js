@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import useStoreon from 'storeon/react';
 import Slide from 'react-reveal/Slide';
 import useTimeout from "react-use/lib/useTimeout";
 import desk from '../assets/image/classroom_blackboard_cube.png'
@@ -9,6 +10,8 @@ import {Stage} from "./Stage";
 import {Answer} from "./Answer";
 import {sounds} from "../sounds";
 import {Sound} from "./Sound";
+import {Menu} from "./Menu";
+import {Help} from "./Help";
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -27,6 +30,7 @@ const DeskWrapper = styled.div`
   top: 1rem;
   //top: -7rem;
   pointer-events: auto;
+  filter: drop-shadow(0 0 3px);
   img {
     display: inline-block;
     max-width: 100%;
@@ -40,7 +44,7 @@ const Inner = styled.div`
     align-items: center;
     position: absolute;
     top: 31%;
-    width: 91%;
+    width: 100%;
     height: 49%;
     pointer-events: auto;
 `;
@@ -54,10 +58,23 @@ const CurrentStage = styled.div`
   opacity: 0.8;
 `;
 
+const TopPanel = styled.div`
+  position: fixed;
+  display: flex;
+  padding: 2rem;
+  top: 0;
+  left: 0;
+  & > div {
+    &:not(:first-child) {
+      margin-left: 1.5rem;
+    }
+  }
+`;
+
 
 export const GameView = () => {
-    const [currentStage, setCurrentStage] = useState(0);
-    const [stage, setStage] = useState(stagesData[currentStage]);
+    const { dispatch, stage } = useStoreon('stage');
+    const [stageData, setStageData] = useState(stagesData[stage]);
     const [combo, setCombo] = useState(0);
     const [animate, setAnimate] = useState(null);
     const [answer, setAnswer] = useState(null);
@@ -69,17 +86,18 @@ export const GameView = () => {
 
      // cancel animation wrong answer
      useEffect(() => {
+         //console.log(answer)
          if (answer) {
              setTimeout(() => {
                  reset();
                  setAnswer(null)
-             }, 1000)
+             }, 2000)
          }
      }, [answer]);
 
      useEffect(() => {
-         setStage(stagesData[currentStage])
-     }, [currentStage]);
+         setStageData(stagesData[stage])
+     }, [stage]);
 
      const handlerAnswer = (answer) => {
          if (true/*isReady()*/) {
@@ -90,7 +108,7 @@ export const GameView = () => {
              } else {
                  setCombo(0)
              }
-             setCurrentStage(prev => prev + 1);
+             dispatch('stage/next');
          }
      };
 
@@ -144,18 +162,24 @@ export const GameView = () => {
 
     return (
         <Wrapper>
-            <Sound/>
-            <CurrentStage>{currentStage}</CurrentStage>
+
+            <TopPanel>
+                <Sound/>
+                <Menu/>
+                <Help/>
+            </TopPanel>
+
+            <CurrentStage>{stage}</CurrentStage>
             <DeskWrapper>
                 <Slide when={spriteLoaded} bottom onReveal={handlerDeskShow}>
                     <img src={desk} alt="desk"/>
                 </Slide>
-                <AnimatedContainer spritePlay={spritePlay} onLoadedSprites={handlerSpriteLoaded} data={stage} animate={animate} onAnimationEnd={handlerAnimationEnd}/>
+                <AnimatedContainer spritePlay={spritePlay} onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate} onAnimationEnd={handlerAnimationEnd}/>
                 <Inner>
-                    {deskAnimationEnd && <Stage onNext={handlerAnswer} data={stage}/>}
+                    {deskAnimationEnd && <Stage onNext={handlerAnswer} data={stageData}/>}
                 </Inner>
             </DeskWrapper>
-            <input value={currentStage} style={{
+            <input value={stage} style={{
                 position: 'fixed',
                 zIndex: '999',
                 top: 0,
@@ -164,11 +188,11 @@ export const GameView = () => {
                 if (+e.target.value) {
                     const value = e.target.value;
                     if (stagesData[+value]) {
-                        setCurrentStage(+value);
+                        dispatch('stage/to', +value);
                     }
                 }
                 if (!e.target.value) {
-                    setCurrentStage(0)
+                    dispatch('stage/to', 0)
                 }
             }}/>
             <Answer answer={answer}/>

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import StoreContext from 'storeon/react/context';
 import {GameView} from "./components/GameView";
+import {store} from "./store/store";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -14,7 +15,7 @@ const Wrapper = styled.div`
 
 const WithProviders = () => {
     return (
-        <StoreContext.Provider >
+        <StoreContext.Provider value={store} >
             <Wrapper >
                 <GameView/>
             </Wrapper>

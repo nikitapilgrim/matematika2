@@ -15,16 +15,29 @@ html, body {
 }
 
 body {
-    background: url("./image/classroom_bg.jpg");
-    background-size: cover;
-    background-position: 50% 50%;
+
 }
 
 #root {
     position: relative;
     height: 100vh;
     min-height: inherit;
-
+    transition: filter 1s;
+    overflow: hidden;
+    &:before {
+        position: fixed;
+        //top: 50%; right: 50%;
+        top: 0;
+        left: 0;
+        //transform: translate(50%,-50%);
+        height: 100vh;
+        width: 100vw;
+        z-index: -1;
+        content: '';
+        background: url("./image/classroom_bg.jpg");
+        background-size: cover;
+        background-position: 50% 50%;
+    }
 }
 
 .react-responsive-spritesheet-container__move {

@@ -1,26 +1,28 @@
 import createStore from 'storeon';
 import persistState from '@storeon/localstorage';
 
-
 const stage = store => {
   store.on('@init', () => ({
     stage: 0,
     final: false,
   }));
-  store.on('final', ({final}, state) => {
+  store.on('stage/final', ({final}, state) => {
     return ({final: state});
   });
-  store.on('next', ({stage}, number) => {
+  store.on('stage/to', ({stage}, number) => {
     if (number === 0 || number) {
       return ({stage: number});
     }
-    if (Stages.length <= stage) {
+  });
+  store.on('stage/next', ({stage}, number) => {
+    return ({stage: stage + 1});
+    /*if (Stages.length <= stage) {
       store.dispatch('final', true);
       return ({stage: stage});
-    }
-    return ({stage: stage + 1});
+    }*/
   });
 };
+/*
 
 const audio = store => {
   store.on('@init', () => ({
@@ -59,5 +61,6 @@ const articles = store => {
     };
   });
 };
+*/
 
-export const store = createStore([stage, progress, audio, articles, persistState(['articles'])]);
+export const store = createStore([stage, persistState(['stage'])]);
