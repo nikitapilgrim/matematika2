@@ -1,26 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import ResponsiveModal from 'react-responsive-modal';
-
+import useStoreon from "storeon/react";
 
 export const Modal = ({children, style, inner}) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const {dispatch, modal} = useStoreon('modal');
 
     const onOpenModal = () => {
-        setIsOpen(true);
+        dispatch('modal/show')
     };
 
     const onCloseModal = () => {
-        setIsOpen(false);
+        dispatch('modal/hide')
     };
     useEffect(() => {
         const root = document.querySelector('#root');
-        if (isOpen) {
+        if (modal) {
             root.style.filter = 'blur(10px) brightness(0.70) saturate(130%)';
         } else {
             root.style.filter = 'none';
             root.style.transform = 'none';
         }
-    }, [isOpen]);
+    }, [modal]);
 
 
     return (
@@ -28,7 +28,7 @@ export const Modal = ({children, style, inner}) => {
             <div onClick={onOpenModal}>
                 {children}
             </div>
-            <ResponsiveModal open={isOpen} onClose={onCloseModal} center styles={style}>
+            <ResponsiveModal open={modal} onClose={onCloseModal} center styles={style}>
                 {inner}
             </ResponsiveModal>
         </>

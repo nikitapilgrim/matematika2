@@ -6,7 +6,15 @@ const stage = store => {
     stage: 0,
     final: false,
     quiz: false,
+    modal: false,
   }));
+  store.on('modal/show', ({quiz}, state) => {
+    return ({modal: true});
+  });
+  store.on('modal/hide', ({quiz}, state) => {
+    return ({modal: false});
+  });
+
   store.on('quiz/show', ({quiz}, state) => {
     return ({quiz: true});
   });

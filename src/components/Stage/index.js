@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import useKeyPressEvent from "react-use/lib/useKeyPressEvent";
+import useStoreon from "storeon/react";
 import styled from 'styled-components';
 import {Simple} from "./Simple";
 import {ManyInputs} from "./ManyInputs";
@@ -39,6 +40,7 @@ const NextButton = styled.button`
 
 export const Stage = ({data, onNext}) => {
     const [answer, setAnswer] = useState(null);
+    const {dispatch, modal} = useStoreon('modal');
 
     useEffect(() => {
         setAnswer(null)
@@ -54,7 +56,7 @@ export const Stage = ({data, onNext}) => {
 
     useEffect(() => {
         const handlerClickWindow = (e) => {
-            if (data.layout === LAYOUTS.speech) {
+            if (data.layout === LAYOUTS.speech && !modal) {
                 handlerNext();
             }
         };
