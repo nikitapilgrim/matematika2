@@ -20,21 +20,31 @@ const sprites = {
 const setting = {
     teacher: {
         options: {
-            steps: 2,
-            image: sprites.teacherIdle,
+            steps: 86,
+            image: sprites.teacher,
             widthFrame: 165,
             heightFrame: 450,
         },
         idle: {
-            start: 0,
-            end: 2,
+            start: 84,
+            end: 86,
             fps: 0.30,
         },
-        right: {
-            start: 43,
-            end: 65,
-            fps: 15,
-        }
+        right: [
+            {
+                start: 1,
+                end: 18,
+                fps: 15,
+            }, {
+                start: 42,
+                end: 84,
+                fps: 15,
+            }, {
+                start: 42,
+                end: 84,
+                fps: 15,
+            }
+        ]
     },
     girl: {
         options: {
@@ -57,17 +67,17 @@ const setting = {
         ],
         right: [
             {
-                end: 53,
+                end: 52,
                 fps: 24,
-                start: 0
+                start: 1
             },
             {
-                end: 120,
+                end: 121,
                 start: 62,
                 fps: 24,
             },
             {
-                end: 183,
+                end: 184,
                 start: 123,
                 fps: 24,
             }
@@ -82,12 +92,12 @@ const setting = {
         },
         right: [
             {
-                start: 0,
-                end: 57,
+                start: 1,
+                end: 58,
                 fps: 24,
             },
             {
-                end: 148,
+                end: 149,
                 start: 90,
                 fps: 24,
             },
@@ -157,12 +167,22 @@ const PersonDropShadow = styled.div`
 
 const creatorPerson = (setting, name) => {
     return ({animate, onLoopComplete, children, onLoaded, pause, scale}) => {
+        const [state, setState] = useState(animate);
         const [ref, setRef] = useState(null);
-        const [settings, animateConfig] = useAnimateConfig(setting[name], animate);
+        const [settings, animateConfig] = useAnimateConfig(setting[name], state);
 
-        const handlerLoop = (state) => {
-            onLoopComplete(name, animate.name, state)
+        const handlerLoop = () => {
+            onLoopComplete(name, animate.name, ref)
+            if (animate.name === 'idle') {
+                setState(animate);
+            }
         };
+
+        useEffect(() => {
+            if (animate.name !== 'idle') {
+                setState(animate);
+            }
+        }, [animate]);
 
         useEffect(() => {
             if (pause && ref) {
@@ -187,7 +207,8 @@ const creatorPerson = (setting, name) => {
                 });
             }
         };
-        useEffect(setAnimation, [animateConfig, ref, pause]);
+
+        useEffect(setAnimation, [animateConfig, ref, pause, state]);
 
         return (
             <>
@@ -205,17 +226,18 @@ const creatorPerson = (setting, name) => {
                                  onClick={e => console.log(e)}
                                  isResponsive={true}
                                  loop={true}
-                                 fps={0.30}
+                                 fps={24}
                                  onEachFrame={spritesheet => {
-                                     if (animate.name === 'idle') {
-                                         if (name === 'teacher') {
-                                             if (spritesheet.getInfo('frame') !== 1) {
-                                                 spritesheet.setFps(2)
-                                             } else {
-                                                 spritesheet.setFps(0.30)
-                                             }
-                                             return false
+
+                                     //fix for girl empty frame
+                                     if (name === 'girl' && state.stage === 1) {
+                                         if (spritesheet.getInfo('frame') === 121) {
+                                             spritesheet.goToAndPlay(122);
+                                             spritesheet.setEndAt(123);
                                          }
+                                     }
+
+                                     if (state.name === 'idle') {
                                          if (spritesheet.getInfo('frame') !== animateConfig.start) {
                                              spritesheet.setFps(2)
                                          } else {
@@ -284,7 +306,7 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
         teacher: null,
         boy: null,
         girl: null,
-        quiz: null
+        //quiz: null
     });
 
     const handlerAnimationEnd = (name) => () => {
@@ -346,8 +368,7 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
             <QuizWrapper>
                 <QuizInner>
                     <Zoom when={allSpriteLoaded} onReveal={handlerAnimationEnd('quiz')}>
-                        <Quiz onLoaded={handlerSpriteLoaded('quiz')}
-                        />
+
                     </Zoom>
                 </QuizInner>
             </QuizWrapper>
