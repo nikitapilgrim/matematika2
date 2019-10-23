@@ -1,6 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import styled, {keyframes} from "styled-components";
+import ResponsiveCanvas from 'react-responsive-canvas';
 import useMount from "react-use/lib/useMount";
+import FontFaceObserver from 'fontfaceobserver';
+import useComponentSize from '@rehooks/component-size'
+
 
 const Wrong = keyframes`
   from {
@@ -65,25 +69,49 @@ const Wrapper = styled.div`
 `;
 
 
-export const Answer = ({answer}) => {
-    const ref = useRef();
+const Canvas = ({text}) => {
+    const [ref, setRef] = useState(null);
+    let size = useComponentSize(ref);
+    // size == { width: 100, height: 200 }
+    let {width, height} = size;
+    const FONT_NAME = 'Luckiest Guy';
+    const [fontLoaded, setFontLoaded] = useState(null);
+    console.log(width, height)
+
+    useMount(() => {
+        const font = new FontFaceObserver(FONT_NAME);
+        font.load().then(function () {
+            setFontLoaded(true);
+        });
+
+    });
 
     useEffect(() => {
-        if (ref.current) {
-            const canvas = ref.current;
-            const ctx = canvas.getContext("2d");
-            ctx.font = "40px Courier";
+        if (ref.current && fontLoaded) {
+            const ctx = ref.current.getContext("2d");
+            ctx.font = `20rem "${FONT_NAME}"`;
+            ctx.lineWidth = 20;
             ctx.strokeStyle = 'white';
-            ctx.fillText(answer.value, 210, 75)
+            ctx.fillStyle = 'red';
+            ctx.strokeText(text, 210, 75);
+            ctx.fillText(text, 210, 75)
         }
-    }, [answer, ref]);
+    }, [text, ref, fontLoaded]);
 
+    return (
+        <ResponsiveCanvas
+            canvasRef={el => (setRef({current: el}))}
+        />
+    )
+};
+
+export const Answer = ({answer}) => {
     return (
         <>
             {answer &&
             <Wrapper right={answer.right}>
                 {!answer.right ? answer.value : 'BRAVO!'}
-                {/*<canvas ref={ref} width={640} height={425}/>*/}
+                {/*<Canvas text={answer.value}/>*/}
             </Wrapper>
             }
         </>

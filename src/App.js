@@ -15,8 +15,8 @@ const Wrapper = styled.div`
 
 const WithProviders = () => {
     return (
-        <StoreContext.Provider value={store} >
-            <Wrapper >
+        <StoreContext.Provider value={store}>
+            <Wrapper>
                 <GameView/>
             </Wrapper>
         </StoreContext.Provider>
