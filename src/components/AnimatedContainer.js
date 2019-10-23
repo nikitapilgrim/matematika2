@@ -239,32 +239,12 @@ const creatorPerson = (setting, name) => {
     }
 };
 
-const QuizWrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const QuizInner = styled.div`
-
-`;
-
-const Quiz = ({onLoaded}) => {
-
-
-};
-
 const Girl = creatorPerson(setting, 'girl');
 const Boy = creatorPerson(setting, 'boy');
 const Teacher = creatorPerson(setting, 'teacher');
 
 
-export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEnd, onLoadedSprites}) => {
+export const AnimatedContainer = React.memo(({animate, spritePlay,showCharacters, onAnimationEnd, onLoadedSprites}) => {
     const [state, setState] = useState({name: 'idle', stage: 0});
     const [animations, setAnimations] = useState({
         teacher: null,
@@ -295,7 +275,7 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
         if (Object.values(spriteLoaded).every(a => a === true)) {
             setTimeout(() => {
                 setAllSpriteLoaded(true);
-                onLoadedSprites(spriteLoaded)
+                onLoadedSprites(spriteLoaded);
             }, 0)
         }
     }, [spriteLoaded]);
@@ -324,7 +304,7 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
 
     return (
         <>
-            <Slide when={allSpriteLoaded} left onReveal={handlerAnimationEnd('teacher')}>
+            <Slide when={showCharacters} left onReveal={handlerAnimationEnd('teacher')}>
                 <Position left={-12}>
                     <Teacher onLoaded={handlerSpriteLoaded('teacher')}
                              onLoopComplete={handlerLoopComplete}
@@ -334,7 +314,7 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
                 </Position>
             </Slide>
 
-            <Slide when={allSpriteLoaded} right onReveal={handlerAnimationEnd('child')}>
+            <Slide when={showCharacters} right onReveal={handlerAnimationEnd('child')}>
                 <Position right={-4} bottom={-1}>
                     <Boy onLoaded={handlerSpriteLoaded('boy')}
                          onLoopComplete={handlerLoopComplete}

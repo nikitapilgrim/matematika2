@@ -40,7 +40,7 @@ const NextButton = styled.button`
 
 export const Stage = ({data, onNext}) => {
     const [answer, setAnswer] = useState(null);
-    const {dispatch, modal} = useStoreon('modal');
+    const {dispatch, modal, kviz} = useStoreon('modal', 'kviz');
 
     useEffect(() => {
         setAnswer(null)
@@ -55,16 +55,18 @@ export const Stage = ({data, onNext}) => {
     useKeyPressEvent('Enter', handlerNext);
 
     useEffect(() => {
-        const handlerClickWindow = (e) => {
-            if (data.layout === LAYOUTS.speech && !modal) {
-                handlerNext();
-            }
-        };
-        window.addEventListener("click", handlerClickWindow);
-        return () => {
-            window.removeEventListener("click", handlerClickWindow);
-        };
-    }, [data, modal]);
+        if (!kviz.show) {
+            const handlerClickWindow = (e) => {
+                if (data.layout === LAYOUTS.speech && !modal) {
+                    handlerNext();
+                }
+            };
+            window.addEventListener("click", handlerClickWindow);
+            return () => {
+                window.removeEventListener("click", handlerClickWindow);
+            };
+        }
+    }, [data, modal, kviz]);
 
 
     const handlerInput = (value) => {

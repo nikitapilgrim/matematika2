@@ -5,8 +5,11 @@ const stage = store => {
   store.on('@init', () => ({
     stage: 0,
     final: false,
-    quiz: false,
     modal: false,
+    kviz: {
+      order: false,
+      show: false
+    }
   }));
   store.on('modal/show', ({quiz}, state) => {
     return ({modal: true});
@@ -14,13 +17,16 @@ const stage = store => {
   store.on('modal/hide', ({quiz}, state) => {
     return ({modal: false});
   });
+  store.on('kviz/set', ({kviz}, state) => {
+    return ({kviz: {...kviz, order: state}});
+  });
+  store.on('kviz/show', ({kviz}) => {
+    return ({kviz: {...kviz, show: true}});
+  });
+  store.on('kviz/hide', ({kviz}) => {
+    return ({kviz: {...kviz, show: false}});
+  });
 
-  store.on('quiz/show', ({quiz}, state) => {
-    return ({quiz: true});
-  });
-  store.on('quiz/hide', ({quiz}, state) => {
-    return ({quiz: false});
-  });
   store.on('stage/final', ({final}, state) => {
     return ({final: state});
   });

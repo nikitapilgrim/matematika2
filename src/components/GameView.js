@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from "react";
 import useStoreon from 'storeon/react';
 import Slide from 'react-reveal/Slide';
+import Fade from 'react-reveal/Fade';
 import useTimeout from "react-use/lib/useTimeout";
 import desk from '../assets/image/classroom_blackboard_cube.png'
 import styled from "styled-components";
 import {AnimatedContainer} from "./AnimatedContainer";
-import stagesData from "../data/stages";
+import stagesData, {LAYOUTS} from "../data/stages";
 import {Stage} from "./Stage";
 import {Answer} from "./Answer";
 import {sounds} from "../sounds";
 import {Sound} from "./Sound";
 import {Menu} from "./Menu";
 import {Help} from "./Help";
+import {Kviz} from "./Kviz";
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -78,7 +80,7 @@ const TopPanel = styled.div`
 
 
 export const GameView = () => {
-    const { dispatch, stage, quiz } = useStoreon('stage', 'quiz');
+    const {dispatch, stage, kviz, modal} = useStoreon('stage', 'kviz', 'modal');
     const [stageData, setStageData] = useState(stagesData[stage]);
     const [combo, setCombo] = useState(0);
     const [animate, setAnimate] = useState(null);
@@ -88,73 +90,99 @@ export const GameView = () => {
     const [spriteLoaded, setSpriteLoaded] = useState(null);
     const [spritePlay, setSpritePlay] = useState(null);
     const [deskAnimationEnd, setDeskAnimationEnd] = useState(null);
+    const [showGameView, setShowGameView] = useState(null);
 
-     // cancel animation wrong answer
-     useEffect(() => {
-         //console.log(answer)
-         if (answer) {
-             setTimeout(() => {
-                 reset();
-                 setAnswer(null)
-             }, 2000)
-         }
-     }, [answer]);
+    // cancel animation wrong answer
+    useEffect(() => {
+        //console.log(answer)
+        if (answer) {
+            setTimeout(() => {
+                reset();
+                setAnswer(null)
+            }, 2000)
+        }
+    }, [answer]);
 
-     useEffect(() => {
-         setStageData(stagesData[stage])
-     }, [stage]);
+    useEffect(() => {
+        setStageData(stagesData[stage])
+    }, [stage]);
 
-     const handlerAnswer = (answer) => {
-         if (true/*isReady()*/) {
-             setAnswer(answer);
-             if (answer.right === true) {
-                 setCombo(prev => prev + 1);
-                 sounds.success.play()
-             } else {
-                 setCombo(0)
-             }
-             dispatch('stage/next');
-         }
-     };
 
-     useEffect(() => {
-         if (combo >= 3) {
-             setAnimate({
-                 stage: 2,
-                 name: 'right'
-             })
-         }
-         if (combo === 2) {
-             setAnimate({
-                 stage: 1,
-                 name: 'right'
-             })
-         }
-         if (combo === 1) {
-             setAnimate({
-                 stage: 0,
-                 name: 'right'
-             })
-         }
-     }, [combo, stage]);
+    // animation if modal show
+    useEffect(() => {
+        if (!kviz.show && spriteLoaded) {
+            setShowGameView(!modal);
+        }
+    }, [modal, kviz, spriteLoaded]);
 
-     const handlerAnimationEnd = (state) => {
-         setAnimationDone(true);
-     };
+    useEffect(() => {
+        if (kviz.show) {
+            setShowGameView(false);
+            if (!modal) {
+                setTimeout(() => {
+                    dispatch('stage/next');
+                    dispatch('kviz/hide');
+                    setShowGameView(true);
+                }, 2000);
+            }
+        }
+    }, [modal, kviz]);
 
-     const handlerSpriteLoaded = () => {
-         setSpriteLoaded(true);
-     };
+    useEffect(() => {
+        if (!showGameView) {
+            setDeskAnimationEnd(false)
+        }
+    }, [showGameView]);
 
-     const handlerDeskShow = () => {
-         setTimeout(() => {
-             setDeskAnimationEnd(true)
-         }, 1000);
-     };
+    const handlerAnswer = (answer) => {
+        if (true/*isReady()*/) {
+            setAnswer(answer);
+            if (answer.right === true) {
+                setCombo(prev => prev + 1);
+                sounds.success.play()
+            } else {
+                setCombo(0)
+            }
+            dispatch('stage/next');
+        }
+    };
 
-     useEffect(() => {
-         //console.log(animationDone, spriteLoaded)
-     }, [animationDone, spriteLoaded])
+    useEffect(() => {
+        if (combo >= 3) {
+            setAnimate({
+                stage: 2,
+                name: 'right'
+            })
+        }
+        if (combo === 2) {
+            setAnimate({
+                stage: 1,
+                name: 'right'
+            })
+        }
+        if (combo === 1) {
+            setAnimate({
+                stage: 0,
+                name: 'right'
+            })
+        }
+    }, [combo, stage]);
+
+    const handlerAnimationEnd = (state) => {
+        setAnimationDone(true);
+    };
+
+    const handlerSpriteLoaded = () => {
+        setSpriteLoaded(true);
+        setShowGameView(true)
+    };
+
+    const handlerDeskShow = () => {
+        setTimeout(() => {
+            setDeskAnimationEnd(true)
+        }, 1000);
+    };
+
 
     useEffect(() => {
         if (animationDone && deskAnimationEnd) {
@@ -175,15 +203,22 @@ export const GameView = () => {
             </TopPanel>
 
             <CurrentStage>{stage}</CurrentStage>
-            <DeskWrapper>
-                <Slide when={spriteLoaded} bottom onReveal={handlerDeskShow}>
-                    <img src={desk} alt="desk"/>
-                </Slide>
-                <AnimatedContainer spritePlay={spritePlay} onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate} onAnimationEnd={handlerAnimationEnd}/>
-                <Inner>
-                    {deskAnimationEnd && <Stage onNext={handlerAnswer} data={stageData}/>}
-                </Inner>
-            </DeskWrapper>
+            <Slide when={kviz.show} top>
+                <Kviz order={kviz.order}/>
+            </Slide>
+            <Slide when={showGameView} bottom onReveal={handlerDeskShow}>
+                <DeskWrapper>
+                        <img src={desk} alt="desk"/>
+                    <AnimatedContainer showCharacters={showGameView} spritePlay={spritePlay}
+                                       onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
+                                       onAnimationEnd={handlerAnimationEnd}/>
+
+                    <Inner>
+                        <Stage onNext={handlerAnswer} data={stageData}/>
+                    </Inner>
+                </DeskWrapper>
+            </Slide>
+
             <input value={stage} style={{
                 position: 'fixed',
                 zIndex: '999',

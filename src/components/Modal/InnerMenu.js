@@ -43,7 +43,7 @@ const Title = styled.div`
 `;
 
 export const InnerMenu = () => {
-    const {dispatch, stage} = useStoreon('stage');
+    const {dispatch} = useStoreon('stage', 'kviz', 'modal');
     const [buttons, setButtons] = useState(null);
     useMount(() => {
         const prepareButtons = stagesData.reduce((acc, stage, stageNumber) => {
@@ -57,7 +57,10 @@ export const InnerMenu = () => {
     });
 
     const handlerStage = (next) => () => {
-        dispatch('stage/to', next)
+        dispatch('kviz/set', next);
+        dispatch('kviz/show');
+        dispatch('stage/to', next);
+        dispatch('modal/hide');
     };
 
     return (
@@ -67,7 +70,7 @@ export const InnerMenu = () => {
                 {
                     buttons && buttons.map((stage, i) => {
                         return (
-                            <Button onClick={handlerStage(stage.id + 1)} key={stage.id}>
+                            <Button onClick={handlerStage(stage.id)} key={stage.id}>
                                 KVIZ {i}
                             </Button>
                         )
