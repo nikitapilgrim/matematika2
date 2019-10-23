@@ -1,20 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import Slide from 'react-reveal/Slide';
-import Zoom from 'react-reveal/Zoom';
 import styled from 'styled-components';
 import Spritesheet from '../lib/Spritesheet';
 import teacher from '../assets/img/teacherSprites.png'
-import teacherIdle from '../assets/img/teacherSpriteIdle.png'
 import girl from '../assets/img/girlSprites.png';
 import boy from '../assets/img/boySprites.png'
-import quiz from '../assets/img/quizSuccessSprite.png'
 
 const sprites = {
     teacher,
-    teacherIdle,
     girl,
     boy,
-    quiz
 };
 
 const setting = {
@@ -120,15 +115,6 @@ const setting = {
             },
         ]
     },
-    quiz: {
-        options: {
-            steps: 40,
-            image: sprites.quiz,
-            widthFrame: 252,
-            heightFrame: 300,
-            fps: 24,
-        },
-    }
 };
 
 const Position = styled.div`
@@ -365,13 +351,7 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
                     />
                 </Position>
             </Slide>
-            <QuizWrapper>
-                <QuizInner>
-                    <Zoom when={allSpriteLoaded} onReveal={handlerAnimationEnd('quiz')}>
 
-                    </Zoom>
-                </QuizInner>
-            </QuizWrapper>
             <Slide when={allSpriteLoaded} right onReveal={handlerAnimationEnd('child')}>
                 <Position right={-4} bottom={-1}>
                     <Boy onLoaded={handlerSpriteLoaded('boy')}
