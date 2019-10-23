@@ -248,31 +248,15 @@ const QuizWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: ${props => props.show ? '1' : '0'};
 `;
 
 const QuizInner = styled.div`
-  width: 20%;
-  height: 20%;
+
 `;
 
 const Quiz = ({onLoaded}) => {
-    const handlerEndAnimation = () => {
 
-    }
 
-    return (
-        <Spritesheet getInstance={(ref) => {
-        }}
-                     onInit={onLoaded}
-                     onLoopComplete={handlerEndAnimation}
-                     style={{width: '100%'}}
-                     onClick={e => console.log(e)}
-                     isResponsive={true}
-                     loop={true}
-                     {...setting.quiz.options}
-        />
-    )
 };
 
 const Girl = creatorPerson(setting, 'girl');
@@ -285,14 +269,12 @@ export const AnimatedContainer = React.memo(({animate, spritePlay, onAnimationEn
     const [animations, setAnimations] = useState({
         teacher: null,
         child: null,
-        quiz: null
     });
     const [allSpriteLoaded, setAllSpriteLoaded] = useState(false);
     const [spriteLoaded, setSpriteLoaded] = useState({
         teacher: null,
         boy: null,
         girl: null,
-        //quiz: null
     });
 
     const handlerAnimationEnd = (name) => () => {
