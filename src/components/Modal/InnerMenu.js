@@ -56,8 +56,8 @@ export const InnerMenu = () => {
         setButtons(prepareButtons)
     });
 
-    const handlerStage = (next) => () => {
-        dispatch('kviz/set', next);
+    const handlerStage = (next, number) => () => {
+        dispatch('kviz/set', number);
         dispatch('kviz/show');
         dispatch('stage/to', next);
         dispatch('modal/hide');
@@ -70,8 +70,8 @@ export const InnerMenu = () => {
                 {
                     buttons && buttons.map((stage, i) => {
                         return (
-                            <Button onClick={handlerStage(stage.id)} key={stage.id}>
-                                KVIZ {i}
+                            <Button onClick={handlerStage(stage.id, i+1)} key={stage.id}>
+                                KVIZ {i+1}
                             </Button>
                         )
                     })

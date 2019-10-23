@@ -49,6 +49,9 @@ const Inner = styled.div`
     width: 100%;
     height: 49%;
     pointer-events: auto;
+    transition: opacity 0.2s linear;
+    transition-delay: ${props => props.show ? '1s' : '0'};
+    opacity: ${props => props.show ? 1 : 0}
 `;
 
 const CurrentStage = styled.div`
@@ -206,18 +209,18 @@ export const GameView = () => {
             <Slide when={kviz.show} top>
                 <Kviz order={kviz.order}/>
             </Slide>
-            <Slide when={showGameView} bottom onReveal={handlerDeskShow}>
                 <DeskWrapper>
+                    <Slide when={showGameView} bottom onReveal={handlerDeskShow}>
                         <img src={desk} alt="desk"/>
+                    </Slide>
                     <AnimatedContainer showCharacters={showGameView} spritePlay={spritePlay}
                                        onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
                                        onAnimationEnd={handlerAnimationEnd}/>
 
-                    <Inner>
+                    <Inner show={showGameView}>
                         <Stage onNext={handlerAnswer} data={stageData}/>
                     </Inner>
                 </DeskWrapper>
-            </Slide>
 
             <input value={stage} style={{
                 position: 'fixed',
