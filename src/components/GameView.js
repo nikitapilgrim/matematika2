@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import useStoreon from 'storeon/react';
+import Fullscreen from "react-full-screen";
 import Slide from 'react-reveal/Slide';
 import Fade from 'react-reveal/Fade';
 import useTimeout from "react-use/lib/useTimeout";
@@ -198,7 +199,6 @@ export const GameView = () => {
 
     return (
         <Wrapper>
-
             <TopPanel>
                 <Sound/>
                 <Menu/>
@@ -209,18 +209,18 @@ export const GameView = () => {
             <Slide when={kviz.show} top>
                 <Kviz order={kviz.order}/>
             </Slide>
-                <DeskWrapper>
-                    <Slide when={showGameView} bottom onReveal={handlerDeskShow}>
-                        <img src={desk} alt="desk"/>
-                    </Slide>
-                    <AnimatedContainer showCharacters={showGameView} spritePlay={spritePlay}
-                                       onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
-                                       onAnimationEnd={handlerAnimationEnd}/>
+            <DeskWrapper>
+                <Slide when={showGameView} bottom onReveal={handlerDeskShow}>
+                    <img src={desk} alt="desk"/>
+                </Slide>
+                <AnimatedContainer showCharacters={showGameView} spritePlay={spritePlay}
+                                   onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
+                                   onAnimationEnd={handlerAnimationEnd}/>
 
-                    <Inner show={showGameView}>
-                        <Stage onNext={handlerAnswer} data={stageData}/>
-                    </Inner>
-                </DeskWrapper>
+                <Inner show={showGameView}>
+                    <Stage onNext={handlerAnswer} data={stageData}/>
+                </Inner>
+            </DeskWrapper>
 
             <input value={stage} style={{
                 position: 'fixed',

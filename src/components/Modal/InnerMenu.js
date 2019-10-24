@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import useMount from "react-use/lib/useMount";
 import styled from "styled-components";
 import useStoreon from 'storeon/react';
 import stagesData from "../../data/stages";
 import {LAYOUTS} from "../../data/stages";
+import {TextWithBorders} from "../TextWithBorders";
+import useComponentSize from "@rehooks/component-size";
 
 const Wrapper = styled.div`
 
@@ -38,13 +40,20 @@ const Button = styled.div`
 
 const Title = styled.div`
   font-family: 'Luckiest Guy', cursive;
-  text-transform: uppercase;
-
+  font-size: 17px;
+  transform: scale(1.5);
+  position: relative;
+  left: 1rem;
+  top: -50px;
+  filter: drop-shadow(0px 0px 1px black);
 `;
 
 export const InnerMenu = () => {
-    const {dispatch} = useStoreon('stage', 'kviz', 'modal');
+    const {dispatch, modal} = useStoreon('stage', 'kviz', 'modal');
     const [buttons, setButtons] = useState(null);
+    const ref = useRef(null);
+    const size = useComponentSize(ref);
+    const {width, height} = size;
     useMount(() => {
         const prepareButtons = stagesData.reduce((acc, stage, stageNumber) => {
             if (stage.layout === LAYOUTS.quiz) {
@@ -64,19 +73,21 @@ export const InnerMenu = () => {
     };
 
     return (
-        <Wrapper>
-            <Title>Izaberi kviz!</Title>
+        <Wrapper ref={ref}>
+            <Title>
+                <TextWithBorders width={width} color='#4a822b'>Izaberi kviz!</TextWithBorders>
+            </Title>
             <Buttons>
                 {
                     buttons && buttons.map((stage, i) => {
                         return (
-                            <Button onClick={handlerStage(stage.id, i+1)} key={stage.id}>
-                                KVIZ {i+1}
+                            <Button onClick={handlerStage(stage.id, i + 1)} key={stage.id}>
+                                KVIZ {i + 1}
                             </Button>
                         )
                     })
                 }
             </Buttons>
         </Wrapper>
-    )
+)
 };

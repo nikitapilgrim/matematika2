@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Container, Draggable} from 'react-smooth-dnd';
+import useMount from "react-use/lib/useMount";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -73,47 +74,133 @@ const applyDrag = (arr, dragResult) => {
 export const Sortable = ({data, handler}) => {
     const [items, setItems] = useState(data.items);
     const [resultItems, setResultItems] = useState([]);
-
-
-    const shouldAnimateDrop = (sourceContainerOptions, payload) => {
-        //console.log(sourceContainerOptions, payload);
-        return false;
-    };
+    const [swapItems, setSwapItems] = useState({remove: null, added: null});
+    const [dragging, setDragging] = useState(false);
 
     useEffect(() => {
-        const flatValues = items.reduce((acc, item) => [...acc, item.value], []);
-        const check = flatValues.every((value, i) => data.answer[i] === value);
-        handler(flatValues);
+        /* const flatValues = items.reduce((acc, item) => [...acc, item.value], []);
+         const check = flatValues.every((value, i) => data.answer[i] === value);
+         handler(flatValues);*/
     }, [items]);
 
     // change if elem have
-    const handleResultOnDrop = id => (e) => {
-        //console.log(e, id)
+    /*const handleResultOnDrop = id => (e) => {
+        console.log(e.payload, e, id, 'id', 'handlerResult')
+        if (e.removedIndex === 0) {
+            const newState = Object.entries(resultItems).reduce((acc, pair) => {
+                const [key, value] = pair;
+                if (value === e.payload) return acc;
+                return {...acc, [key]: value}
+            }, {});
+            setResultItems(newState);
+        }
         if (e.addedIndex === 0 && resultItems[id]) {
             setItems([...items, resultItems[id]]);
         }
         if (e.addedIndex === 0) {
             setResultItems(prev => ({...prev, [id]: e.payload}))
         }
-    };
+        /!*const newState = Object.entries(resultItems).reduce((acc, pair) => {
+            const [key, value] = pair;
+            if (value === payload) return acc;
+            return {...acc, [key]: value}
+        }, {});
+        setResultItems(newState);*!/
+    };*/
 
-    const handlerItemsOnDrop = e => {
-        const {payload} = e;
-        console.log(e)
-        if (e.addedIndex) {
-            const newState = Object.entries(resultItems).reduce((acc, pair) => {
-                const [key, value] = pair;
-                if (value === payload) return acc;
-                return {...acc, [key]: value}
-            }, {});
+    /* const handlerItemsOnDrop = e => {
+         const {payload} = e;
+         console.log(payload, e, 'handlerItems')
+         if (e.addedIndex) {
+            /!* const newState = Object.entries(resultItems).reduce((acc, pair) => {
+                 const [key, value] = pair;
+                 if (value === payload) return acc;
+                 return {...acc, [key]: value}
+             }, {});
+             setResultItems(newState);*!/
+         }
+         setItems(applyDrag(items, e))
+     };*/
+
+    // swap items for result
+    /*useEffect(() => {
+        if (swapItems.added && swapItems.remove) {
+            const newState = {...resultItems};
+            newState[swapItems.added.index] = swapItems.remove.value;
+            newState[swapItems.remove.index] = swapItems.added.value;
             setResultItems(newState);
+            setSwapItems({});
         }
-        setItems(applyDrag(items, e))
-    };
-    useEffect(() => {
-        //console.log(resultItems, 'result')
-    }, [resultItems])
+    }, [swapItems, resultItems]);*/
 
+
+    const onDragStart = index => ({isSource, payload, willAcceptDrop}) => {
+        setDragging(true)
+    };
+    const onDragEnd = index => ({isSource, payload, willAcceptDrop}) => {
+        if (isSource) {
+            //console.log(index, isSource, payload.item)
+
+        }
+        setTimeout(() => {
+            setDragging(false)
+        }, 0)
+    };
+
+
+
+    const handlerResultOnDrop = (index) => (e) => {
+        const {payload} = e;
+
+        if (payload.item) {
+
+            // check swapped elems
+            if (payload.container === 'result') {
+                //console.log(index, e.payload, e)
+                if (e.removedIndex === 0) {
+                    //setSwapItems(items => ({...items, added: {value: resultItems[index], index: index}}));
+                }
+                if (e.addedIndex === 0) {
+                    //setSwapItems(items => ({...items, remove: {value: resultItems[index], index: index}}));
+                }
+            }
+            if (e.removedIndex === e.addedIndex) {
+                return false;
+            }
+            if (payload.container === 'items') {
+                if (e.addedIndex === 0) {
+                    if (!resultItems[index]) {
+                        setResultItems(prev => ({...prev, [index]: payload.item}))
+                        setItems(items.filter(item => item !== payload.item));
+                        return false;
+                    }
+                    if (resultItems[index]) {
+                        setItems([...items.filter(item => item !== payload.item), resultItems[index]]);
+                        setResultItems({...resultItems, [index]: payload.item})
+                    }
+                }
+            }
+
+           /* if (e.removedIndex === 0) {
+                const copy = {...resultItems};
+                delete copy[index];
+                setResultItems(copy)
+            }
+            if (e.addedIndex === 0) {
+                setItems(prev => prev.filter(item => item !== payload.item));
+                if (resultItems[index]) {
+                    console.log(e, index)
+                    setItems(prev => [...prev, resultItems[index]])
+                }
+                setResultItems(prev => ({...prev, [index]: payload.item}))
+            }*/
+        }
+
+    };
+
+    const handlerItemsOnDrop = index => e => {
+        console.log(index, e, 'indextems')
+    };
 
     return (
         <>
@@ -124,8 +211,11 @@ export const Sortable = ({data, handler}) => {
                             {item.placeholder}
                             <Container orientation='horizontal'
                                        groupName='1'
-                                       getChildPayload={_ => resultItems[index]}
-                                       onDrop={handleResultOnDrop(index)}>
+                                       getChildPayload={_ => ({container: 'result', item: resultItems[index]})}
+                                       onDrop={handlerResultOnDrop(index)}
+                                       onDragStart={onDragStart(index)}
+                                       onDragEnd={onDragEnd(index)}
+                            >
 
                                 {resultItems[index] &&
                                 <Draggable>
@@ -139,7 +229,8 @@ export const Sortable = ({data, handler}) => {
                     )
                 })}
             </DroppedContainer>
-            <Container orientation='horizontal' groupName='1' getChildPayload={i => items[i]}
+            <Container orientation='horizontal' groupName='1'
+                       getChildPayload={i => ({container: 'items', item: items[i]})}
                        onDrop={handlerItemsOnDrop}
             >
                 {items.map((item, i) => {
