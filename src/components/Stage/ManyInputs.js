@@ -1,11 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import useMount from "react-use/lib/useMount";
-import {Input} from "../Input";
 
 const Inputs = styled.div`
   display: flex;
   justify-content: flex-start;
+`;
+
+const Input = styled.input`
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    white-space: nowrap;
+    display: inline-block;
+    padding: 0px 10px;
+    margin: 0;
+    margin-left: 10px;
+    width: 4rem;
+    height: 4rem;
+    text-align: center;
+    background-color: #5a5f3f;
+    border: dashed #fff 2px;
+    outline: none;
+    color: #fff;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);  
+    &::placeholder {
+      color: #fff;
+      opacity: 0.8;
+    }
 `;
 
 export const ManyInputs = ({data, handler}) => {
@@ -41,7 +63,7 @@ export const ManyInputs = ({data, handler}) => {
         <Inputs>
             {inputs && inputs.map((data, i) => {
               return (
-                  <Input key={i} placeholder={data.placeholder || ''} onKeyUp={handlerInputs(data.answer)}/>
+                  <Input key={i} disabled={!!data.placeholder} placeholder={data.placeholder || ''} onKeyUp={handlerInputs(data.answer)}/>
               )
             })}
         </Inputs>

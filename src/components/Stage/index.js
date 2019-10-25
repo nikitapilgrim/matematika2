@@ -106,7 +106,7 @@ export const Stage = ({data, onNext}) => {
             {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerManyInputs}/>}
             {data.layout === LAYOUTS.choice && <Choice data={data}/>}
             {data.layout === LAYOUTS.speech && <Speech phrase={data.phrase} audio={data.audio}/>}
-            {data.layout !== LAYOUTS.speech && <NextButton onClick={handlerNext}>Dalje</NextButton>}
+            {data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice && <NextButton onClick={handlerNext}>Dalje</NextButton>}
         </>
     )
 };
