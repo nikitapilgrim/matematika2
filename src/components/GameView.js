@@ -119,6 +119,13 @@ export const GameView = () => {
         }
     }, [modal, kviz, spriteLoaded]);
 
+    // show kviz 
+    useEffect(() => {
+        if (stageData.layout === LAYOUTS.quiz) {
+            dispatch('kviz/show');
+        }
+    }, [stageData]);
+
     useEffect(() => {
         if (kviz.show) {
             setShowGameView(false);
@@ -131,6 +138,8 @@ export const GameView = () => {
             }
         }
     }, [modal, kviz]);
+
+
 
     useEffect(() => {
         if (!showGameView) {
