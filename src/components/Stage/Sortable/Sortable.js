@@ -10,20 +10,56 @@ import useMount from "react-use/lib/useMount";
 const DroppedContainer = styled.div`
   display: flex;
   position: relative;
-  width: 200px;
-  height: 50px;
-  border: 1px solid black;
+  & > div {
+    &:not(:first-child) {
+      margin-left: 0.4rem;
+    }
+  }
 `;
 
 const DroppedPlaceholder = styled.div`
-    height: 40px;
-    width: 51px;
+    position: relative;
+    width: 4rem;
+    height: 4rem;
     text-align: center;
     border: dashed #fff 3px;
+
+    & > div {
+      &:nth-child(1) {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -0.2rem;
+        }
+      &:nth-child(2) {
+        top: -0.22rem;
+        left: -0.19rem;
+        transform: scale(1.03);
+      }
+    }
+`;
+const PlaceholderInner = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    font-family: 'Zilla Slab', serif;
+    font-size: 2rem;
+    font-weight: bold;
 `;
 
 const ItemsContainer = styled.div`
   display: flex;
+  margin-top: 0.5rem;
+  & > div {
+      &:not(:first-child) {
+          margin-left: 0.4rem;
+        }
+  }
 `;
 
 
@@ -90,11 +126,10 @@ export const Sortable = ({data, handler}) => {
 
                 {data.answer.map((answer, index) => {
                     return (
-                        <Droppable droppableId={'result' + index}>
+                        <Droppable key={index} droppableId={'result' + index}>
                             {provided => (
                                 <DroppedPlaceholder ref={provided.innerRef} {...provided.droppableProps}>
-                                    {answer.placeholder}
-                                    {provided.placeholder}
+                                    <PlaceholderInner>{answer.placeholder}</PlaceholderInner>
                                     {resultItems['result'+ index] && <DraggableElem item={resultItems['result'+ index]} index={index}
                                                                           key={resultItems['result'+ index].id}/>}
                                 </DroppedPlaceholder>)}
