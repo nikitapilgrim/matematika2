@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from "styled-components";
+import {TextWithBorders} from "./TextWithBorders";
 
 const Wrapper = styled.div`
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,7 +20,9 @@ const Wrapper = styled.div`
 export const Kviz = ({order}) => {
     return (
         <Wrapper>
-            Kviz {order}
+            <TextWithBorders color="#3a6269;">
+                Kviz {order}
+            </TextWithBorders>
         </Wrapper>
     )
 };

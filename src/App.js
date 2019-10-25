@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import StoreContext from 'storeon/react/context';
 import {GameView} from "./components/GameView";
 import {store} from "./store/store";
+import TouchBackend from 'react-dnd-touch-backend'
 import Fullscreen from "react-full-screen";
 
 const Wrapper = styled.div`
@@ -24,14 +25,14 @@ const WithProviders = () => {
 
     return (
         <StoreContext.Provider value={store}>
-            <Fullscreen
-                enabled={isFull}
-                onChange={isFull => setIsFull(isFull)}
-            >
-                <Wrapper>
-                    <GameView/>
-                </Wrapper>
-            </Fullscreen>
+                <Fullscreen
+                    enabled={isFull}
+                    onChange={isFull => setIsFull(isFull)}
+                >
+                    <Wrapper>
+                        <GameView/>
+                    </Wrapper>
+                </Fullscreen>
         </StoreContext.Provider>
     );
 };

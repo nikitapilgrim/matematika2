@@ -7,8 +7,8 @@ const stage = store => {
     final: false,
     modal: false,
     kviz: {
-      order: false,
-      show: false
+      order: 1,
+      show: false,
     }
   }));
   store.on('modal/show', ({quiz}, state) => {
@@ -18,8 +18,9 @@ const stage = store => {
     return ({modal: false});
   });
   store.on('kviz/set', ({kviz}, state) => {
-    return ({kviz: {...kviz, order: state}});
+    return ({kviz: {...kviz, order: state.order}});
   });
+
   store.on('kviz/show', ({kviz}) => {
     return ({kviz: {...kviz, show: true}});
   });

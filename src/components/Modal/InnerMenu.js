@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import useMount from "react-use/lib/useMount";
 import styled from "styled-components";
 import useStoreon from 'storeon/react';
@@ -25,35 +25,28 @@ const stagesColor = {
 };
 
 const Button = styled.div`
-  padding: 1rem;
-  background-color: ${stagesColor.current};
-  border-radius: 3px;
-  font-size: 1rem;
+  padding: 0.9rem;
+  background-color: ${ props => props.current ? stagesColor.current : stagesColor.some};
+  border-radius: 5px;
+  font-size: 2rem;
   color: #FFF;
-  font-weight: bold;
+  font-weight: 900;
   transition: background-color 0.3s ease;
   cursor: pointer;
+  text-align: center;
   &:hover {
     background-color: #d89d57;
   }
 `;
 
 const Title = styled.div`
-  font-family: 'Luckiest Guy', cursive;
-  font-size: 17px;
-  transform: scale(1.5);
-  position: relative;
-  left: 1rem;
-  top: -50px;
-  filter: drop-shadow(0px 0px 1px black);
+  
 `;
 
 export const InnerMenu = () => {
-    const {dispatch, modal} = useStoreon('stage', 'kviz', 'modal');
+    const {dispatch, modal, kviz, stage} = useStoreon('stage', 'kviz', 'modal');
     const [buttons, setButtons] = useState(null);
-    const ref = useRef(null);
-    const size = useComponentSize(ref);
-    const {width, height} = size;
+
     useMount(() => {
         const prepareButtons = stagesData.reduce((acc, stage, stageNumber) => {
             if (stage.layout === LAYOUTS.quiz) {
@@ -65,24 +58,34 @@ export const InnerMenu = () => {
         setButtons(prepareButtons)
     });
 
+    useEffect(() => {
+        if (stagesData[stage]) {
+            if (stagesData[stage].layou === LAYOUTS.quiz) {
+                dispatch('kviz/set', {order: kviz.order + 1});
+            }
+        }
+    }, [stage]);
+
     const handlerStage = (next, number) => () => {
-        dispatch('kviz/set', number);
+        dispatch('kviz/set', {order: number});
         dispatch('kviz/show');
         dispatch('stage/to', next);
         dispatch('modal/hide');
     };
 
+
     return (
-        <Wrapper ref={ref}>
+        <Wrapper>
             <Title>
-                <TextWithBorders width={width} color='#4a822b'>Izaberi kviz!</TextWithBorders>
+                <TextWithBorders color='#4a822b'>Izaberi kviz!</TextWithBorders>
             </Title>
             <Buttons>
                 {
-                    buttons && buttons.map((stage, i) => {
+                    buttons && buttons.map((button, i) => {
+                        const index = i;
                         return (
-                            <Button onClick={handlerStage(stage.id, i + 1)} key={stage.id}>
-                                KVIZ {i + 1}
+                            <Button current={kviz.order === index + 1} onClick={handlerStage(button.id, index + 1)} key={button.id}>
+                                KVIZ {index + 1}
                             </Button>
                         )
                     })

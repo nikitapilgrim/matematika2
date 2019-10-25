@@ -102,7 +102,7 @@ export const GameView = () => {
         if (answer) {
             setTimeout(() => {
                 reset();
-                setAnswer(null)
+                //setAnswer(null)
             }, 2000)
         }
     }, [answer]);

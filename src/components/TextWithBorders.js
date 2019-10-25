@@ -4,6 +4,13 @@ import useComponentSize from '@rehooks/component-size'
 
 const Wrapper = styled.div`
   position: relative;
+  pointer-events: none;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 17px;
+  transform: scale(1.5);
+  left: 1rem;
+  top: -50px;
+  filter: drop-shadow(0px 0px 1px black);
   svg {
     &:not(:first-child) {
         position: absolute;

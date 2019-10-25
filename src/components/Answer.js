@@ -4,6 +4,7 @@ import ResponsiveCanvas from 'react-responsive-canvas';
 import useMount from "react-use/lib/useMount";
 import FontFaceObserver from 'fontfaceobserver';
 import useComponentSize from '@rehooks/component-size'
+import {TextWithBorders} from "./TextWithBorders";
 
 
 const Wrong = keyframes`
@@ -62,56 +63,20 @@ const Wrapper = styled.div`
     animation-timing-function: ${props => !props.right && 'ease-out'};
     animation-iteration-count: ${props => !props.right && 'infinite'};
     font-weight: bold;
-    color: ${props => props.right ? '#1dc91d' : 'red'};
+    color: ${props => props.right ? '#' : 'red'};
     z-index: 999;
-    text-shadow:0px 1px 0 rgb(255,255,255),0px -1px 0 rgb(255,255,255),1px 0px 0 rgb(255,255,255),-1px 0px 0 rgb(255,255,255),1px 1px 0 rgb(255,255,255),1px -1px 0 rgb(255,255,255),-1px 1px 0 rgb(255,255,255),-1px -1px 0 rgb(255,255,255),0px 2px 0 rgb(255,255,255),0px -2px 0 rgb(255,255,255),2px 0px 0 rgb(255,255,255),-2px 0px 0 rgb(255,255,255),2px 2px 0 rgb(255,255,255),2px -2px 0 rgb(255,255,255),-2px 2px 0 rgb(255,255,255),-2px -2px 0 rgb(255,255,255),0px 3px 0 rgb(255,255,255),0px -3px 0 rgb(255,255,255),3px 0px 0 rgb(255,255,255),-3px 0px 0 rgb(255,255,255),3px 3px 0 rgb(255,255,255),3px -3px 0 rgb(255,255,255),-3px 3px 0 rgb(255,255,255),-3px -3px 0 rgb(255,255,255),0px 4px 0 rgb(255,255,255),0px -4px 0 rgb(255,255,255),4px 0px 0 rgb(255,255,255),-4px 0px 0 rgb(255,255,255),4px 4px 0 rgb(255,255,255),4px -4px 0 rgb(255,255,255),-4px 4px 0 rgb(255,255,255),-4px -4px 0 rgb(255,255,255),0px 5px 0 rgb(255,255,255),0px -5px 0 rgb(255,255,255),5px 0px 0 rgb(255,255,255),-5px 0px 0 rgb(255,255,255),5px 5px 0 rgb(255,255,255),5px -5px 0 rgb(255,255,255),-5px 5px 0 rgb(255,255,255),-5px -5px 0 rgb(255,255,255),0px 6px 0 rgb(255,255,255),0px -6px 0 rgb(255,255,255),6px 0px 0 rgb(255,255,255),-6px 0px 0 rgb(255,255,255),6px 6px 0 rgb(255,255,255),6px -6px 0 rgb(255,255,255),-6px 6px 0 rgb(255,255,255),-6px -6px 0 rgb(255,255,255),0px 7px 0 rgb(255,255,255),0px -7px 0 rgb(255,255,255),7px 0px 0 rgb(255,255,255),-7px 0px 0 rgb(255,255,255),7px 7px 0 rgb(255,255,255),7px -7px 0 rgb(255,255,255),-7px 7px 0 rgb(255,255,255),-7px -7px 0 rgb(255,255,255),0px 8px 0 rgb(255,255,255),0px -8px 0 rgb(255,255,255),8px 0px 0 rgb(255,255,255),-8px 0px 0 rgb(255,255,255),8px 8px 0 rgb(255,255,255),8px -8px 0 rgb(255,255,255),-8px 8px 0 rgb(255,255,255),-8px -8px 0 rgb(255,255,255);
     font-size:100px;
 `;
 
-
-const Canvas = ({text}) => {
-    const [ref, setRef] = useState(null);
-    let size = useComponentSize(ref);
-    // size == { width: 100, height: 200 }
-    let {width, height} = size;
-    const FONT_NAME = 'Luckiest Guy';
-    const [fontLoaded, setFontLoaded] = useState(null);
-    console.log(width, height)
-
-    useMount(() => {
-        const font = new FontFaceObserver(FONT_NAME);
-        font.load().then(function () {
-            setFontLoaded(true);
-        });
-
-    });
-
-    useEffect(() => {
-        if (ref.current && fontLoaded) {
-            const ctx = ref.current.getContext("2d");
-            ctx.font = `20rem "${FONT_NAME}"`;
-            ctx.lineWidth = 20;
-            ctx.strokeStyle = 'white';
-            ctx.fillStyle = 'red';
-            ctx.strokeText(text, 210, 75);
-            ctx.fillText(text, 210, 75)
-        }
-    }, [text, ref, fontLoaded]);
-
-    return (
-        <ResponsiveCanvas
-            canvasRef={el => (setRef({current: el}))}
-        />
-    )
-};
 
 export const Answer = ({answer}) => {
     return (
         <>
             {answer &&
             <Wrapper right={answer.right}>
-                {!answer.right ? answer.value : 'BRAVO!'}
-                {/*<Canvas text={answer.value}/>*/}
+                {!answer.right ?
+                    <TextWithBorders color="red">{answer.value}</TextWithBorders> :
+                    <TextWithBorders color="#1dc91d">BRAVO!</TextWithBorders>}
             </Wrapper>
             }
         </>
