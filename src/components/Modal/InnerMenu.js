@@ -12,6 +12,7 @@ const Wrapper = styled.div`
 `
 
 const Buttons = styled.div`
+    margin-top: 3rem;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
@@ -77,7 +78,7 @@ export const InnerMenu = () => {
     return (
         <Wrapper>
             <Title>
-                <TextWithBorders color='#4a822b'>Izaberi kviz!</TextWithBorders>
+                <TextWithBorders color='#4a822b' text="Izaberi kviz!"/>
             </Title>
             <Buttons>
                 {

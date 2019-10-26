@@ -102,7 +102,7 @@ export const GameView = () => {
         if (answer) {
             setTimeout(() => {
                 reset();
-                //setAnswer(null)
+                setAnswer(null)
             }, 2000)
         }
     }, [answer]);
@@ -119,7 +119,7 @@ export const GameView = () => {
         }
     }, [modal, kviz, spriteLoaded]);
 
-    // show kviz 
+    // show kviz
     useEffect(() => {
         if (stageData.layout === LAYOUTS.quiz) {
             dispatch('kviz/show');
@@ -215,9 +215,7 @@ export const GameView = () => {
             </TopPanel>
 
             <CurrentStage>{stage}</CurrentStage>
-            <Slide when={kviz.show} top>
-                <Kviz order={kviz.order}/>
-            </Slide>
+            <Kviz show={kviz.show} order={kviz.order}/>
             <DeskWrapper>
                 <Slide when={showGameView} bottom onReveal={handlerDeskShow}>
                     <img src={desk} alt="desk"/>

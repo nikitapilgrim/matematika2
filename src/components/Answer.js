@@ -75,8 +75,8 @@ export const Answer = ({answer}) => {
             {answer &&
             <Wrapper right={answer.right}>
                 {!answer.right ?
-                    <TextWithBorders color="red">{answer.value}</TextWithBorders> :
-                    <TextWithBorders color="#1dc91d">BRAVO!</TextWithBorders>}
+                    <TextWithBorders color="red" size={12} text={answer.value}/> :
+                    <TextWithBorders color="#1dc91d" size={12} text="BRAVO!"/>}
             </Wrapper>
             }
         </>

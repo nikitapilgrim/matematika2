@@ -1,17 +1,28 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import useComponentSize from '@rehooks/component-size'
+import { Stage, Layer, Rect, Text } from 'react-konva';
+import Konva from 'konva';
+import useWindowSize from "react-use/lib/useWindowSize";
 
 const Wrapper = styled.div`
+  display: inline-block;
   position: relative;
   pointer-events: none;
-  font-family: 'Luckiest Guy', cursive;
-  font-size: 17px;
-  transform: scale(1.5);
-  left: 1rem;
-  top: -50px;
-  filter: drop-shadow(0px 0px 1px black);
-  svg {
+  div  {
+    &:not(:first-child) {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+  //font-family: 'Luckiest Guy', cursive;
+  //font-size: 17px;
+  //transform: scale(1.5);
+  //left: 1rem;
+  //top: -50px;
+  //filter: drop-shadow(0px 0px 1px black);
+  /*svg {
     &:not(:first-child) {
         position: absolute;
         top: 0;
@@ -21,41 +32,55 @@ const Wrapper = styled.div`
         height: 99%;
         filter: drop-shadow(0px 0px 10px white);
     }
-  }
+  }*/
 `;
 
-const HiddenText = styled.span`
-    position: absolute;
-    top: -0.1em;
-    left: 0.07em;
-    font-size: 2.9em;
-    z-index: -1;
+const HiddenText = styled.div`
+    display: inline-block;
+    white-space: nowrap;
+    //position: absolute;
+    //top: -0.1em;
+    //left: 0.07em;
+    font-size: ${props => `${props.size}rem`};
+    font-family: 'Luckiest Guy', cursive;
+    font-weight: bold;
     color: transparent;
-    text-shadow: 2px 2px 20px white;
+    //z-index: -1;
+    //color: transparent;
+    //text-shadow: 2px 2px 20px white;
 `;
 
-export const TextWithBorders = ({children, color}) => {
+const getFontSize = () => parseInt(getComputedStyle(document.documentElement).fontSize);
+
+export const TextWithBorders = ({children, color, text, size = 6}) => {
+    const ref = useRef(null);
+    const componentSize = useComponentSize(ref);
+    const { width, height } = componentSize;
+    const windowSize = useWindowSize();
+    const [fontSize, setFontSize] = useState(getFontSize());
+
+    useEffect(() =>{
+        setFontSize(getFontSize());
+    }, [windowSize]);
+
 
     return (
-        <Wrapper>
-            <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 400 75" width="100%" height="100%"
-                 style={{width: '100%', height: '100%'}}>
-                <defs>
-                    <filter id="whiteOutlineEffect">
-                        <feMorphology in="SourceAlpha" result="MORPH" operator="dilate" radius="4"/>
-                        <feColorMatrix in="MORPH" result="WHITENED" type="matrix"
-                                       values="-1 0 0 1 0, 0 -1 0 1 0, 0 0 -1 1 0, 0 0 0 1 0"/>
-                        <feMerge>
-                            <feMergeNode in="WHITENED"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                </defs>
-                <text x="10" y="50" fill={color} fontSize="60" filter="url(#whiteOutlineEffect)">
-                    {children}
-                </text>
-            </svg>
-            <HiddenText>{children}</HiddenText>
+        <Wrapper >
+            <HiddenText size={size} color={color} ref={ref}>{text}</HiddenText>
+            <Stage width={width+20} height={height+20}>
+                <Layer>
+                    <Text fontFamily={"Luckiest Guy"}
+                          fontSize={fontSize * size}
+                          text={text}
+                          fill={color}
+                          stroke="white"
+                          strokeWidth={fontSize / 4}
+                          shadowColor="white"
+                          shadowBlur={10}
+                          padding={10}
+                    />
+                </Layer>
+            </Stage>
         </Wrapper>
     )
 };
