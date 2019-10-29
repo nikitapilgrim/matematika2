@@ -93,7 +93,37 @@ export const Stage = ({data, onNext}) => {
     };
 
     const handlerManyInputs = (values) => {
+        if (values === true) {
+            setAnswer(values)
+        } else {
+            setAnswer({
+                value: values,
+                right: false
+            });
+        }
+    };
+
+    const handlerSortable = (values) => {
         setAnswer(values)
+    };
+
+    const handlerDragAndDrop = value => {
+        setAnswer(value)
+    };
+
+    const handlerChoice = (correct, value) => {
+        if (correct) {
+            setAnswer({
+                value: value,
+                right: false
+            });
+        } else {
+            setAnswer({
+                value: value,
+                right: false
+            });
+        }
+        handlerNext();
     };
 
     return (
@@ -101,9 +131,9 @@ export const Stage = ({data, onNext}) => {
             {data.layout === LAYOUTS.simple &&
             <Simple question={data.question} answer={data.answer} handlerInput={handlerInput}/>}
             {data.layout === LAYOUTS.manyInputs && <ManyInputs handler={handlerManyInputs} data={data.inputs}/>}
-            {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data}/>}
-            {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerManyInputs}/>}
-            {data.layout === LAYOUTS.choice && <Choice data={data}/>}
+            {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data} handler={handlerDragAndDrop}/>}
+            {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerSortable}/>}
+            {data.layout === LAYOUTS.choice && <Choice data={data} handler={handlerChoice}/>}
             {data.layout === LAYOUTS.speech && <Speech phrase={data.phrase} audio={data.audio}/>}
             {data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice && <NextButton onClick={handlerNext}>Dalje</NextButton>}
         </>

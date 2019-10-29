@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -35,17 +35,29 @@ const Span = styled.span`
   top: -0.4rem
 `
 
-export const Choice = ({data}) => {
-    const handlerClick = answer => () => {
-        answer && console.log('true')
+export const Choice = ({data, handler}) => {
+    const [answer, setAnswer] = useState()
+
+    const handlerClick = (answer, value) => () => {
+        setAnswer({
+            right: answer,
+            value: value
+        });
+        handler(answer, value)
     };
+
+    useEffect(() => {
+        if (answer) {
+            handler(answer)
+        }
+    }, [answer]);
 
     return (
         <Wrapper>
             {data.items.map((item, i) => {
                 return (
                     <Fragment key={i}>
-                        <Elem onClick={handlerClick(item.right)}>
+                        <Elem onClick={handlerClick(item.right, item.placeholder)}>
                             <Span>
                                 {item.placeholder}
                             </Span>

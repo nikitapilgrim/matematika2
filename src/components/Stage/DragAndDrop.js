@@ -97,8 +97,12 @@ export const DragAndDrop = React.memo(({data, handler}) => {
     const parsedAnswer = useMemo(() => parseQuestion(data.question), [data.question]);
 
     useEffect(() => {
-        console.log(resultItems, 'resultItems')
-    }, [resultItems])
+        if (resultItems && resultItems.hasOwnProperty('result1') && parsedAnswer === resultItems['result1'].placeholder) {
+            handler({right: true, value: resultItems['result1'].placeholder})
+        } else {
+            handler({right: false, value: parsedAnswer})
+        }
+    }, [resultItems]);
 
     useEffect(() => {
         setItems(data.items);

@@ -70,7 +70,7 @@ const ItemsList = React.memo(({items}) => {
     ));
 });
 
-export const Sortable = React.memo(({data, handler}) => {
+export const Sortable = ({data, handler}) => {
     const [items, setItems] = useState(data.items);
     const [resultItems, setResultItems] = useState({});
 
@@ -94,11 +94,12 @@ export const Sortable = React.memo(({data, handler}) => {
             .sort((a, b) => a.key - b.key);
         const convertItems = convert(result);
         const equalsResults = equals(convertResult, convertItems);
+        handler({right: false, value: result.toString()});
         if (equalsResults) {
-            handler(true)
+            handler({right: true, value: result.toString()})
         }
         if (convertResult.length === convertItems.length && !equalsResults) {
-            handler(result)
+            handler({right: false, value: result.toString()})
         }
     }, [resultItems]);
 
@@ -179,4 +180,4 @@ export const Sortable = React.memo(({data, handler}) => {
             </div>
         </DragDropContext>
     )
-});
+};
