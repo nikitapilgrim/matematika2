@@ -7,6 +7,7 @@ import arrayMove from 'array-move';
 import reactStringReplace from 'react-string-replace';
 
 import useMount from "react-use/lib/useMount";
+import useStoreon from "storeon/react";
 
 const DroppedContainer = styled.div`
   display: flex;
@@ -43,7 +44,7 @@ const PlaceholderInner = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-   
+    position: relative;
     z-index: 0;
     height: 100%;
     width: 100%;
@@ -84,6 +85,19 @@ const Question = styled.div`
     }
 `;
 
+const HiddenWrapper = styled.div`
+    position: absolute;
+    z-index: 3;
+    opacity: ${props => props.help ? 0.8 : 0};
+    transition: 0.2s;
+    div {
+       
+        left: -0.1rem;
+        right: 0;
+        top: 0;
+    }
+`;
+
 
 const parseQuestion = (question) => {
     const type = question.match(/{{([^}]+)}}/);
@@ -95,6 +109,7 @@ export const DragAndDrop = React.memo(({data, handler}) => {
     const [resultItems, setResultItems] = useState({});
     const [question, setQuestion] = useState(data.question);
     const parsedAnswer = useMemo(() => parseQuestion(data.question), [data.question]);
+    const {dispatch, help} = useStoreon('help');
 
     useEffect(() => {
         if (resultItems && resultItems.hasOwnProperty('result1') && parsedAnswer === resultItems['result1'].placeholder) {
@@ -162,6 +177,10 @@ export const DragAndDrop = React.memo(({data, handler}) => {
                             <Droppable key={i} droppableId={'result' + i}>
                                 {provided => (
                                     <DroppedPlaceholder ref={provided.innerRef} {...provided.droppableProps}>
+                                        {help && <HiddenWrapper help={help}>
+                                            <DraggableElem item={{id: 1, value: parsedAnswer}} index={i}
+                                                           key={'help'}/>
+                                        </HiddenWrapper>}
                                         <PlaceholderInner>?</PlaceholderInner>
                                         {resultItems['result' + i] &&
                                         <DraggableElem item={resultItems['result' + i]} index={i}
