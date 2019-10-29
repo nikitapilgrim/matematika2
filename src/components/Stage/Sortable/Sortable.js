@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import styled from 'styled-components';
 import {DragDropContext} from 'react-beautiful-dnd'
 import {Droppable, Draggable} from 'react-beautiful-dnd'
@@ -6,6 +6,7 @@ import {DraggableElem} from "./DraggableElem";
 import arrayMove from 'array-move';
 
 import useMount from "react-use/lib/useMount";
+import equals from "ramda/es/equals";
 
 const DroppedContainer = styled.div`
   display: flex;
@@ -69,16 +70,44 @@ const ItemsList = React.memo(({items}) => {
     ));
 });
 
-export const Sortable = ({data, handler}) => {
+export const Sortable = React.memo(({data, handler}) => {
     const [items, setItems] = useState(data.items);
     const [resultItems, setResultItems] = useState({});
 
+    const result = useMemo(() => {
+        const items = data.items;
+        const answer = data.answer;
+        return Object.entries(answer).reduce((acc, pair) => {
+            const [key, value] = pair;
+            return [...acc, Object.values(items).find(item => item.id === value.id).value]
+        }, []);
+    }, [data]);
+
+
     useEffect(() => {
-        console.log(resultItems, 'resultItems')
-    }, [resultItems])
+        const convert = (obj) => Object.entries(obj).reduce((acc, pair) => {
+            const [key, value] = pair;
+            return [...acc, {key: +key.replace(/\D+/g,""), value}]
+        }, []);
+        const convertResult = convert(resultItems)
+            .reduce((acc, item) => [...acc, {key: item.key, value: item.value.value}], [])
+            .sort((a, b) => a.key - b.key);
+        const convertItems = convert(result);
+        const equalsResults = equals(convertResult, convertItems);
+        if (equalsResults) {
+            handler(true)
+        }
+        if (convertResult.length === convertItems.length && !equalsResults) {
+            handler(result)
+        }
+    }, [resultItems]);
+
+    useEffect(() => {
+        setItems(data.items);
+        setResultItems({})
+    }, [data]);
 
     const onDragEnd = (result) => {
-        console.log(result)
 
         if (!result.destination) {
             return;
@@ -150,4 +179,4 @@ export const Sortable = ({data, handler}) => {
             </div>
         </DragDropContext>
     )
-};
+});

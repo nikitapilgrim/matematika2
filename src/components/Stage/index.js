@@ -6,7 +6,6 @@ import {Simple} from "./Simple";
 import {ManyInputs} from "./ManyInputs";
 import {DragAndDrop} from "./DragAndDrop";
 import {Sortable} from "./Sortable/Sortable";
-import {SortableNew} from './SortableNew'
 import {Choice} from "./Choice";
 import {LAYOUTS} from "../../data/stages";
 import {Speech} from "../Speech";

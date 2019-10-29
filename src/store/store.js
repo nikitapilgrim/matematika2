@@ -1,5 +1,6 @@
 import createStore from 'storeon';
 import persistState from '@storeon/localstorage';
+import stages from '../data/stages'
 
 const stage = store => {
   store.on('@init', () => ({
@@ -37,11 +38,10 @@ const stage = store => {
     }
   });
   store.on('stage/next', ({stage}, number) => {
-    return ({stage: stage + 1});
-    /*if (Stages.length <= stage) {
-      store.dispatch('final', true);
+    if (stages.length <= stage + 1) {
       return ({stage: stage});
-    }*/
+    }
+    return ({stage: stage + 1});
   });
 };
 /*

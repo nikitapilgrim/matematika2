@@ -148,6 +148,7 @@ export const GameView = () => {
     }, [showGameView]);
 
     const handlerAnswer = (answer) => {
+        console.log(answer, 'asnwer')
         if (true/*isReady()*/) {
             setAnswer(answer);
             if (answer.right === true) {

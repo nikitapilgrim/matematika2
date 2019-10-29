@@ -29,7 +29,7 @@ export const  DraggableElem = ({ item, index }) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                 >
-                    {item.value}
+                    {item.value || item.placeholder}
                 </Wrapper>
             )}
         </Draggable>
