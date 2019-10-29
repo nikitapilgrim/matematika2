@@ -7,6 +7,7 @@ import arrayMove from 'array-move';
 
 import useMount from "react-use/lib/useMount";
 import equals from "ramda/es/equals";
+import useStoreon from "storeon/react";
 
 const DroppedContainer = styled.div`
   display: flex;
@@ -64,6 +65,21 @@ const ItemsContainer = styled.div`
 `;
 
 
+const HiddenWrapper = styled.div`
+    position: absolute;
+    z-index: 3;
+    opacity: ${props => props.help ? 0.8 : 0};
+    transition: 0.2s;
+    div {
+       
+        left: -0.1rem;
+        right: 0;
+        top: 0;
+    }
+`;
+
+
+
 const ItemsList = React.memo(({items}) => {
     return items.map((item, index) => (
         <DraggableElem item={item} index={index} key={item.id}/>
@@ -73,6 +89,7 @@ const ItemsList = React.memo(({items}) => {
 export const Sortable = ({data, handler}) => {
     const [items, setItems] = useState(data.items);
     const [resultItems, setResultItems] = useState({});
+    const {dispatch, help} = useStoreon('help');
 
     const result = useMemo(() => {
         const items = data.items;
@@ -160,6 +177,12 @@ export const Sortable = ({data, handler}) => {
                             {provided => (
                                 <DroppedPlaceholder ref={provided.innerRef} {...provided.droppableProps}>
                                     <PlaceholderInner>{answer.placeholder}</PlaceholderInner>
+
+                                    {help && <HiddenWrapper help={help}>
+                                        <DraggableElem item={{id: 'help' + index, value: result[index]}} index={index}
+                                                       key={'help' + index}/>
+                                    </HiddenWrapper>}
+
                                     {resultItems['result'+ index] && <DraggableElem item={resultItems['result'+ index]} index={index}
                                                                           key={resultItems['result'+ index].id}/>}
                                 </DroppedPlaceholder>)}
