@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import useComponentSize from '@rehooks/component-size'
 import reactStringReplace from 'react-string-replace';
+import useStoreon from "storeon/react";
 
 const Wrapper = styled.div`
   display: flex;
@@ -9,6 +10,8 @@ const Wrapper = styled.div`
 `;
 
 const Question = styled.div`
+    display: flex;
+    align-items: center;
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 700;
     font-size: 3rem;
@@ -16,23 +19,33 @@ const Question = styled.div`
 `;
 
 const InputWrapper = styled.span`
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 700;
     font-size: 3rem;
     white-space: nowrap;
+    width: ${props => props.width ? `${props.width}px` : '6rem'};
+    height: ${props => props.height ? `${props.height}px` : '6rem'};
+    padding: 0px 10px;
+     margin: 0;
+    margin-left: 10px;
+    min-height: 6rem;
+    min-width: 6rem;
 `;
 
 const Input = styled.input`
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     font-family: 'Roboto Condensed', sans-serif;
     display: inline-block;
     padding: 0px 10px;
-    margin: 0;
-    margin-left: 10px;
-    width: ${props => props.width ? `${props.width}px` : '6rem'};
-    min-height: 6rem;
-    min-width: 6rem;
-    height: ${props => props.height ? `${props.height}px` : '6rem'};
+   
     text-align: center;
     background-color: #5a5f3f;
     border: dashed #fff 5px;
@@ -42,19 +55,21 @@ const Input = styled.input`
 `;
 
 const HiddenAnswer = styled.div`
-  opacity: 0;
+  opacity: ${props => props.show ? '0.5' : '0'};
+  transition: 0.2s;
   position: absolute;
-  z-index: -1;
+  pointer-events: none;
+  z-index: 1;
 `;
 
 const InputWithState = ({question,answer, handler}) => {
+    const {dispatch, help} = useStoreon('help');
     const ref = useRef(null);
     let size = useComponentSize(ref);
     let {width, height} = size;
     const [value, setValue] = useState('');
     const handlerInput = (e) => {
         const value = e.target.value;
-        console.log(value)
         setValue(value);
     };
 
@@ -71,9 +86,9 @@ const InputWithState = ({question,answer, handler}) => {
         <>
             {reactStringReplace(question, /{{([^}]+)}}/g, (match, i) => {
                 return (
-                    <InputWrapper key={i}>
-                        <HiddenAnswer ref={ref}>{answer}</HiddenAnswer>
-                        <Input width={width} height={height} value={value} onChange={handlerInput}/>
+                    <InputWrapper width={width} height={height}  key={i}>
+                        <HiddenAnswer show={help} ref={ref}>{answer}</HiddenAnswer>
+                        <Input value={value} onChange={handlerInput}/>
                     </InputWrapper>
                 )
             })}
@@ -83,6 +98,7 @@ const InputWithState = ({question,answer, handler}) => {
 
 
 export const Simple = ({question, handlerInput, answer}) => {
+
 
     return (
         <Wrapper>

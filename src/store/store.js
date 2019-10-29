@@ -10,7 +10,8 @@ const stage = store => {
     kviz: {
       order: 1,
       show: false,
-    }
+    },
+    help: false
   }));
   store.on('modal/show', ({quiz}, state) => {
     return ({modal: true});
@@ -36,6 +37,12 @@ const stage = store => {
     if (number === 0 || number) {
       return ({stage: number});
     }
+  });
+  store.on('help/show', ({kviz}) => {
+    return ({help: true});
+  });
+  store.on('help/hide', ({kviz}) => {
+    return ({help: false});
   });
   store.on('stage/next', ({stage}, number) => {
     if (stages.length <= stage + 1) {
