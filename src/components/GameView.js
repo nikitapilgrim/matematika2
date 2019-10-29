@@ -15,6 +15,7 @@ import {Sound} from "./Sound";
 import {Menu} from "./Menu";
 import {Help} from "./Help";
 import {Kviz} from "./Kviz";
+import {Final} from "./Final";
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -157,7 +158,9 @@ export const GameView = () => {
             } else {
                 setCombo(0)
             }
-            dispatch('stage/next');
+            dispatch('stage/next', {
+                answer: answer.right
+            });
         }
     };
 
@@ -229,6 +232,7 @@ export const GameView = () => {
                     <Stage onNext={handlerAnswer} data={stageData}/>
                 </Inner>
             </DeskWrapper>
+            <Final/>
 
             <input value={stage} style={{
                 position: 'fixed',

@@ -7,6 +7,8 @@ const stage = store => {
     stage: 0,
     final: false,
     modal: false,
+    countQuestions: 0,
+    countCorrectAnswers: 0,
     kviz: {
       order: 1,
       show: false,
@@ -44,8 +46,22 @@ const stage = store => {
   store.on('help/hide', ({kviz}) => {
     return ({help: false});
   });
-  store.on('stage/next', ({stage}, number) => {
+  store.on('countQuestion', ({countQuestions}) => {
+    return ({countQuestions: countQuestions + 1});
+  });
+  store.on('countCorrectAnswers', ({countCorrectAnswers}) => {
+    return ({countCorrectAnswers: countCorrectAnswers + 1});
+  });
+  store.on('stage/next', ({stage}, data) => {
+    store.dispatch('countQuestion');
+    if (data) {
+      if (data.right) {
+        store.dispatch('countCorrectAnswers')
+      }
+    }
+
     if (stages.length <= stage + 1) {
+      store.dispatch('stage/final', true);
       return ({stage: stage});
     }
     return ({stage: stage + 1});
