@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import useMount from "react-use/lib/useMount";
+import useStoreon from "storeon/react";
 
 const Inputs = styled.div`
   display: flex;
@@ -27,11 +28,14 @@ const Input = styled.input`
     &::placeholder {
       color: #fff;
       opacity: 0.8;
+      transition: 0.2s;
     }
 `;
 
 export const ManyInputs = ({data, handler}) => {
     const [inputs, setInputs] = useState(null);
+    const {dispatch, help} = useStoreon('help');
+
 
     useMount(() => {
         if (data) {
@@ -60,8 +64,13 @@ export const ManyInputs = ({data, handler}) => {
     return (
         <Inputs>
             {inputs && inputs.map((data, i) => {
+                const answer = !data.placeholder && data.answer;
+
               return (
-                  <Input key={i} disabled={!!data.placeholder} placeholder={data.placeholder || ''} onKeyUp={handlerInputs(data.answer)}/>
+                  <Input key={i}
+                         disabled={!!data.placeholder || help}
+                         placeholder={data.placeholder || help && answer || ''}
+                         onKeyUp={handlerInputs(data.answer)}/>
               )
             })}
         </Inputs>
