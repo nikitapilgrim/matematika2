@@ -85,7 +85,7 @@ const TopPanel = styled.div`
 
 
 export const GameView = () => {
-    const {dispatch, stage, kviz, modal} = useStoreon('stage', 'kviz', 'modal');
+    const {dispatch, stage, kviz, modal, preloader} = useStoreon('stage', 'kviz', 'modal', 'preloader');
     const [stageData, setStageData] = useState(stagesData[stage]);
     const [combo, setCombo] = useState(0);
     const [animate, setAnimate] = useState(null);
@@ -191,8 +191,24 @@ export const GameView = () => {
 
     const handlerSpriteLoaded = () => {
         setSpriteLoaded(true);
-        setShowGameView(true)
+        let count = 0;
+        const setPreload = i => () => {
+            count = i + 1;
+            dispatch('preload/set', i);
+            if (i < 100) {
+                setTimeout(setPreload(count), 20)
+            }
+        };
+        setTimeout(setPreload(count), 0);
     };
+
+    useEffect(() => {
+        if (preloader.count === 100) {
+            setTimeout(() => {
+                setShowGameView(true)
+            }, 500)
+        }
+    }, [preloader.count]);
 
     const handlerDeskShow = () => {
         setTimeout(() => {

@@ -2,11 +2,18 @@ import createStore from 'storeon';
 import persistState from '@storeon/localstorage';
 import stages from '../data/stages'
 
+const preloader = document.querySelector('#preload__percent');
+
 const stage = store => {
   store.on('@init', () => ({
     stage: 0,
     final: false,
     modal: false,
+    preloader: {
+      container: preloader,
+      count: 0,
+      show: true,
+    },
     countQuestions: 0,
     countCorrectAnswers: 0,
     kviz: {
@@ -23,6 +30,15 @@ const stage = store => {
   });
   store.on('kviz/set', ({kviz}, state) => {
     return ({kviz: {...kviz, order: state.order}});
+  });
+
+  store.on('preload/set', ({preloader}, state) => {
+    preloader.container.innerHTML = `${state} %`;
+    if (state === 100) {
+      document.querySelector('#preload').style.opacity = 0;
+      document.querySelector('#preload').style.zIndex = -99;
+    }
+    return ({preloader: {...preloader, count: state}});
   });
 
   store.on('kviz/show', ({kviz}) => {
