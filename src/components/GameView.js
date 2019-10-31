@@ -115,15 +115,18 @@ export const GameView = () => {
 
     // animation if modal show
     useEffect(() => {
-        if (!kviz.show && spriteLoaded) {
+        if (!kviz.show && spriteLoaded && preloader.count === 100) {
             setShowGameView(!modal);
         }
-    }, [modal, kviz, spriteLoaded]);
+    }, [modal, kviz, spriteLoaded, preloader]);
 
     // show kviz
     useEffect(() => {
         if (stageData.layout === LAYOUTS.quiz) {
             dispatch('kviz/show');
+        }
+        if (stagesData[stage - 1] && stagesData[stage - 1].layout === LAYOUTS.quiz) {
+            dispatch('kviz/set', kviz.order + 1);
         }
     }, [stageData]);
 

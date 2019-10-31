@@ -29,7 +29,7 @@ const stage = store => {
     return ({modal: false});
   });
   store.on('kviz/set', ({kviz}, state) => {
-    return ({kviz: {...kviz, order: state.order}});
+    return ({kviz: {...kviz, order: state}});
   });
 
   store.on('preload/set', ({preloader}, state) => {

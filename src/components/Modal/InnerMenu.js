@@ -5,11 +5,7 @@ import useStoreon from 'storeon/react';
 import stagesData from "../../data/stages";
 import {LAYOUTS} from "../../data/stages";
 import {TextWithBorders} from "../TextWithBorders";
-import useComponentSize from "@rehooks/component-size";
-
-const Wrapper = styled.div`
-
-`
+import useClickAway from "react-use/lib/useClickAway";
 
 const Buttons = styled.div`
     margin-top: 3rem;
@@ -17,6 +13,18 @@ const Buttons = styled.div`
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 0.3rem;
+`;
+
+const Wrapper = styled.div`
+  position: relative;
+  z-index: 5;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
 `;
 
 const stagesColor = {
@@ -27,7 +35,7 @@ const stagesColor = {
 
 const Button = styled.div`
   padding: 0.9rem;
-  background-color: ${ props => props.current ? stagesColor.current : stagesColor.some};
+  background-color: ${props => props.current ? stagesColor.current : stagesColor.some};
   border-radius: 5px;
   font-size: 2rem;
   color: #FFF;
@@ -43,10 +51,17 @@ const Button = styled.div`
 const Title = styled.div`
   
 `;
+const Inner = styled.div`
 
-export const InnerMenu = () => {
+`;
+
+export const InnerMenu = (props) => {
     const {dispatch, modal, kviz, stage} = useStoreon('stage', 'kviz', 'modal');
     const [buttons, setButtons] = useState(null);
+    const ref = useRef(null);
+    useClickAway(ref, () => {
+        dispatch('modal/hide')
+    });
 
     useMount(() => {
         const prepareButtons = stagesData.reduce((acc, stage, stageNumber) => {
@@ -68,7 +83,7 @@ export const InnerMenu = () => {
     }, [stage]);
 
     const handlerStage = (next, number) => () => {
-        dispatch('kviz/set', {order: number});
+        dispatch('kviz/set', number);
         dispatch('kviz/show');
         dispatch('stage/to', next);
         dispatch('modal/hide');
@@ -77,21 +92,24 @@ export const InnerMenu = () => {
 
     return (
         <Wrapper>
-            <Title>
-                <TextWithBorders color='#4a822b' text="Izaberi kviz!"/>
-            </Title>
-            <Buttons>
-                {
-                    buttons && buttons.map((button, i) => {
-                        const index = i;
-                        return (
-                            <Button current={kviz.order === index + 1} onClick={handlerStage(button.id, index + 1)} key={button.id}>
-                                KVIZ {index + 1}
-                            </Button>
-                        )
-                    })
-                }
-            </Buttons>
+            <Inner ref={ref}>
+                <Title>
+                    <TextWithBorders color='#4a822b' text="Izaberi kviz!"/>
+                </Title>
+                <Buttons>
+                    {
+                        buttons && buttons.map((button, i) => {
+                            const index = i;
+                            return (
+                                <Button current={kviz.order === index + 1} onClick={handlerStage(button.id, index + 1)}
+                                        key={button.id}>
+                                    KVIZ {index + 1}
+                                </Button>
+                            )
+                        })
+                    }
+                </Buttons>
+            </Inner>
         </Wrapper>
-)
+    )
 };

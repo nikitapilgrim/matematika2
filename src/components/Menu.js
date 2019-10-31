@@ -20,6 +20,7 @@ const Wrapper = styled.div`
 
 const style = {
     overlay: {
+        zIndex: 2,
         background: 'none',
         padding: '0px !important',
     },

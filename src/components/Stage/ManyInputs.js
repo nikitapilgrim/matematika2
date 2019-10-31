@@ -14,7 +14,6 @@ const Input = styled.input`
     font-size: 2rem;
     white-space: nowrap;
     display: inline-block;
-    padding: 0px 10px;
     margin: 0;
     margin-left: 10px;
     width: 4rem;

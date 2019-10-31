@@ -36,15 +36,18 @@ const Span = styled.span`
 `
 
 export const Choice = ({data, handler}) => {
-    const [answer, setAnswer] = useState()
+    const [answer, setAnswer] = useState(null);
 
     const handlerClick = (answer, value) => () => {
         setAnswer({
             right: answer,
             value: value
         });
-        handler(answer, value)
     };
+
+    useEffect(() => {
+        setAnswer(null)
+    }, [data]);
 
     useEffect(() => {
         if (answer) {

@@ -111,20 +111,15 @@ export const Stage = ({data, onNext}) => {
         setAnswer(value)
     };
 
-    const handlerChoice = (correct, value) => {
-        if (correct) {
-            setAnswer({
-                value: value,
-                right: false
-            });
-        } else {
-            setAnswer({
-                value: value,
-                right: false
-            });
-        }
-        handlerNext();
+    const handlerChoice = (answer) => {
+        setAnswer(answer);
     };
+
+    useEffect(() => {
+        if (data.layout === LAYOUTS.choice && answer) {
+            handlerNext()
+        }
+    }, [data, answer]);
 
     return (
         <>

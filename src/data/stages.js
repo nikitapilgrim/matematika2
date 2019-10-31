@@ -366,7 +366,7 @@ export default [
         items: [
             {
                 placeholder: 19,
-                right: true,
+                right: false,
             },
             {
                 placeholder: 14,
