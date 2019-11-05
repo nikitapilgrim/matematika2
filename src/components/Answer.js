@@ -38,12 +38,8 @@ const Bravo = keyframes`
   50% {
     transform: scale(1.4);
   }
-  80% {
-    transform: scale(1.6) rotate(-10deg);
-  }
-
   to {
-    transform: scale(0);
+    transform: scale(1.6) rotate(-10deg);
   }
 `;
 

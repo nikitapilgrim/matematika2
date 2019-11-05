@@ -74,7 +74,7 @@ export const TextWithBorders = ({children, color, text, size = 6}) => {
                           text={text}
                           fill={color}
                           stroke="white"
-                          strokeWidth={fontSize / 4}
+                          strokeWidth={fontSize / 2}
                           shadowColor="white"
                           shadowBlur={10}
                           padding={10}
