@@ -4,13 +4,13 @@ import {Howl, Howler} from 'howler';
 
 const Wrapper = styled.div`
     background-color:#fff;
-    max-width: 400px;
+    max-width: 300px;
     position: absolute;
-    top: -50px;
+    top: -80px;
     padding: 15px;
     z-index: 300;
-    font-family: 'Zilla Slab', serif;
-    font-size: 20px;
+    font-family: 'Boogaloo', cursive;
+    font-size: 24px;
     color:#000;
     border-radius: 10px;
     //border: solid 1px#000;

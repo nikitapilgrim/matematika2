@@ -69,6 +69,7 @@ const HiddenAnswer = styled.div`
 
 const InputWithState = ({question, answer, handler}) => {
     const {dispatch, help} = useStoreon('help');
+    const inputRef = useRef(null);
     const ref = useRef(null);
     let size = useComponentSize(ref);
     let {width, height} = size;
@@ -94,6 +95,7 @@ const InputWithState = ({question, answer, handler}) => {
 
     useEffect(() => {
         setValue('')
+        inputRef.current.focus()
     }, [question]);
 
     useEffect(() => {
@@ -106,13 +108,9 @@ const InputWithState = ({question, answer, handler}) => {
                 return (
                     <InputWrapper width={width} height={height} key={i}>
                         <HiddenAnswer show={help} ref={ref}>{answer}</HiddenAnswer>
-                        {type === 'number' ?
-                            <Input pattern={"[0-9]*"} value={value}
-                                         onChange={handlerInput}
-                            /> :
-                            <Input type={type} value={value}
-                                   onChange={handlerInput}/>
-                           }
+                        <Input ref={inputRef} pattern={type === "number" ? "[0-9]*" : ''} value={value}
+                               onChange={handlerInput}
+                        />
                     </InputWrapper>
                 )
             })}
