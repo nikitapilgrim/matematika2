@@ -13,6 +13,7 @@ const Buttons = styled.div`
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 0.3rem;
+    filter: drop-shadow(0px 0px 10px white);
 `;
 
 const Wrapper = styled.div`
@@ -34,6 +35,8 @@ const stagesColor = {
 };
 
 const Button = styled.div`
+  position: relative;
+  z-index: 1;
   padding: 0.9rem;
   background-color: ${props => props.current ? stagesColor.current : stagesColor.some};
   border-radius: 5px;

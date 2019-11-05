@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 `;
 
 export const Sound = () => {
-    const [state, setState] = useState(true);
+    const [state, setState] = useState(false);
 
     useEffect(() => {
         if (state) {

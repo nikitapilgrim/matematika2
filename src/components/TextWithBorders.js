@@ -14,6 +14,7 @@ const Wrapper = styled.div`
       position: absolute;
       top: 0;
       left: 0;
+      ${props => props.center && 'transform: translateY(100%);' }
     }
   }
   //font-family: 'Luckiest Guy', cursive;
@@ -52,7 +53,7 @@ const HiddenText = styled.div`
 
 const getFontSize = () => parseInt(getComputedStyle(document.documentElement).fontSize);
 
-export const TextWithBorders = ({children, color, text, size = 6}) => {
+export const TextWithBorders = ({children, color, text, size = 6, center}) => {
     const ref = useRef(null);
     const componentSize = useComponentSize(ref);
     const { width, height } = componentSize;
@@ -65,7 +66,7 @@ export const TextWithBorders = ({children, color, text, size = 6}) => {
 
 
     return (
-        <Wrapper >
+        <Wrapper center={center}>
             <HiddenText size={size} color={color} ref={ref}>{text}</HiddenText>
             <Stage width={width+20} height={height+20}>
                 <Layer>
@@ -74,7 +75,7 @@ export const TextWithBorders = ({children, color, text, size = 6}) => {
                           text={text}
                           fill={color}
                           stroke="white"
-                          strokeWidth={fontSize / 2}
+                          strokeWidth={fontSize / 3}
                           shadowColor="white"
                           shadowBlur={10}
                           padding={10}
