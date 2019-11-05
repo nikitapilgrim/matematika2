@@ -47,6 +47,7 @@
     "react-drag-elements": "^0.1.2",
     "react-full-screen": "^0.2.4",
     "react-howler": "^3.7.4",
+    "react-input-just-numbers": "^1.0.3",
     "react-konva": "^16.10.1-0",
     "react-modal-hook": "^2.0.0",
     "react-responsive-canvas": "^1.0.2",

@@ -70,9 +70,27 @@ const Wrapper = styled.div`
 
 
 export const Answer = ({answer}) => {
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        if (answer) {
+            setShow(true)
+            if (answer.right) {
+                setTimeout(() => {
+                    setShow(false)
+                }, 1000)
+            }
+            if (answer.right === false) {
+                setTimeout(() => {
+                    setShow(false)
+                }, 600)
+            }
+        }
+    }, [answer]);
+
     return (
         <>
-            {answer &&
+            {show &&
             <Wrapper right={answer.right}>
                 {!answer.right ?
                     <TextWithBorders color="red" size={7} text={answer.value}/> :

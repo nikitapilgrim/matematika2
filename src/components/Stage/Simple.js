@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import useComponentSize from '@rehooks/component-size'
 import reactStringReplace from 'react-string-replace';
 import useStoreon from "storeon/react";
+import InputNumber from 'react-input-just-numbers';
+import {set} from "ramda";
 
 const Wrapper = styled.div`
   display: flex;
@@ -45,13 +47,16 @@ const Input = styled.input`
     font-family: 'Roboto Condensed', sans-serif;
     display: inline-block;
     padding: 0px 10px;
-   
+    -moz-appearance:textfield;
     text-align: center;
     background-color: #5a5f3f;
     border: dashed #fff 5px;
     outline: none;
     color: #fff;
     text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);  
+    &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
 `;
 
 const HiddenAnswer = styled.div`
@@ -62,15 +67,28 @@ const HiddenAnswer = styled.div`
   z-index: 1;
 `;
 
-const InputWithState = ({question,answer, handler}) => {
+const InputWithState = ({question, answer, handler}) => {
     const {dispatch, help} = useStoreon('help');
     const ref = useRef(null);
     let size = useComponentSize(ref);
     let {width, height} = size;
     const [value, setValue] = useState('');
+    const regexp = /^[0-9]*$/gm;
+    const type = new RegExp(regexp).test(answer) ? 'number' : 'text';
     const handlerInput = (e) => {
         const value = e.target.value;
-        setValue(value);
+        if (type === 'number') {
+            const re = /^[0-9\b]+$/;
+            if (value === '' || re.test(value)) {
+                setValue(value)
+            }
+        }
+        if (type === 'text') {
+            const re = /^[A-Za-z]+$/;
+            if (value === '' || re.test(value)) {
+                setValue(value)
+            }
+        }
     };
 
 
@@ -86,9 +104,15 @@ const InputWithState = ({question,answer, handler}) => {
         <>
             {reactStringReplace(question, /{{([^}]+)}}/g, (match, i) => {
                 return (
-                    <InputWrapper width={width} height={height}  key={i}>
+                    <InputWrapper width={width} height={height} key={i}>
                         <HiddenAnswer show={help} ref={ref}>{answer}</HiddenAnswer>
-                        <Input value={value} onChange={handlerInput}/>
+                        {type === 'number' ?
+                            <Input pattern={"[0-9]*"} value={value}
+                                         onChange={handlerInput}
+                            /> :
+                            <Input type={type} value={value}
+                                   onChange={handlerInput}/>
+                           }
                     </InputWrapper>
                 )
             })}

@@ -85,7 +85,7 @@ const TopPanel = styled.div`
 
 
 export const GameView = () => {
-    const {dispatch, stage, kviz, modal, preloader} = useStoreon('stage', 'kviz', 'modal', 'preloader');
+    const {dispatch, stage, kviz, modal, preloader, final} = useStoreon('stage', 'kviz', 'modal', 'preloader', 'final');
     const [stageData, setStageData] = useState(stagesData[stage]);
     const [combo, setCombo] = useState(0);
     const [animate, setAnimate] = useState(null);
@@ -100,12 +100,12 @@ export const GameView = () => {
     // cancel animation wrong answer
     useEffect(() => {
         //console.log(answer)
-        if (answer) {
+       /* if (answer) {
             setTimeout(() => {
                 reset();
                 setAnswer(null)
-            }, 2000)
-        }
+            }, 1000)
+        }*/
     }, [answer]);
 
     useEffect(() => {
@@ -247,9 +247,10 @@ export const GameView = () => {
                                    onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
                                    onAnimationEnd={handlerAnimationEnd}/>
 
-                <Inner show={showGameView}>
-                    <Stage onNext={handlerAnswer} data={stageData}/>
-                </Inner>
+
+                    <Inner show={!final && showGameView}>
+                        <Stage onNext={handlerAnswer} data={stageData}/>
+                    </Inner>
             </DeskWrapper>
             <Final/>
 
