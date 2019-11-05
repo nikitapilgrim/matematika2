@@ -6,7 +6,8 @@ const Wrapper = styled.div`
     background-color:#fff;
     max-width: 300px;
     position: absolute;
-    top: -80px;
+    top: -86%;
+    left: -12%;
     padding: 15px;
     z-index: 300;
     font-family: 'Boogaloo', cursive;
@@ -20,7 +21,7 @@ const Wrapper = styled.div`
         content: '';
         position: absolute;
         bottom: 0;
-        left: 10%;
+        left: 15%;
         width: 0;
         height: 0;
         border: 1.5em solid transparent;

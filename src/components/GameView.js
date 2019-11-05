@@ -47,9 +47,9 @@ const Inner = styled.div`
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 31%;
+    top: 39%;
     width: 100%;
-    height: 49%;
+    height: 32%;
     pointer-events: auto;
     transition: opacity 0.2s linear;
     transition-delay: ${props => props.show ? '1s' : '0'};
