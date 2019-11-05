@@ -199,7 +199,7 @@ export const GameView = () => {
             count = i + 1;
             dispatch('preload/set', i);
             if (i < 100) {
-                //setTimeout(setPreload(count), 20)
+                setTimeout(setPreload(count), 20)
             }
         };
         setTimeout(setPreload(count), 0);
