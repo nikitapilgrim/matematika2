@@ -117,10 +117,26 @@ const setting = {
     },
 };
 
+const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const Inner = styled.div`
+  position: relative;
+  width: 400px;
+  height: 500px;
+`;
+
 const Position = styled.div`
   z-index: 1;
   width: 40%;
-  position: absolute;
+  position: relative;
   bottom: ${props => props.bottom ? `${props.bottom}rem` : '0'};
   ${(props) => {
     if (props.left !== undefined) {
@@ -246,17 +262,17 @@ const Boy = creatorPerson(setting, 'boy');
 const Teacher = creatorPerson(setting, 'teacher');
 
 
-export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,showCharacters, onAnimationEnd, onLoadedSprites}) => {
+export const TutorialContainer = React.memo(({animate, spritePlay, showCharacters, onAnimationEnd, onLoadedSprites}) => {
     const [state, setState] = useState({name: 'idle', stage: 0});
     const [animations, setAnimations] = useState({
         teacher: null,
-        child: null,
+        //child: null,
     });
     const [allSpriteLoaded, setAllSpriteLoaded] = useState(false);
     const [spriteLoaded, setSpriteLoaded] = useState({
         teacher: null,
-        boy: null,
-        girl: null,
+        //boy: null,
+        //girl: null,
     });
 
     const handlerAnimationEnd = (name) => () => {
@@ -305,36 +321,38 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
     }, [animate]);
 
     return (
-        <>
-            <Slide when={showCharacters} left onReveal={handlerAnimationEnd('teacher')}>
-                <Position left={-12}>
-                    <Teacher onLoaded={handlerSpriteLoaded('teacher')}
+        <Wrapper>
+            <Inner>
+                <Slide when={showCharacters} left onReveal={handlerAnimationEnd('teacher')}>
+                    <Position left={-12}>
+                        <Teacher onLoaded={handlerSpriteLoaded('teacher')}
+                                 onLoopComplete={handlerLoopComplete}
+                                 animate={state}
+                                 pause={!spritePlay}
+                                 className="teacher-sprite"
+                        />
+                    </Position>
+                </Slide>
+
+                {/*<Slide when={showCharacters} right onReveal={handlerAnimationEnd('child')}>
+                    <Position right={-4} bottom={-1}>
+                        <Boy onLoaded={handlerSpriteLoaded('boy')}
                              onLoopComplete={handlerLoopComplete}
                              animate={state}
                              pause={!spritePlay}
-                             className="teacher-sprite"
-                    />
-                </Position>
-            </Slide>
-
-            <Slide when={!tutorial && showCharacters} right onReveal={handlerAnimationEnd('child')}>
-                <Position right={-4} bottom={-1}>
-                    <Boy onLoaded={handlerSpriteLoaded('boy')}
-                         onLoopComplete={handlerLoopComplete}
-                         animate={state}
-                         pause={!spritePlay}
-                         scale={1.2}
-                    />
-                </Position>
-                <Position right={-10} bottom={-1}>
-                    <Girl onLoaded={handlerSpriteLoaded('girl')}
-                          onLoopComplete={handlerLoopComplete}
-                          animate={state}
-                          pause={!spritePlay}
-                          scale={1.2}
-                    />
-                </Position>
-            </Slide>
-        </>
+                             scale={1.2}
+                        />
+                    </Position>
+                    <Position right={-10} bottom={-1}>
+                        <Girl onLoaded={handlerSpriteLoaded('girl')}
+                              onLoopComplete={handlerLoopComplete}
+                              animate={state}
+                              pause={!spritePlay}
+                              scale={1.2}
+                        />
+                    </Position>
+                </Slide>*/}
+            </Inner>
+        </Wrapper>
     )
 });

@@ -2,13 +2,13 @@ import React, {useEffect, useState} from "react";
 import ReactDOM from 'react-dom';
 import styled from "styled-components";
 import {Howl, Howler} from 'howler';
-import {Manager, Reference, Popper} from 'react-popper';
-
+import {LAYOUTS} from "../data/stages";
 
 const Wrapper = styled.div`
     background-color:#fff;
     position: absolute;
     width: 300px;
+    min-height: ${props => props.type ? '150px' : 'auto'};
     bottom: 103%;
     left: 59%;
     padding: 15px;
@@ -17,6 +17,15 @@ const Wrapper = styled.div`
     font-size: 24px;
     color:#000;
     border-radius: 10px;
+    ${props => {
+    if (props.show === true) {
+        return 'opacity: 1'
+    }
+    if (props.show === false) {
+        return 'opacity: 0'
+    }
+    }};
+    transition: opacity 0.5s;
     //border: solid 1px#000;
     //filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.87));
     &:before {
@@ -37,8 +46,24 @@ const Wrapper = styled.div`
     }
 `;
 
+const Klik = styled.div`
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+`;
 
-export const Speech = ({phrase, audio, teacherInit}) => {
+
+export const Speech = ({phrase, audio, teacherInit, type, show}) => {
+    const [delayShow, setDelayShow] = useState(null);
+
+    useEffect(() => {
+        if (show === true) {
+            setTimeout(() => setDelayShow(true), 1000)
+        }
+        if (show === false) {
+            setDelayShow(false)
+        }
+    }, [show]);
 
     useEffect(() => {
         if (audio) {
@@ -59,14 +84,15 @@ export const Speech = ({phrase, audio, teacherInit}) => {
         <>
 
             {phrase && teacherInit &&
-                <>
-                    {ReactDOM.createPortal(
-                        <Wrapper>
-                            {phrase}
-                        </Wrapper>,
-                        document.querySelector('.teacher-sprite')
-                    )}
-                </>
+            <>
+                {ReactDOM.createPortal(
+                    <Wrapper show={delayShow} type={type}>
+                        {phrase}
+                        {type === 'tutorial' && <Klik> {'>Klikni<'} </Klik>}
+                    </Wrapper>,
+                    document.querySelector('.teacher-sprite')
+                )}
+            </>
             }
         </>
     )

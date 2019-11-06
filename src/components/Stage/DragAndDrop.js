@@ -112,8 +112,8 @@ export const DragAndDrop = React.memo(({data, handler}) => {
     const {dispatch, help} = useStoreon('help');
 
     useEffect(() => {
-        if (resultItems && resultItems.hasOwnProperty('result1') && parsedAnswer === resultItems['result1'].placeholder) {
-            handler({right: true, value: resultItems['result1'].placeholder})
+        if (resultItems && resultItems.hasOwnProperty('result') && parsedAnswer === resultItems['result'].placeholder) {
+            handler({right: true, value: resultItems['result'].placeholder})
         } else {
             handler({right: false, value: parsedAnswer})
         }
@@ -174,17 +174,17 @@ export const DragAndDrop = React.memo(({data, handler}) => {
                 <Question>
                     {reactStringReplace(question, /{{([^}]+)}}/g, (match, i) => {
                         return (
-                            <Droppable key={i} droppableId={'result' + i}>
+                            <Droppable key={i} droppableId={'result'}>
                                 {provided => (
                                     <DroppedPlaceholder ref={provided.innerRef} {...provided.droppableProps}>
                                         {help && <HiddenWrapper help={help}>
-                                            <DraggableElem item={{id: 1, value: parsedAnswer}} index={i}
-                                                           key={'help'}/>
+                                            <DraggableElem item={{id: 'help'+i, value: parsedAnswer}} index={i}
+                                                           key={'help'+i}/>
                                         </HiddenWrapper>}
                                         <PlaceholderInner>?</PlaceholderInner>
-                                        {resultItems['result' + i] &&
-                                        <DraggableElem item={resultItems['result' + i]} index={i}
-                                                       key={resultItems['result' + i].id}/>
+                                        {resultItems['result'] &&
+                                        <DraggableElem item={resultItems['result']} index={i}
+                                                       key={resultItems['result'].id}/>
                                         }
                                     </DroppedPlaceholder>
                                 )

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import useStoreon from 'storeon/react';
+import tutorialData from "../data/tutorial";
 import Fullscreen from "react-full-screen";
 import Slide from 'react-reveal/Slide';
 import Fade from 'react-reveal/Fade';
@@ -7,6 +8,7 @@ import useTimeout from "react-use/lib/useTimeout";
 import desk from '../assets/image/classroom_blackboard_cube.png'
 import styled from "styled-components";
 import {AnimatedContainer} from "./AnimatedContainer";
+//import {TutorialContainer} from "./TutorialContainer";
 import stagesData, {LAYOUTS} from "../data/stages";
 import {Stage} from "./Stage";
 import {Answer} from "./Answer";
@@ -16,6 +18,7 @@ import {Menu} from "./Menu";
 import {Help} from "./Help";
 import {Kviz} from "./Kviz";
 import {Final} from "./Final";
+import {Speech} from "./Speech";
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -96,6 +99,7 @@ export const GameView = () => {
     const [spritePlay, setSpritePlay] = useState(null);
     const [deskAnimationEnd, setDeskAnimationEnd] = useState(null);
     const [showGameView, setShowGameView] = useState(null);
+    const [tutorial, setTutorial] = useState(true);
 
     // cancel animation wrong answer
     useEffect(() => {
@@ -213,6 +217,12 @@ export const GameView = () => {
         }
     }, [preloader.count]);
 
+    useEffect(() => {
+        if (tutorial) {
+            //setShowGameView(true)
+        }
+    }, [tutorial]);
+
     const handlerDeskShow = () => {
         setTimeout(() => {
             setDeskAnimationEnd(true)
@@ -228,6 +238,18 @@ export const GameView = () => {
         }
     }, [animationDone, deskAnimationEnd]);
 
+    useEffect(() => {
+        if (tutorial) {
+            const handlerClickWindow = (e) => {
+                setTutorial(false)
+            };
+            window.addEventListener("click", handlerClickWindow);
+            return () => {
+                window.removeEventListener("click", handlerClickWindow);
+            };
+        }
+    }, [tutorial]);
+
 
     return (
         <Wrapper>
@@ -240,19 +262,23 @@ export const GameView = () => {
             <CurrentStage>{stage}</CurrentStage>
             <Kviz show={kviz.show} order={kviz.order}/>
             <DeskWrapper>
-                <Slide when={showGameView} bottom onReveal={handlerDeskShow}>
+                <Slide when={!tutorial && showGameView} bottom onReveal={handlerDeskShow}>
                     <img src={desk} alt="desk"/>
                 </Slide>
-                <AnimatedContainer showCharacters={showGameView} spritePlay={spritePlay}
+
+                {tutorial &&
+                    <Speech show={showGameView || false} teacherInit={spriteLoaded} phrase={tutorialData[0].phrase} type={'tutorial'}/>
+                }
+                <AnimatedContainer
+                    tutorial={tutorial}
+                    showCharacters={showGameView} spritePlay={spritePlay}
                                    onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
                                    onAnimationEnd={handlerAnimationEnd}/>
 
-
-                    <Inner show={!final && showGameView}>
+                    <Inner show={!tutorial && !final && showGameView}>
                         <Stage onNext={handlerAnswer} data={stageData} spriteLoaded={spriteLoaded}/>
                     </Inner>
             </DeskWrapper>
-            <Final/>
 
             <input value={stage} style={{
                 position: 'fixed',
