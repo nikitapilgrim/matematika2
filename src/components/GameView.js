@@ -3,7 +3,6 @@ import useStoreon from 'storeon/react';
 import tutorialData from "../data/tutorial";
 import Fullscreen from "react-full-screen";
 import Slide from 'react-reveal/Slide';
-import Fade from 'react-reveal/Fade';
 import useTimeout from "react-use/lib/useTimeout";
 import desk from '../assets/image/classroom_blackboard_cube.png'
 import styled from "styled-components";
@@ -261,6 +260,7 @@ export const GameView = () => {
 
             <CurrentStage>{stage}</CurrentStage>
             <Kviz show={kviz.show} order={kviz.order}/>
+
             <DeskWrapper>
                 <Slide when={!tutorial && showGameView} bottom onReveal={handlerDeskShow}>
                     <img src={desk} alt="desk"/>

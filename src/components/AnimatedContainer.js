@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import Slide from 'react-reveal/Slide';
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 import styled from 'styled-components';
 import Spritesheet from '../lib/Spritesheet';
 import teacher from '../assets/img/teacherSprites.png'
 import girl from '../assets/img/girlSprites.png';
 import boy from '../assets/img/boySprites.png'
+import Fade from "react-reveal/Fade";
 
 const sprites = {
     teacher,
@@ -132,6 +135,18 @@ const Position = styled.div`
 }}
 `;
 
+const ConfettiWrapper = styled.div`
+  position: fixed;
+  z-index: 1;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+`;
+
 const useAnimateConfig = (config, animate) => {
     const [animateConfig, setAnimateConfig] = useState(null);
     const {name, stage} = animate;
@@ -248,6 +263,8 @@ const Teacher = creatorPerson(setting, 'teacher');
 
 export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,showCharacters, onAnimationEnd, onLoadedSprites}) => {
     const [state, setState] = useState({name: 'idle', stage: 0});
+    const [confettiShow, setConfettiShow] = useState(null);
+    const { width, height } = useWindowSize();
     const [animations, setAnimations] = useState({
         teacher: null,
         child: null,
@@ -258,6 +275,15 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
         boy: null,
         girl: null,
     });
+
+    useEffect(() => {
+        if (state.stage === 2) {
+            setConfettiShow(true);
+            setTimeout(() => {
+                setConfettiShow(false)
+            }, 5000)
+        }
+    }, [state])
 
     const handlerAnimationEnd = (name) => () => {
         setTimeout(() => {
@@ -306,6 +332,15 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
 
     return (
         <>
+            <ConfettiWrapper>
+                
+                <Fade when={confettiShow}>
+                    <Confetti
+                    width={width}
+                    height={height}
+                />
+                </Fade>
+            </ConfettiWrapper>
             <Slide when={showCharacters} left onReveal={handlerAnimationEnd('teacher')}>
                 <Position left={-12}>
                     <Teacher onLoaded={handlerSpriteLoaded('teacher')}
