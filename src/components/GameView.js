@@ -249,7 +249,7 @@ export const GameView = () => {
 
 
                     <Inner show={!final && showGameView}>
-                        <Stage onNext={handlerAnswer} data={stageData}/>
+                        <Stage onNext={handlerAnswer} data={stageData} spriteLoaded={spriteLoaded}/>
                     </Inner>
             </DeskWrapper>
             <Final/>

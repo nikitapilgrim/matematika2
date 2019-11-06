@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from "react";
+import ReactDOM from 'react-dom';
 import styled from "styled-components";
 import {Howl, Howler} from 'howler';
+import {Manager, Reference, Popper} from 'react-popper';
+
 
 const Wrapper = styled.div`
     background-color:#fff;
-    max-width: 300px;
     position: absolute;
-    top: -86%;
-    left: -12%;
+    width: 300px;
+    bottom: 103%;
+    left: 59%;
     padding: 15px;
     z-index: 300;
     font-family: 'Boogaloo', cursive;
@@ -34,7 +37,8 @@ const Wrapper = styled.div`
     }
 `;
 
-export const Speech = ({phrase, audio}) => {
+
+export const Speech = ({phrase, audio, teacherInit}) => {
 
     useEffect(() => {
         if (audio) {
@@ -51,11 +55,19 @@ export const Speech = ({phrase, audio}) => {
         }
     }, [audio]);
 
-  return (
-      <>
-          {phrase && <Wrapper>
-            {phrase}
-          </Wrapper>}
-      </>
-  )
+    return (
+        <>
+
+            {phrase && teacherInit &&
+                <>
+                    {ReactDOM.createPortal(
+                        <Wrapper>
+                            {phrase}
+                        </Wrapper>,
+                        document.querySelector('.teacher-sprite')
+                    )}
+                </>
+            }
+        </>
+    )
 };

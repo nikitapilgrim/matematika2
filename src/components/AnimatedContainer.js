@@ -149,10 +149,11 @@ const useAnimateConfig = (config, animate) => {
 
 const PersonDropShadow = styled.div`
   filter: drop-shadow(0 0 3px);
+  position: relative;
 `;
 
 const creatorPerson = (setting, name) => {
-    return ({animate, onLoopComplete, children, onLoaded, pause, scale}) => {
+    return ({animate, onLoopComplete, children, onLoaded, pause, scale, className}) => {
         const [state, setState] = useState(animate);
         const [ref, setRef] = useState(null);
         const [settings, animateConfig] = useAnimateConfig(setting[name], state);
@@ -205,6 +206,7 @@ const creatorPerson = (setting, name) => {
                     <Spritesheet getInstance={(ref) => {
                         setRef(ref)
                     }}
+                                 className={className}
                                  autoplay={false}
                                  onInit={onLoaded}
                                  onLoopComplete={handlerLoop}
@@ -310,6 +312,7 @@ export const AnimatedContainer = React.memo(({animate, spritePlay,showCharacters
                              onLoopComplete={handlerLoopComplete}
                              animate={state}
                              pause={!spritePlay}
+                             className="teacher-sprite"
                     />
                 </Position>
             </Slide>

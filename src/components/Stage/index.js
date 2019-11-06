@@ -38,7 +38,7 @@ const NextButton = styled.button`
     }
 `;
 
-export const Stage = ({data, onNext}) => {
+export const Stage = ({data, onNext, spriteLoaded}) => {
     const [answer, setAnswer] = useState(null);
     const {dispatch, modal, kviz} = useStoreon('modal', 'kviz');
 
@@ -129,7 +129,7 @@ export const Stage = ({data, onNext}) => {
             {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data} handler={handlerDragAndDrop}/>}
             {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerSortable}/>}
             {data.layout === LAYOUTS.choice && <Choice data={data} handler={handlerChoice}/>}
-            {data.layout === LAYOUTS.speech && <Speech phrase={data.phrase} audio={data.audio}/>}
+            {data.layout === LAYOUTS.speech && <Speech teacherInit={spriteLoaded} phrase={data.phrase} audio={data.audio}/>}
             {data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice && <NextButton onClick={handlerNext}>Dalje</NextButton>}
         </>
     )
