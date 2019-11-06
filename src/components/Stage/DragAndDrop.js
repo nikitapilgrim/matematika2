@@ -126,23 +126,24 @@ export const DragAndDrop = React.memo(({data, handler}) => {
     }, [data]);
 
     const onDragEnd = (result) => {
-        console.log(result)
 
         if (!result.destination) {
             return;
         }
 
-        // from result to result
+        // from items to items
         if (result.source.droppableId === 'items' && result.destination.droppableId === 'items') {
             setItems(arrayMove(items, result.source.index, result.destination.index))
             return false;
         }
         // from items to result
         if (result.source.droppableId === 'items' && result.destination.droppableId !== 'items') {
+            const deletedElem = resultItems.hasOwnProperty('result') && resultItems.result;
+            const newItems = [...items.filter(item => items[result.source.index] !== item)];
             setResultItems({
                 ...resultItems, [result.destination.droppableId]: items[result.source.index]
             });
-            setItems(items.filter(item => items[result.source.index] !== item))
+            setItems(deletedElem ? [...newItems, deletedElem] : newItems);
             return false;
         }
         if (result.source.droppable !== 'items') {
