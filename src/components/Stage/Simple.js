@@ -85,9 +85,10 @@ const InputWithState = ({question, answer, handler}) => {
             }
         }
         if (type === 'text') {
-            const re = /^\w+$/ui;
-            console.log(value, !re.test(/^\w+$/))
-            if (value === '' || re.test(value)) {
+            //const re = /^[A-Za-z]+$/;
+            const re = /^[0-9\b]+$/;
+            console.log(value, !re.test(value));
+            if (value === '' || !re.test(value)) {
                 setValue(value)
             }
         }
