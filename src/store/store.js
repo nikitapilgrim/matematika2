@@ -33,7 +33,8 @@ const stage = store => {
   });
 
   store.on('preload/set', ({preloader}, state) => {
-    preloader.container.innerHTML = `${state} %`;
+    preloader.container.innerHTML = `${state}%`;
+    document.querySelector('#preload progress').value = state;
     if (state === 100) {
       document.querySelector('#preload').style.opacity = 0;
       document.querySelector('#preload').style.zIndex = -99;
