@@ -85,7 +85,8 @@ const InputWithState = ({question, answer, handler}) => {
             }
         }
         if (type === 'text') {
-            const re = /^[A-Za-z]+$/;
+            const re = /^\w+$/ui;
+            console.log(value, !re.test(/^\w+$/))
             if (value === '' || re.test(value)) {
                 setValue(value)
             }

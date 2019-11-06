@@ -281,7 +281,7 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
             setConfettiShow(true);
             setTimeout(() => {
                 setConfettiShow(false)
-            }, 5000)
+            }, 2500)
         }
     }, [state])
 

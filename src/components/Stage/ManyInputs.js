@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import useMount from "react-use/lib/useMount";
 import useStoreon from "storeon/react";
@@ -34,6 +34,15 @@ const Input = styled.input`
 export const ManyInputs = ({data, handler}) => {
     const [inputs, setInputs] = useState(null);
     const {dispatch, help} = useStoreon('help');
+    const ref = useRef(null);
+    const [inputsRef, setInputsRef] = useState([]);
+
+    useEffect(() => {
+        if (ref.current) {
+            const wrapper = ref.current;
+            setInputsRef([...wrapper.querySelectorAll('input')])
+        }
+    }, [ref, inputs]);
 
 
     useMount(() => {
@@ -52,25 +61,30 @@ export const ManyInputs = ({data, handler}) => {
     };
 
     useEffect(() => {
-        if (inputs) {
-            const check = inputs.every(input => {
-                return input.value === input.answer.toString() || input.answer === input.placeholder;
+        if (inputs && inputsRef.length > 0) {
+            const check = inputs.every((input, i, arr) => {
+                if (input.value === input.answer.toString() || input.answer === input.placeholder) {
+                    if (arr[i + 1]) {
+                        inputsRef[i + 1].focus()
+                    }
+                    return true;
+                }
             });
             handler(check || inputs.reduce((acc, item, index) => `${acc}${index > 0 && ',' || ''}${item.answer || item.placeholder}`, ``))
         }
-    }, [inputs]);
+    }, [inputs, inputsRef]);
 
     return (
-        <Inputs>
+        <Inputs ref={ref}>
             {inputs && inputs.map((data, i) => {
                 const answer = !data.placeholder && data.answer;
-
-              return (
-                  <Input key={i}
-                         disabled={!!data.placeholder || help}
-                         placeholder={data.placeholder || help && answer || ''}
-                         onKeyUp={handlerInputs(data.answer)}/>
-              )
+                return (
+                    <Input
+                        key={i}
+                        disabled={!!data.placeholder || help}
+                        placeholder={data.placeholder || help && answer || ''}
+                        onKeyUp={handlerInputs(data.answer)}/>
+                )
             })}
         </Inputs>
     )

@@ -18,6 +18,7 @@ import {Help} from "./Help";
 import {Kviz} from "./Kviz";
 import {Final} from "./Final";
 import {Speech} from "./Speech";
+import bg from '../assets/image/classroom_bg.jpg'
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -42,6 +43,20 @@ const DeskWrapper = styled.div`
     max-width: 100%;
   }
 `;
+
+const Bg = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(${bg});
+    background-size: cover;
+    background-position: 50% 50%;
+    transition: filter 1s;
+    pointer-events: none;
+    ${props => props.tutorial ? 'filter: blur(10px) brightness(0.70) saturate(130%);' : ''}
+`
 
 const Inner = styled.div`
     display: flex;
@@ -99,16 +114,17 @@ export const GameView = () => {
     const [deskAnimationEnd, setDeskAnimationEnd] = useState(null);
     const [showGameView, setShowGameView] = useState(null);
     const [tutorial, setTutorial] = useState(true);
+    const [showTutorial, setShowTutorial] = useState(false);
 
     // cancel animation wrong answer
     useEffect(() => {
         //console.log(answer)
-       /* if (answer) {
-            setTimeout(() => {
-                reset();
-                setAnswer(null)
-            }, 1000)
-        }*/
+        /* if (answer) {
+             setTimeout(() => {
+                 reset();
+                 setAnswer(null)
+             }, 1000)
+         }*/
     }, [answer]);
 
     useEffect(() => {
@@ -118,10 +134,10 @@ export const GameView = () => {
 
     // animation if modal show
     useEffect(() => {
-        if (!kviz.show && spriteLoaded && preloader.count === 100) {
+        if (!tutorial && !kviz.show && spriteLoaded && preloader.count === 100) {
             setShowGameView(!modal);
         }
-    }, [modal, kviz, spriteLoaded, preloader]);
+    }, [modal, kviz, spriteLoaded, preloader, tutorial]);
 
     // show kviz
     useEffect(() => {
@@ -145,7 +161,6 @@ export const GameView = () => {
             }
         }
     }, [modal, kviz]);
-
 
 
     useEffect(() => {
@@ -210,17 +225,17 @@ export const GameView = () => {
 
     useEffect(() => {
         if (preloader.count === 100) {
-            setTimeout(() => {
-                setShowGameView(true)
-            }, 500)
+            if (tutorial) {
+                setTimeout(() => {
+                    setShowTutorial(true)
+                    setTimeout(() => {
+                        setShowGameView(true)
+                    }, 1000)
+                },500)
+            }
         }
     }, [preloader.count]);
 
-    useEffect(() => {
-        if (tutorial) {
-            //setShowGameView(true)
-        }
-    }, [tutorial]);
 
     const handlerDeskShow = () => {
         setTimeout(() => {
@@ -239,19 +254,22 @@ export const GameView = () => {
 
     useEffect(() => {
         if (tutorial) {
+
             const handlerClickWindow = (e) => {
-                setTutorial(false)
+                setTutorial(false);
+                setShowTutorial(false)
             };
             window.addEventListener("click", handlerClickWindow);
             return () => {
                 window.removeEventListener("click", handlerClickWindow);
             };
         }
-    }, [tutorial]);
+    }, [tutorial, showGameView]);
 
 
     return (
         <Wrapper>
+            <Bg tutorial={showTutorial}/>
             <TopPanel>
                 <Sound/>
                 <Menu/>
@@ -267,17 +285,18 @@ export const GameView = () => {
                 </Slide>
 
                 {tutorial &&
-                    <Speech show={showGameView || false} teacherInit={spriteLoaded} phrase={tutorialData[0].phrase} type={'tutorial'}/>
+                <Speech show={showGameView || false} teacherInit={spriteLoaded} phrase={tutorialData[0].phrase}
+                        type={'tutorial'}/>
                 }
                 <AnimatedContainer
                     tutorial={tutorial}
                     showCharacters={showGameView} spritePlay={spritePlay}
-                                   onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
-                                   onAnimationEnd={handlerAnimationEnd}/>
+                    onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
+                    onAnimationEnd={handlerAnimationEnd}/>
 
-                    <Inner show={!tutorial && !final && showGameView}>
-                        <Stage onNext={handlerAnswer} data={stageData} spriteLoaded={spriteLoaded}/>
-                    </Inner>
+                <Inner show={!tutorial && !final && showGameView}>
+                    <Stage onNext={handlerAnswer} data={stageData} spriteLoaded={spriteLoaded}/>
+                </Inner>
             </DeskWrapper>
 
             <input value={stage} style={{
