@@ -24,7 +24,7 @@ const Wrapper = styled.div`
     if (props.show === false) {
         return 'opacity: 0'
     }
-    }};
+}};
     transition: opacity 0.5s;
     //border: solid 1px#000;
     //filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.87));
@@ -53,8 +53,11 @@ const Klik = styled.div`
 `;
 
 
-export const Speech = ({phrase, audio, teacherInit, type, show}) => {
+export const Speech = ({data, teacherInit, show}) => {
     const [delayShow, setDelayShow] = useState(null);
+    const [countSpeech, setCountSpeech] = useState(null);
+    const [speech, setSpeech] = useState(null);
+
 
     useEffect(() => {
         if (show === true) {
@@ -66,9 +69,28 @@ export const Speech = ({phrase, audio, teacherInit, type, show}) => {
     }, [show]);
 
     useEffect(() => {
-        if (audio) {
+        if (data) {
+            if (Array.isArray(data)) {
+                setCountSpeech(0)
+                setSpeech(data[0])
+            }
+            if (!Array.isArray(data)) {
+                setCountSpeech(null);
+                setSpeech(data)
+            }
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (typeof  countSpeech === 'number')  {
+            setSpeech(data[countSpeech])
+        }
+    }, [countSpeech]);
+
+    useEffect(() => {
+        if (speech && speech.hasOwnProperty('audio')) {
             const howl = new Howl({
-                src: audio,
+                src: speech.audio,
                 autoplay: true,
                 volume: 0.5,
             });
@@ -78,21 +100,34 @@ export const Speech = ({phrase, audio, teacherInit, type, show}) => {
                 Howler._howls = Howler._howls.filter(h => h !== howl)
             })
         }
-    }, [audio]);
+    }, [speech]);
+
+
+    useEffect(() => {
+         if (Array.isArray(data)) {
+             const handlerClickWindow = (e) => {
+                setCountSpeech(prev => prev + 1)
+             };
+             window.addEventListener("click", handlerClickWindow);
+             return () => {
+                 window.removeEventListener("click", handlerClickWindow);
+             };
+         }
+    }, [data]);
+
 
     return (
         <>
-
-            {phrase && teacherInit &&
-            <>
-                {ReactDOM.createPortal(
-                    <Wrapper show={delayShow} type={type}>
-                        {phrase}
-                        {type === 'tutorial' && <Klik> {'>Klikni<'} </Klik>}
-                    </Wrapper>,
-                    document.querySelector('.teacher-sprite')
-                )}
-            </>
+            {speech && teacherInit && data &&
+                <>
+                    {ReactDOM.createPortal(
+                        <Wrapper show={delayShow} type={data.type}>
+                            {speech.phrase}
+                            {data.type === 'tutorial' && <Klik> {'>Klikni<'} </Klik>}
+                        </Wrapper>,
+                        document.querySelector('.teacher-sprite')
+                    )}
+                </>
             }
         </>
     )
