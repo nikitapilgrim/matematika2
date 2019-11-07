@@ -47,6 +47,7 @@ export const Stage = ({data, onNext, spriteLoaded}) => {
     }, [data]);
 
     const handlerNext = () => {
+        console.log('next')
         onNext(answer || {
             value: data.answer,
             right: false
@@ -79,6 +80,7 @@ export const Stage = ({data, onNext, spriteLoaded}) => {
             }
             return;
         }
+        console.log(value, data.answer)
         if (value === data.answer) {
             setAnswer({
                 value: value,

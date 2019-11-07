@@ -1086,7 +1086,6 @@ export default [
         question: "VI+II={{input}}",
         answer: 'VIII'
     },
-
     {
         layout: LAYOUTS.simple,
         question: "IX-III={{input}}",
@@ -1269,6 +1268,11 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
+        phrase: `Upiši tačan odgovor`,
+        audio: [require('../assets/sound/speech/speech23.aac')]
+    },
+    {
+        layout: LAYOUTS.speech,
         phrase: `Oduzmi i napiši rezultat. `,
         audio: [require('../assets/sound/speech/speech22.aac')]
     },
@@ -1298,16 +1302,6 @@ export default [
         answer: '80'
     },
    /* {layout: LAYOUTS.quiz},*/
-    {
-        layout: LAYOUTS.speech,
-        phrase: `Upiši tačan odgovor`,
-        audio: [require('../assets/sound/speech/speech23.aac')]
-    },
-    {
-        layout: LAYOUTS.simple,
-        question: "50+30={{input}}",
-        answer: '80'
-    },
 
 
 ];

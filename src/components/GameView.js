@@ -294,6 +294,7 @@ export const GameView = () => {
                     onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
                     onAnimationEnd={handlerAnimationEnd}/>
 
+                {final && <Final/>}
                 <Inner show={!tutorial && !final && showGameView}>
                     <Stage onNext={handlerAnswer} data={stageData} spriteLoaded={spriteLoaded}/>
                 </Inner>

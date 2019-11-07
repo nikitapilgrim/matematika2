@@ -45,11 +45,11 @@ export const ManyInputs = ({data, handler}) => {
     }, [ref, inputs]);
 
 
-    useMount(() => {
+    useEffect(() => {
         if (data) {
             setInputs([...data])
         }
-    });
+    }, [data]);
 
     const handlerInputs = answer => e => {
         const value = e.target.value;

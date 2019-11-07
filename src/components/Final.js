@@ -7,6 +7,8 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   z-index: ${props => props.hidden ? '-2' : '10'};
