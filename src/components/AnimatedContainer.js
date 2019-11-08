@@ -24,7 +24,7 @@ const setting = {
             heightFrame: 450,
         },
         idle: {
-            start: 84,
+            start: 85,
             end: 86,
             fps: 0.30,
         },
