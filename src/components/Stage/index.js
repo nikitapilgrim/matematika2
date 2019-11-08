@@ -131,7 +131,7 @@ export const Stage = ({data, onNext, spriteLoaded}) => {
             {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data} handler={handlerDragAndDrop}/>}
             {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerSortable}/>}
             {data.layout === LAYOUTS.choice && <Choice data={data} handler={handlerChoice}/>}
-            {data.layout === LAYOUTS.speech && <Speech teacherInit={spriteLoaded} phrase={data.phrase} audio={data.audio}/>}
+           {/* {data.layout === LAYOUTS.speech && <Speech teacherInit={spriteLoaded} phrase={data.phrase} audio={data.audio}/>}*/}
             {data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice && <NextButton onClick={handlerNext}>Dalje</NextButton>}
         </>
     )

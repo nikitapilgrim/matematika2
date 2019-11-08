@@ -7,7 +7,6 @@ import useTimeout from "react-use/lib/useTimeout";
 import desk from '../assets/image/classroom_blackboard_cube.png'
 import styled from "styled-components";
 import {AnimatedContainer} from "./AnimatedContainer";
-//import {TutorialContainer} from "./TutorialContainer";
 import stagesData, {LAYOUTS} from "../data/stages";
 import {Stage} from "./Stage";
 import {Answer} from "./Answer";
@@ -19,6 +18,7 @@ import {Kviz} from "./Kviz";
 import {Final} from "./Final";
 import {Speech} from "./Speech";
 import bg from '../assets/image/classroom_bg.jpg'
+import {set} from "ramda";
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -115,6 +115,7 @@ export const GameView = () => {
     const [showGameView, setShowGameView] = useState(null);
     const [tutorial, setTutorial] = useState(true);
     const [showTutorial, setShowTutorial] = useState(false);
+    const [speech, setSpeech] = useState(null);
 
     // cancel animation wrong answer
     useEffect(() => {
@@ -128,8 +129,22 @@ export const GameView = () => {
     }, [answer]);
 
     useEffect(() => {
-        setStageData(stagesData[stage])
+        setStageData(stagesData[stage]);
     }, [stage]);
+
+    // set Speech
+
+    useEffect(() => {
+        if (stageData.hasOwnProperty('speech') && !tutorial) {
+            setSpeech(stageData.speech)
+        }
+        if (tutorial) {
+            setSpeech(tutorialData[0])
+        }
+        if (!tutorial && !stageData.hasOwnProperty('speech')) {
+            setSpeech(null)
+        }
+    }, [stageData, tutorial]);
 
 
     // animation if modal show
@@ -245,7 +260,7 @@ export const GameView = () => {
 
 
     useEffect(() => {
-        if (animationDone && deskAnimationEnd) {
+        if (animationDone && deskAnimationEnd || tutorial) {
             setTimeout(() => {
                 setSpritePlay(true);
             }, 500)
@@ -284,10 +299,10 @@ export const GameView = () => {
                     <img src={desk} alt="desk"/>
                 </Slide>
 
-                {tutorial &&
-                <Speech show={showGameView || false} teacherInit={spriteLoaded} phrase={tutorialData[0].phrase}
-                        type={'tutorial'}/>
-                }
+                <Speech show={showGameView || tutorial}
+                        teacherInit={spriteLoaded}
+                        data={speech}/>
+
                 <AnimatedContainer
                     tutorial={tutorial}
                     showCharacters={showGameView} spritePlay={spritePlay}
