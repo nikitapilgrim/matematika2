@@ -260,7 +260,7 @@ export const GameView = () => {
 
 
     useEffect(() => {
-        if (animationDone && deskAnimationEnd) {
+        if (animationDone && deskAnimationEnd || tutorial) {
             setTimeout(() => {
                 setSpritePlay(true);
             }, 500)
