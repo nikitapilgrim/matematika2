@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {TextWithBorders} from "./TextWithBorders";
 import {easeCubic} from 'd3-ease'
@@ -22,6 +22,7 @@ const Wrapper = styled.div`
 `;
 
 export const Kviz = ({order, show}) => {
+    const [number, setNumber] = useState(order);
     const { x } = useSpring({
         config: {
             duration: 1000,
@@ -31,6 +32,12 @@ export const Kviz = ({order, show}) => {
         x: show ? 1 : 0,
     });
 
+    useEffect(() => {
+        setTimeout(() => {
+            setNumber(order)
+        }, 5000)
+    }, [order]);
+
     return (
         <Wrapper>
             <animated.div style={{
@@ -39,7 +46,7 @@ export const Kviz = ({order, show}) => {
                     output: [-60, 0]
                 }).interpolate(x => `translateY(${x}vh)`),
             }}>
-                <TextWithBorders storeWidth={10} size={20} color="#3a6269" text={`Kviz ${order}`}/>
+                <TextWithBorders storeWidth={10} size={20} color="#3a6269" text={`Kviz ${number}`}/>
             </animated.div>
         </Wrapper>
     )
