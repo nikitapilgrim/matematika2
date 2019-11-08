@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import Slide from 'react-reveal/Slide';
+import {Slide as NewSlide} from './Animate/Slide'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 import styled from 'styled-components';
@@ -283,6 +284,7 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
         }
     }, [state])
 
+
     const handlerAnimationEnd = (name) => () => {
         setTimeout(() => {
             setAnimations(prev => {
@@ -290,6 +292,13 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
             })
         }, 1000);
     };
+    const memoHandlerAnimationEnd = useCallback(
+        () => {
+            handlerAnimationEnd(name);
+        },
+        [name],
+    );
+
     const handlerSpriteLoaded = (name) => () => {
         setSpriteLoaded(prev => {
             return {...prev, [name]: true}
@@ -339,7 +348,7 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
                 />
                 </Fade>
             </ConfettiWrapper>
-            <Slide when={showCharacters} left onReveal={handlerAnimationEnd('teacher')}>
+            <NewSlide when={showCharacters} left onReveal={memoHandlerAnimationEnd('teacher')}>
                 <Position left={-12}>
                     <Teacher onLoaded={handlerSpriteLoaded('teacher')}
                              onLoopComplete={handlerLoopComplete}
@@ -348,9 +357,9 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
                              className="teacher-sprite"
                     />
                 </Position>
-            </Slide>
+            </NewSlide>
 
-            <Slide when={!tutorial && showCharacters} right onReveal={handlerAnimationEnd('child')}>
+            <NewSlide when={!tutorial && showCharacters} right onReveal={memoHandlerAnimationEnd('child')}>
                 <Position right={-4} bottom={-1}>
                     <Boy onLoaded={handlerSpriteLoaded('boy')}
                          onLoopComplete={handlerLoopComplete}
@@ -367,7 +376,7 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
                           scale={1.2}
                     />
                 </Position>
-            </Slide>
+            </NewSlide>
         </>
     )
 });

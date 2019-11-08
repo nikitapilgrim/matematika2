@@ -53,7 +53,7 @@ const HiddenText = styled.div`
 
 const getFontSize = () => parseInt(getComputedStyle(document.documentElement).fontSize);
 
-export const TextWithBorders = ({children, color, text, size = 6, center}) => {
+export const TextWithBorders = ({children, color, text, size = 6, center, storeWidth}) => {
     const ref = useRef(null);
     const componentSize = useComponentSize(ref);
     const { width, height } = componentSize;
@@ -75,7 +75,7 @@ export const TextWithBorders = ({children, color, text, size = 6, center}) => {
                           text={text}
                           fill={color}
                           stroke="white"
-                          strokeWidth={fontSize / 3}
+                          strokeWidth={storeWidth || fontSize / 3}
                           shadowColor="white"
                           shadowBlur={10}
                           padding={10}
