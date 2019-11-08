@@ -174,9 +174,8 @@ const creatorPerson = (setting, name) => {
         const [settings, animateConfig] = useAnimateConfig(setting[name], state);
 
         const handlerLoop = () => {
-            onLoopComplete(name, animate.name, ref)
-            if (animate.name === 'idle') {
-                setState(animate);
+            if (state.name !== 'idle') {
+                setState({name: 'idle', stage: 0})
             }
         };
 
@@ -226,7 +225,6 @@ const creatorPerson = (setting, name) => {
                                  onInit={onLoaded}
                                  onLoopComplete={handlerLoop}
                                  style={{width: scale ? `${100 * scale}%` : '100%'}}
-                                 onClick={e => console.log(e)}
                                  isResponsive={true}
                                  loop={true}
                                  fps={24}
@@ -319,9 +317,9 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
     }, [animations]);
 
     const handlerLoopComplete = (name, animateName) => {
-        if (animateName !== 'idle') {
+        /*if (animateName !== 'idle') {
             setState({name: 'idle', stage: 0})
-        }
+        }*/
     };
 
     useEffect(() => {

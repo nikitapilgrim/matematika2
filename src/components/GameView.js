@@ -18,7 +18,6 @@ import {Kviz} from "./Kviz";
 import {Final} from "./Final";
 import {Speech} from "./Speech";
 import bg from '../assets/image/classroom_bg.jpg'
-import {set} from "ramda";
 
 const Wrapper = styled.div`
     width: 50rem;
@@ -265,7 +264,7 @@ export const GameView = () => {
                 setSpritePlay(true);
             }, 500)
         }
-    }, [animationDone, deskAnimationEnd]);
+    }, [animationDone, deskAnimationEnd, tutorial]);
 
     useEffect(() => {
         if (tutorial) {
