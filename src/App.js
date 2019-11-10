@@ -29,7 +29,7 @@ const WithProviders = () => {
                     onChange={isFull => setIsFull(isFull)}
                 >
                     <Wrapper>
-                        <GameView/>
+                        <GameView handlerFullscreen={goFullScreen}/>
                     </Wrapper>
                 </Fullscreen>
         </StoreContext.Provider>

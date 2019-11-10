@@ -99,8 +99,11 @@ const TopPanel = styled.div`
   }
 `;
 
+const FullscreenButton = styled.div`
 
-export const GameView = () => {
+`;
+
+export const GameView = ({handlerFullscreen}) => {
     const {dispatch, stage, kviz, modal, preloader, final} = useStoreon('stage', 'kviz', 'modal', 'preloader', 'final');
     const [stageData, setStageData] = useState(stagesData[stage]);
     const [combo, setCombo] = useState(0);
@@ -159,7 +162,7 @@ export const GameView = () => {
             dispatch('kviz/show');
         }
         if (stagesData[stage - 1] && stagesData[stage - 1].layout === LAYOUTS.quiz) {
-            dispatch('kviz/set', kviz.order + 1);
+            //dispatch('kviz/set', kviz.order + 1);
         }
     }, [stageData]);
 
@@ -314,6 +317,12 @@ export const GameView = () => {
                 </Inner>
             </DeskWrapper>
 
+            <button style={{
+                position: 'fixed',
+                zIndex: '999',
+                top: '50px',
+                right: '50px'
+            }} onClick={handlerFullscreen}>fullscreen</button>
             <input value={stage} style={{
                 position: 'fixed',
                 zIndex: '999',

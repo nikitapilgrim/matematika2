@@ -33,9 +33,7 @@ export const Kviz = ({order, show}) => {
     });
 
     useEffect(() => {
-        setTimeout(() => {
-            setNumber(order)
-        }, 5000)
+        setNumber(order)
     }, [order]);
 
     return (
@@ -46,7 +44,7 @@ export const Kviz = ({order, show}) => {
                     output: [-60, 0]
                 }).interpolate(x => `translateY(${x}vh)`),
             }}>
-                <TextWithBorders storeWidth={10} size={20} color="#3a6269" text={`Kviz ${number}`}/>
+                <TextWithBorders storeWidth={10} size={20} color="#3a6269" text={`Kviz ${order}`}/>
             </animated.div>
         </Wrapper>
     )

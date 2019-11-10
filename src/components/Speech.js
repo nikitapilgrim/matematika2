@@ -58,7 +58,6 @@ export const Speech = ({data, teacherInit, show}) => {
     const [countSpeech, setCountSpeech] = useState(null);
     const [speech, setSpeech] = useState(null);
 
-
     useEffect(() => {
         if (show === true) {
             setTimeout(() => setDelayShow(true), 1000)
@@ -104,7 +103,7 @@ export const Speech = ({data, teacherInit, show}) => {
 
 
     useEffect(() => {
-         if (Array.isArray(data)) {
+         if (data && Array.isArray(data)) {
              const handlerClickWindow = (e) => {
                 setCountSpeech(prev => prev + 1)
              };

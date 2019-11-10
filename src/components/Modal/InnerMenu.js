@@ -79,8 +79,8 @@ export const InnerMenu = (props) => {
 
     useEffect(() => {
         if (stagesData[stage]) {
-            if (stagesData[stage].layou === LAYOUTS.quiz) {
-                dispatch('kviz/set', {order: kviz.order + 1});
+            if (stagesData[stage].layout === LAYOUTS.quiz) {
+                //dispatch('kviz/set',kviz.order + 1);
             }
         }
     }, [stage]);
