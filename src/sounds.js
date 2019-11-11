@@ -7,8 +7,7 @@ const data = {
         require('./assets/sound/success_mixdown.ogg'),
     ],
     background: [
-        require('./assets/sound/backgroundmusic.aac'),
-        require('./assets/sound/backgroundmusic.mp3'),
+        require('./assets/sound/background_music.aac'),
     ]
 };
 

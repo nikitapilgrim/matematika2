@@ -9,6 +9,7 @@ import desk from '../assets/image/classroom_blackboard_cube.png'
 import styled from "styled-components";
 import {AnimatedContainer} from "./AnimatedContainer";
 import stagesData, {LAYOUTS} from "../data/stages";
+import {TopPanel} from "./TopPanel";
 import {Stage} from "./Stage";
 import {Answer} from "./Answer";
 import {sounds} from "../sounds";
@@ -54,7 +55,7 @@ const Bg = styled.div`
     background-size: cover;
     background-position: 50% 50%;
     transition: filter 1s;
-    pointer-events: none;
+    //pointer-events: none;
     ${props => props.tutorial ? 'filter: blur(10px) brightness(0.70) saturate(130%);' : ''}
 `
 
@@ -82,23 +83,6 @@ const CurrentStage = styled.div`
   opacity: 0.8;
 `;
 
-const TopPanel = styled.div`
-  position: fixed;
-  display: flex;
-  z-index: 2;
-  padding: 2rem;
-  top: 0;
-  left: 0;
-  & > div {
-    transition: all 0.2s ease;
-    &:hover {
-      transform: scale(1.2);
-    }
-    &:not(:first-child) {
-      margin-left: 0.5rem;
-    }
-  }
-`;
 
 const FullscreenButton = styled.div`
 
@@ -118,8 +102,10 @@ export const GameView = ({handlerFullscreen}) => {
     const [showGameView, setShowGameView] = useState(null);
     const [tutorial, setTutorial] = useState(true);
     const [showTutorial, setShowTutorial] = useState(false);
+    const [countTutorial, setCountTutorial] = useState(0);
     const [speech, setSpeech] = useState(null);
     const refDebugg = useRef(null);
+
 
     useClickAway(refDebugg, () => {
         const input = document.querySelector('.desk-wrapper input');
@@ -130,34 +116,37 @@ export const GameView = ({handlerFullscreen}) => {
         }
     });
 
-    // cancel animation wrong answer
-    useEffect(() => {
-        //console.log(answer)
-        /* if (answer) {
-             setTimeout(() => {
-                 reset();
-                 setAnswer(null)
-             }, 1000)
-         }*/
-    }, [answer]);
 
     useEffect(() => {
         setStageData(stagesData[stage]);
     }, [stage]);
 
     // set Speech
-
     useEffect(() => {
         if (stageData.hasOwnProperty('speech') && !tutorial) {
             setSpeech(stageData.speech)
         }
         if (tutorial) {
-            setSpeech(tutorialData[0])
+            setSpeech(tutorialData[countTutorial])
         }
         if (!tutorial && !stageData.hasOwnProperty('speech')) {
             setSpeech(null)
         }
-    }, [stageData, tutorial]);
+    }, [stageData, tutorial, countTutorial]);
+
+    // show kviz animation tutorial
+    useEffect(() => {
+        if (tutorialData[countTutorial] && tutorialData[countTutorial].hasOwnProperty('animation')) {
+            dispatch('kviz/show');
+            setTimeout(() => {
+                setTimeout(() => {
+                    dispatch('stage/to', 1); //fix
+                }, 2000);
+                setTutorial(false);
+                setShowTutorial(false)
+            }, 1000)
+        }
+    }, [tutorialData, countTutorial]);
 
 
     // animation if modal show
@@ -282,27 +271,26 @@ export const GameView = ({handlerFullscreen}) => {
 
     useEffect(() => {
         if (tutorial) {
-
             const handlerClickWindow = (e) => {
-                setTutorial(false);
-                setShowTutorial(false)
+                if (tutorialData[countTutorial + 1]) {
+                    setCountTutorial(count => count + 1);
+                } else {
+                    setTutorial(false);
+                    setShowTutorial(false)
+                }
             };
             window.addEventListener("click", handlerClickWindow);
             return () => {
                 window.removeEventListener("click", handlerClickWindow);
             };
         }
-    }, [tutorial, showGameView]);
+    }, [tutorial, countTutorial, showGameView]);
 
 
     return (
         <Wrapper>
             <Bg tutorial={showTutorial}/>
-            <TopPanel>
-                <Sound/>
-                <Menu/>
-                <Help/>
-            </TopPanel>
+            <TopPanel data={tutorialData[countTutorial]}/>
 
             <CurrentStage>{stage}</CurrentStage>
             <Kviz show={kviz.show} order={kviz.order}/>
@@ -320,6 +308,7 @@ export const GameView = ({handlerFullscreen}) => {
                     tutorial={tutorial}
                     showCharacters={showGameView} spritePlay={spritePlay}
                     onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
+                    confety={combo >= 3}
                     onAnimationEnd={handlerAnimationEnd}/>
 
                 {final && <Final/>}

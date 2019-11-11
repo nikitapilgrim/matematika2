@@ -261,7 +261,7 @@ const Boy = creatorPerson(setting, 'boy');
 const Teacher = creatorPerson(setting, 'teacher');
 
 
-export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,showCharacters, onAnimationEnd, onLoadedSprites}) => {
+export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,showCharacters, onAnimationEnd, onLoadedSprites, confety}) => {
     const [state, setState] = useState({name: 'idle', stage: 0});
     const {dispatch, kviz} = useStoreon('kviz');
     const [confettiShow, setConfettiShow] = useState(null);
@@ -343,7 +343,7 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
         <>
             <ConfettiWrapper>
                 
-                <Fade when={kviz.show}>
+                <Fade when={kviz.show && confety}>
                     <Confetti
                     width={width}
                     height={height}

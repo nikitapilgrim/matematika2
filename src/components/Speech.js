@@ -4,11 +4,20 @@ import styled from "styled-components";
 import {Howl, Howler} from 'howler';
 import {LAYOUTS} from "../data/stages";
 
+const Text = styled.p`
+      margin: 0;
+      padding: 0;
+      min-width: 300px;
+    max-width: 500px;
+    //min-height: ${props => props.type ? '150px' : 'auto'};
+max-height: 160px;
+`;
+
 const Wrapper = styled.div`
     background-color:#fff;
     position: absolute;
-    width: 300px;
-    min-height: ${props => props.type ? '150px' : 'auto'};
+    display: flex;
+       width: fit-content;
     bottom: 103%;
     left: 59%;
     padding: 32px;
@@ -81,7 +90,7 @@ export const Speech = ({data, teacherInit, show}) => {
     }, [data]);
 
     useEffect(() => {
-        if (data && typeof  countSpeech === 'number')  {
+        if (data && typeof countSpeech === 'number') {
             setSpeech(data[countSpeech])
         }
     }, [countSpeech, data]);
@@ -103,30 +112,31 @@ export const Speech = ({data, teacherInit, show}) => {
 
 
     useEffect(() => {
-         if (data && Array.isArray(data)) {
-             const handlerClickWindow = (e) => {
+        if (data && Array.isArray(data)) {
+            const handlerClickWindow = (e) => {
                 setCountSpeech(prev => prev + 1)
-             };
-             window.addEventListener("click", handlerClickWindow);
-             return () => {
-                 window.removeEventListener("click", handlerClickWindow);
-             };
-         }
+            };
+            window.addEventListener("click", handlerClickWindow);
+            return () => {
+                window.removeEventListener("click", handlerClickWindow);
+            };
+        }
     }, [data]);
 
 
     return (
         <>
-            {speech && teacherInit && data &&
-                <>
-                    {ReactDOM.createPortal(
-                        <Wrapper show={delayShow} type={data.type}>
+            {speech && speech.phrase && teacherInit && data &&
+            <>
+                {ReactDOM.createPortal(
+                    <Wrapper show={delayShow} type={data.type}>
+                        <Text>
                             {speech.phrase}
-                            {data.type === 'tutorial' && <Klik> {'>Klikni<'} </Klik>}
-                        </Wrapper>,
-                        document.querySelector('.teacher-sprite')
-                    )}
-                </>
+                        </Text>
+                    </Wrapper>,
+                    document.querySelector('.teacher-sprite')
+                )}
+            </>
             }
         </>
     )

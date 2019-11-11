@@ -86,7 +86,6 @@ export const InnerMenu = (props) => {
     }, [stage]);
 
     const handlerStage = (next, number) => () => {
-        console.log(number)
         dispatch('kviz/set', number);
         dispatch('kviz/show');
         dispatch('stage/to', next);

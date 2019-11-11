@@ -19,10 +19,6 @@ export default [
         speech: [
             {
                 layout: LAYOUTS.speech,
-                phrase: `Dobrodošao! Odigraj jednu rundu matematike!`
-            },
-            {
-                layout: LAYOUTS.speech,
                 phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`,
                 audio: [require('../assets/sound/speech/speech2.aac')]
             },
