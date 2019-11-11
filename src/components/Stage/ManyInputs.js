@@ -9,7 +9,7 @@ const Inputs = styled.div`
 `;
 
 const Input = styled.input`
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Luckiest Guy', cursive;
     font-weight: 700;
     font-size: 2rem;
     white-space: nowrap;

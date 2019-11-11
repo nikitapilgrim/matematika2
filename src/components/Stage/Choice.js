@@ -17,7 +17,7 @@ const Elem = styled.div`
     justify-content: center;
     color: #fff;
     background-color: #5C9700;
-    font-family: 'Zilla Slab', serif;
+    font-family: 'Luckiest Guy', cursive;
     border: solid #fff 3px;
     font-size: 50px;
     font-weight: bold;

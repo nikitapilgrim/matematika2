@@ -23,7 +23,7 @@ const NextButton = styled.button`
     border: #fff 2px solid;
     background: #09A900;
     color: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Luckiest Guy', cursive;
     font-weight: bold;
     font-size: 1.5rem;
     border-radius: 5px;

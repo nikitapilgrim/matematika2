@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 const Question = styled.div`
     display: flex;
     align-items: center;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Luckiest Guy', cursive;
     font-weight: 700;
     font-size: 3rem;
     color: white;
@@ -25,7 +25,7 @@ const InputWrapper = styled.span`
     align-items: center;
     justify-content: center;
     position: relative;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Luckiest Guy', cursive;
     font-weight: 700;
     font-size: 3rem;
     white-space: nowrap;
@@ -44,7 +44,7 @@ const Input = styled.input`
     top: 0;
     width: 100%;
     height: 100%;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Luckiest Guy', cursive;
     display: inline-block;
     padding: 0px 10px;
     -moz-appearance:textfield;

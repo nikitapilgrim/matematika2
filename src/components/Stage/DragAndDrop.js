@@ -49,7 +49,7 @@ const PlaceholderInner = styled.div`
     height: 100%;
     width: 100%;
     color: #fff;
-    font-family: 'Zilla Slab', serif;
+    font-family: 'Luckiest Guy', cursive;
     font-size: 2rem;
     font-weight: bold;
 `;
@@ -76,7 +76,7 @@ const Question = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Luckiest Guy', cursive;
     font-weight: 700;
     font-size: 3rem;
     color: white;
