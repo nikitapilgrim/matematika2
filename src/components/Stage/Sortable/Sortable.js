@@ -49,9 +49,9 @@ const PlaceholderInner = styled.div`
     height: 100%;
     width: 100%;
     color: #fff;
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
     font-size: 2rem;
-    font-weight: bold;
 `;
 
 const ItemsContainer = styled.div`

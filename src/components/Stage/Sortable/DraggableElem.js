@@ -9,9 +9,9 @@ const Wrapper = styled.div`
     height: 4rem;
     color: #fff;
     background-color: #5C9700;
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
     font-size: 2.5rem;
-    font-weight: bold;
     text-align: center;
     cursor: pointer;
     text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);

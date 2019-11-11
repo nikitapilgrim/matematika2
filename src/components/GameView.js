@@ -172,8 +172,8 @@ export const GameView = ({handlerFullscreen}) => {
         if (stageData.layout === LAYOUTS.quiz) {
             dispatch('kviz/show');
         }
-        if (stagesData[stage - 1] && stagesData[stage - 1].layout === LAYOUTS.quiz) {
-            //dispatch('kviz/set', kviz.order + 1);
+        if (stagesData[stage - 1] && stagesData[stage].layout === LAYOUTS.quiz) {
+            dispatch('kviz/set', kviz.order + 1);
         }
     }, [stageData]);
 

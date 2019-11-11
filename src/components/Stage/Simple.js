@@ -4,7 +4,6 @@ import useComponentSize from '@rehooks/component-size'
 import reactStringReplace from 'react-string-replace';
 import useStoreon from "storeon/react";
 import InputNumber from 'react-input-just-numbers';
-import {set} from "ramda";
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,10 +13,11 @@ const Wrapper = styled.div`
 const Question = styled.div`
     display: flex;
     align-items: center;
-    font-family: 'Luckiest Guy', cursive;
-    font-weight: 700;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
     font-size: 3rem;
     color: white;
+    text-shadow: 1px 1px 1px #000;
 `;
 
 const InputWrapper = styled.span`
@@ -25,7 +25,7 @@ const InputWrapper = styled.span`
     align-items: center;
     justify-content: center;
     position: relative;
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Source Sans Pro', sans-serif;
     font-weight: 700;
     font-size: 3rem;
     white-space: nowrap;
@@ -44,16 +44,19 @@ const Input = styled.input`
     top: 0;
     width: 100%;
     height: 100%;
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
+    font-size: 1.2em;
     display: inline-block;
-    padding: 0px 10px;
+    padding: 0px 0px;
+    vertical-align: middle;
     -moz-appearance:textfield;
     text-align: center;
     background-color: #5a5f3f;
     border: dashed #fff 5px;
     outline: none;
     color: #fff;
-    text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);  
+    text-shadow: 1px 1px 1px #000;
     &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
       -webkit-appearance: none;
     }

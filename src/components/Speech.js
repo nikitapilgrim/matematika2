@@ -81,10 +81,10 @@ export const Speech = ({data, teacherInit, show}) => {
     }, [data]);
 
     useEffect(() => {
-        if (typeof  countSpeech === 'number')  {
+        if (data && typeof  countSpeech === 'number')  {
             setSpeech(data[countSpeech])
         }
-    }, [countSpeech]);
+    }, [countSpeech, data]);
 
     useEffect(() => {
         if (speech && speech.hasOwnProperty('audio')) {

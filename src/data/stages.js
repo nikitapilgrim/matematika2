@@ -81,7 +81,7 @@ export default [
     {
         layout: LAYOUTS.simple,
         question: "8 - 3 = {{input}}",
-        answer: 1
+        answer: 5
     },
     {
         layout: LAYOUTS.simple,
@@ -155,11 +155,7 @@ export default [
         question: "5+{{input}}=5",
         answer: 0
     },
-    {
-        layout: LAYOUTS.simple,
-        question: "5+{{input}}=5",
-        answer: 0
-    },
+
     {layout: LAYOUTS.quiz},
     {
         layout: LAYOUTS.simple,

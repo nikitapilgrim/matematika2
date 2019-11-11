@@ -9,8 +9,8 @@ const Inputs = styled.div`
 `;
 
 const Input = styled.input`
-    font-family: 'Luckiest Guy', cursive;
-    font-weight: 700;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
     font-size: 2rem;
     white-space: nowrap;
     display: inline-block;

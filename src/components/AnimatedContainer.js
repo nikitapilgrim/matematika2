@@ -9,6 +9,7 @@ import teacher from '../assets/img/teacherSprites.png'
 import girl from '../assets/img/girlSprites.png';
 import boy from '../assets/img/boySprites.png'
 import Fade from "react-reveal/Fade";
+import useStoreon from "storeon/react";
 
 const sprites = {
     teacher,
@@ -262,6 +263,7 @@ const Teacher = creatorPerson(setting, 'teacher');
 
 export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,showCharacters, onAnimationEnd, onLoadedSprites}) => {
     const [state, setState] = useState({name: 'idle', stage: 0});
+    const {dispatch, kviz} = useStoreon('kviz');
     const [confettiShow, setConfettiShow] = useState(null);
     const { width, height } = useWindowSize();
     const [animations, setAnimations] = useState({
@@ -341,7 +343,7 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
         <>
             <ConfettiWrapper>
                 
-                <Fade when={confettiShow}>
+                <Fade when={kviz.show}>
                     <Confetti
                     width={width}
                     height={height}

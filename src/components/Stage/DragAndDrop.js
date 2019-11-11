@@ -6,7 +6,6 @@ import {DraggableElem} from "./Sortable/DraggableElem";
 import arrayMove from 'array-move';
 import reactStringReplace from 'react-string-replace';
 
-import useMount from "react-use/lib/useMount";
 import useStoreon from "storeon/react";
 
 const DroppedContainer = styled.div`
@@ -49,9 +48,9 @@ const PlaceholderInner = styled.div`
     height: 100%;
     width: 100%;
     color: #fff;
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
     font-size: 2rem;
-    font-weight: bold;
 `;
 
 const ItemsContainer = styled.div`
@@ -76,9 +75,10 @@ const Question = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Source Sans Pro', sans-serif;
     font-weight: 700;
     font-size: 3rem;
+    text-shadow: 1px 1px 1px #000;
     color: white;
     & > div {
       margin: 0 1rem;

@@ -17,10 +17,10 @@ const Elem = styled.div`
     justify-content: center;
     color: #fff;
     background-color: #5C9700;
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
     border: solid #fff 3px;
     font-size: 50px;
-    font-weight: bold;
     cursor: pointer;
     width: 7rem;
     height: 7rem;

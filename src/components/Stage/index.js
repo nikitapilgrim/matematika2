@@ -20,15 +20,17 @@ const NextButton = styled.button`
     width: 12rem;
     max-width: 110px;
     max-height: 80px;
+    vertical-align: middle;
     border: #fff 2px solid;
     background: #09A900;
     color: #fff;
-    font-family: 'Luckiest Guy', cursive;
-    font-weight: bold;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
     font-size: 1.5rem;
     border-radius: 5px;
     margin: -10px 0 10 10px;
     box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.87);
+    text-shadow: 1px 1px 1px #000;
     cursor: pointer;
     outline: none;
     &:hover {
