@@ -65,11 +65,11 @@ const Wrapper = styled.div`
 `;
 
 
-export const Answer = ({answer}) => {
+export const Answer = ({answer, last}) => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
-        if (answer) {
+        if (answer && !last) {
             setShow(true)
             if (answer.right) {
                 setTimeout(() => {

@@ -42,18 +42,32 @@ const NextButton = styled.button`
 
 export const Stage = ({data, onNext, spriteLoaded}) => {
     const [answer, setAnswer] = useState(null);
-    const {dispatch, modal, kviz} = useStoreon('modal', 'kviz');
+    const {dispatch, modal, kviz, preloader} = useStoreon('modal', 'kviz', 'preloader');
+    const [canPressEnter, setCanPressEnter] = useState(false);
+
+
+    useEffect(() => {
+        if (preloader.count === 100 && !kviz.show) {
+            setTimeout(() => {
+                setCanPressEnter(true)
+            }, 1500)
+        } else {
+            setCanPressEnter(false)
+        }
+    }, [preloader.count, kviz.show]);
 
     useEffect(() => {
         setAnswer(null)
     }, [data]);
 
     const handlerNext = () => {
-        console.log('next')
-        onNext(answer || {
-            value: data.answer,
-            right: false
-        })
+        if (canPressEnter) {
+            onNext(answer || {
+                value: data.answer,
+                right: false
+            })
+
+        }
     };
     useKeyPressEvent('Enter', handlerNext);
 
@@ -82,7 +96,15 @@ export const Stage = ({data, onNext, spriteLoaded}) => {
             }
             return;
         }
-        console.log(value, data.answer)
+        if (Array.isArray(data.answer)) {
+            if (data.answer.includes(value.toLowerCase())) {
+                setAnswer({
+                    value: value,
+                    right: true
+                });
+            }
+            return;
+        }
         if (value === data.answer) {
             setAnswer({
                 value: value,
@@ -116,14 +138,12 @@ export const Stage = ({data, onNext, spriteLoaded}) => {
     };
 
     const handlerChoice = (answer) => {
-        setAnswer(answer);
+        onNext(answer || {
+            value: data.answer,
+            right: false
+        })
     };
 
-    useEffect(() => {
-        if (data.layout === LAYOUTS.choice && answer) {
-            handlerNext()
-        }
-    }, [data, answer]);
 
     return (
         <>
@@ -133,8 +153,8 @@ export const Stage = ({data, onNext, spriteLoaded}) => {
             {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data} handler={handlerDragAndDrop}/>}
             {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerSortable}/>}
             {data.layout === LAYOUTS.choice && <Choice data={data} handler={handlerChoice}/>}
-           {/* {data.layout === LAYOUTS.speech && <Speech teacherInit={spriteLoaded} phrase={data.phrase} audio={data.audio}/>}*/}
-            {data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice && <NextButton onClick={handlerNext}>Dalje</NextButton>}
+            {data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice &&
+            <NextButton onClick={handlerNext}>Dalje</NextButton>}
         </>
     )
 };

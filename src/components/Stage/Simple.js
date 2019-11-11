@@ -29,7 +29,7 @@ const InputWrapper = styled.span`
     font-weight: 700;
     font-size: 3rem;
     white-space: nowrap;
-    width: ${props => props.width ? `${props.width}px` : '6rem'};
+    width: ${props => props.width ? `${props.width + 60}px` : '6rem'};
     height: ${props => props.height ? `${props.height}px` : '6rem'};
     padding: 0px 10px;
      margin: 0;
@@ -46,7 +46,7 @@ const Input = styled.input`
     height: 100%;
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 900;
-    font-size: 1.2em;
+    font-size: 1em;
     display: inline-block;
     padding: 0px 0px;
     vertical-align: middle;
@@ -78,9 +78,18 @@ const InputWithState = ({question, answer, handler}) => {
     let {width, height} = size;
     const [value, setValue] = useState('');
     const regexp = /^[0-9]*$/gm;
+    const romanRegexp = /^((\(M\)){0,3})(\(C\)\(M\)|\(C\)\(D\)|(\(D\))?(\(C\)){0,3})(\(X\)\(C\)|\(X\)\(L\)|(\(L\))?(\(X\)){0,3})(M\(X\)|M\(V\)|(\(V\))?)(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
     const type = new RegExp(regexp).test(answer) ? 'number' : 'text';
     const handlerInput = (e) => {
         const value = e.target.value;
+        if (romanRegexp.test(answer)) {
+            const convertValue = value.toUpperCase()
+            if (romanRegexp.test(convertValue)) {
+                setValue(convertValue);
+            }
+            return false
+        }
+
         if (type === 'number') {
             const re = /^[0-9\b]+$/;
             if (value === '' || re.test(value)) {
@@ -90,9 +99,8 @@ const InputWithState = ({question, answer, handler}) => {
         if (type === 'text') {
             //const re = /^[A-Za-z]+$/;
             const re = /^[0-9\b]+$/;
-            console.log(value, !re.test(value));
             if (value === '' || !re.test(value)) {
-                setValue(value)
+                setValue(value.toLowerCase())
             }
         }
     };
@@ -118,7 +126,7 @@ const InputWithState = ({question, answer, handler}) => {
             {reactStringReplace(question, /{{([^}]+)}}/g, (match, i) => {
                 return (
                     <InputWrapper width={width} height={height} key={i}>
-                        <HiddenAnswer show={help} ref={ref}>{answer}</HiddenAnswer>
+                        <HiddenAnswer show={help} ref={ref}>{Array.isArray(answer) ? answer[0] : answer}</HiddenAnswer>
                         <Input maxLength ={answer.toString().length} ref={inputRef} pattern={type === "number" ? "[0-9]*" : ''} value={value}
                                onChange={handlerInput}
                         />

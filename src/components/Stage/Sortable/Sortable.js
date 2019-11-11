@@ -79,7 +79,6 @@ const HiddenWrapper = styled.div`
 `;
 
 
-
 const ItemsList = React.memo(({items}) => {
     return items.map((item, index) => (
         <DraggableElem item={item} index={index} key={item.id}/>
@@ -104,7 +103,7 @@ export const Sortable = ({data, handler}) => {
     useEffect(() => {
         const convert = (obj) => Object.entries(obj).reduce((acc, pair) => {
             const [key, value] = pair;
-            return [...acc, {key: +key.replace(/\D+/g,""), value}]
+            return [...acc, {key: +key.replace(/\D+/g, ""), value}]
         }, []);
         const convertResult = convert(resultItems)
             .reduce((acc, item) => [...acc, {key: item.key, value: item.value.value}], [])
@@ -130,28 +129,40 @@ export const Sortable = ({data, handler}) => {
         if (!result.destination) {
             return;
         }
+        console.log(result, 'result')
 
-        // from result to result
+        // from items to items
         if (result.source.droppableId === 'items' && result.destination.droppableId === 'items') {
-            setItems(arrayMove(items, result.source.index, result.destination.index))
+            setItems(arrayMove(items, result.source.index, result.destination.index));
             return false;
         }
         // from items to result
         if (result.source.droppableId === 'items' && result.destination.droppableId !== 'items') {
-            setResultItems({
-                ...resultItems, [result.destination.droppableId]: items[result.source.index]
-            });
-            setItems(items.filter(item => items[result.source.index] !== item))
+            if (!resultItems[result.destination.droppableId]) {
+                setResultItems({
+                    ...resultItems, [result.destination.droppableId]: items[result.source.index]
+                });
+                setItems(items.filter(item => items[result.source.index] !== item))
+            } else {
+                const second = result.destination.droppableId;
+                const copy = {...resultItems};
+                const deletedElem = copy[second];
+                delete copy[second];
+                copy[second] = items[result.source.index];
+                setResultItems(copy);
+                setItems([...items, deletedElem].filter(item => item !== items[result.source.index]))
+            }
             return false;
         }
-        if (result.source.droppable !== 'items') {
+
+        if (result.source.droppableId !== items  && result.destination.droppableId !== 'items') {
             // if no swap
             if (!resultItems[result.destination.droppableId]) {
                 const deletedProp = result.source.droppableId;
                 const copy = {...resultItems};
                 delete copy[deletedProp];
                 setResultItems({...copy, [result.destination.droppableId]: resultItems[deletedProp]})
-                return  false;
+                return false;
             } else {
                 // if swap
                 const first = result.source.droppableId;
@@ -161,9 +172,7 @@ export const Sortable = ({data, handler}) => {
                 copy[second] = resultItems[first];
                 setResultItems(copy)
             }
-
         }
-
     };
 
 
@@ -183,8 +192,9 @@ export const Sortable = ({data, handler}) => {
                                                        key={'help' + index}/>
                                     </HiddenWrapper>}
 
-                                    {resultItems['result'+ index] && <DraggableElem item={resultItems['result'+ index]} index={index}
-                                                                          key={resultItems['result'+ index].id}/>}
+                                    {resultItems['result' + index] &&
+                                    <DraggableElem item={resultItems['result' + index]} index={index}
+                                                   key={resultItems['result' + index].id}/>}
                                 </DroppedPlaceholder>)}
                         </Droppable>
                     )

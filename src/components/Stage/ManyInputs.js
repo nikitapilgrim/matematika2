@@ -37,10 +37,11 @@ export const ManyInputs = ({data, handler}) => {
     const ref = useRef(null);
     const [inputsRef, setInputsRef] = useState([]);
 
+
     useEffect(() => {
         if (ref.current) {
             const wrapper = ref.current;
-            setInputsRef([...wrapper.querySelectorAll('input')])
+            setInputsRef([...wrapper.querySelectorAll('input')].filter(input => !input.placeholder))
         }
     }, [ref, inputs]);
 
@@ -52,22 +53,41 @@ export const ManyInputs = ({data, handler}) => {
     }, [data]);
 
     const handlerInputs = answer => e => {
+        const regexp = /^[0-9]*$/gm;
+        const type = new RegExp(regexp).test(answer) ? 'number' : 'text';
         const value = e.target.value;
         const current = inputs.find((input) => input.answer === answer);
         const clone = [...inputs];
         const index = inputs.indexOf(current);
-        clone[index].value = value;
-        setInputs(clone);
+        if (type === 'number') {
+            const re = /^[0-9\b]+$/;
+            if (value === '' || re.test(value)) {
+                clone[index].value = value;
+                setInputs(clone);
+            }
+        }
+        if (type === 'text') {
+            //const re = /^[A-Za-z]+$/;
+            const re = /^[0-9\b]+$/;
+            if (value === '' || !re.test(value)) {
+                clone[index].value = value;
+                setInputs(clone);
+            }
+        }
     };
 
     useEffect(() => {
         if (inputs && inputsRef.length > 0) {
             const check = inputs.every((input, i, arr) => {
                 if (input.value === input.answer.toString() || input.answer === input.placeholder) {
-                    if (arr[i + 1]) {
-                        inputsRef[i + 1].focus()
-                    }
                     return true;
+                }
+            });
+            inputs.filter(input => !input.placeholder).some((input, i, arr) => {
+                if (input.value && input.value.length === input.answer.toString().length) {
+                    if (inputsRef[i + 1]) {
+                        inputsRef[i + 1].focus();
+                    }
                 }
             });
             handler(check || inputs.reduce((acc, item, index) => `${acc}${index > 0 && ',' || ''}${item.answer || item.placeholder}`, ``))
@@ -81,10 +101,11 @@ export const ManyInputs = ({data, handler}) => {
                 return (
                     <Input
                         maxLength ={answer.toString().length}
+                        value={inputs[i].value || ''}
                         key={i}
                         disabled={!!data.placeholder || help}
                         placeholder={data.placeholder || help && answer || ''}
-                        onKeyUp={handlerInputs(data.answer)}/>
+                        onChange={handlerInputs(data.answer)}/>
                 )
             })}
         </Inputs>

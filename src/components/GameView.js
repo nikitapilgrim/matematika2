@@ -109,7 +109,7 @@ export const GameView = ({handlerFullscreen}) => {
 
     useClickAway(refDebugg, () => {
         const input = document.querySelector('.desk-wrapper input');
-        if (input) {
+        if (input && stageData.layout  === 'simple') {
             setTimeout(() => {
                 input.focus();
             }, 300)
@@ -140,7 +140,7 @@ export const GameView = ({handlerFullscreen}) => {
             dispatch('kviz/show');
             setTimeout(() => {
                 setTimeout(() => {
-                    dispatch('stage/to', 1); //fix
+                    dispatch('stage/to', 1); //fix TODO
                 }, 2000);
                 setTutorial(false);
                 setShowTutorial(false)
@@ -158,6 +158,9 @@ export const GameView = ({handlerFullscreen}) => {
 
     // show kviz
     useEffect(() => {
+        if (stageData.id) {
+            document.title = `ID = ${stageData.id}`
+        }
         if (stageData.layout === LAYOUTS.quiz) {
             dispatch('kviz/show');
         }
@@ -168,9 +171,11 @@ export const GameView = ({handlerFullscreen}) => {
 
     useEffect(() => {
         if (kviz.show) {
+            document.querySelector('body').style.pointerEvents = 'none';
             setShowGameView(false);
             if (!modal) {
                 setTimeout(() => {
+                    document.querySelector('body').style.pointerEvents = 'auto';
                     dispatch('stage/next');
                     dispatch('kviz/hide');
                     setShowGameView(true);
@@ -194,7 +199,8 @@ export const GameView = ({handlerFullscreen}) => {
                 setCombo(prev => prev + 1);
                 sounds.success.play()
             } else {
-                setCombo(0)
+                setCombo(0);
+                sounds.fail.play()
             }
             dispatch('stage/next', {
                 answer: answer.right
@@ -292,7 +298,7 @@ export const GameView = ({handlerFullscreen}) => {
             <Bg tutorial={showTutorial}/>
             <TopPanel data={tutorialData[countTutorial]}/>
 
-            <CurrentStage>{stage}</CurrentStage>
+            <CurrentStage>{stageData.id && stageData.id}</CurrentStage>
             <Kviz show={kviz.show} order={kviz.order}/>
 
             <DeskWrapper className="desk-wrapper">
@@ -343,7 +349,7 @@ export const GameView = ({handlerFullscreen}) => {
                     dispatch('stage/to', 0)
                 }
             }}/>
-            <Answer answer={answer}/>
+            <Answer last={stagesData[stage].layout === 'quiz'} answer={answer}/>
         </Wrapper>
     )
 };

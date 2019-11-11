@@ -39,6 +39,7 @@ export const Choice = ({data, handler}) => {
     const [answer, setAnswer] = useState(null);
 
     const handlerClick = (answer, value) => () => {
+        console.log('kick')
         setAnswer({
             right: answer,
             value: value
