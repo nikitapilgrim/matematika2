@@ -11,7 +11,7 @@ const Wrapper = styled.div`
     min-height: ${props => props.type ? '150px' : 'auto'};
     bottom: 103%;
     left: 59%;
-    padding: 15px;
+    padding: 32px;
     z-index: 300;
     font-family: 'Boogaloo', cursive;
     font-size: 24px;
