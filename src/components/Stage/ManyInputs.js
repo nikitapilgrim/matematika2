@@ -80,6 +80,7 @@ export const ManyInputs = ({data, handler}) => {
                 const answer = !data.placeholder && data.answer;
                 return (
                     <Input
+                        maxLength ={answer.toString().length}
                         key={i}
                         disabled={!!data.placeholder || help}
                         placeholder={data.placeholder || help && answer || ''}

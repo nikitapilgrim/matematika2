@@ -119,7 +119,7 @@ const InputWithState = ({question, answer, handler}) => {
                 return (
                     <InputWrapper width={width} height={height} key={i}>
                         <HiddenAnswer show={help} ref={ref}>{answer}</HiddenAnswer>
-                        <Input ref={inputRef} pattern={type === "number" ? "[0-9]*" : ''} value={value}
+                        <Input maxLength ={answer.toString().length} ref={inputRef} pattern={type === "number" ? "[0-9]*" : ''} value={value}
                                onChange={handlerInput}
                         />
                     </InputWrapper>
@@ -131,8 +131,6 @@ const InputWithState = ({question, answer, handler}) => {
 
 
 export const Simple = ({question, handlerInput, answer}) => {
-
-
     return (
         <Wrapper>
             <Question>
