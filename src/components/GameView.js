@@ -317,12 +317,12 @@ export const GameView = ({handlerFullscreen}) => {
                 </Inner>
             </DeskWrapper>
 
-            <button style={{
+            {/*<button style={{
                 position: 'fixed',
                 zIndex: '999',
                 top: '50px',
                 right: '50px'
-            }} onClick={handlerFullscreen}>fullscreen</button>
+            }} onClick={handlerFullscreen}>fullscreen</button>*/}
             <input value={stage} style={{
                 position: 'fixed',
                 zIndex: '999',

@@ -13,7 +13,7 @@ const Wrapper = styled.div`
     left: 59%;
     padding: 32px;
     z-index: 300;
-    font-family: 'Boogaloo', cursive;
+    font-family: 'McLaren', cursive;
     font-size: 24px;
     color:#000;
     border-radius: 10px;
