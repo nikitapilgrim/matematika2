@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import useStoreon from 'storeon/react';
+import useClickAway from 'react-use/lib/useClickAway'
 import tutorialData from "../data/tutorial";
 import Fullscreen from "react-full-screen";
 import Slide from 'react-reveal/Slide';
@@ -118,6 +119,16 @@ export const GameView = ({handlerFullscreen}) => {
     const [tutorial, setTutorial] = useState(true);
     const [showTutorial, setShowTutorial] = useState(false);
     const [speech, setSpeech] = useState(null);
+    const refDebugg = useRef(null);
+
+    useClickAway(refDebugg, () => {
+        const input = document.querySelector('.desk-wrapper input');
+        if (input) {
+            setTimeout(() => {
+                input.focus();
+            }, 300)
+        }
+    });
 
     // cancel animation wrong answer
     useEffect(() => {
@@ -248,7 +259,7 @@ export const GameView = ({handlerFullscreen}) => {
                     setTimeout(() => {
                         setShowGameView(true)
                     }, 1000)
-                },500)
+                }, 500)
             }
         }
     }, [preloader.count]);
@@ -296,7 +307,7 @@ export const GameView = ({handlerFullscreen}) => {
             <CurrentStage>{stage}</CurrentStage>
             <Kviz show={kviz.show} order={kviz.order}/>
 
-            <DeskWrapper>
+            <DeskWrapper className="desk-wrapper">
                 <Slide when={!tutorial && showGameView} bottom onReveal={handlerDeskShow}>
                     <img src={desk} alt="desk"/>
                 </Slide>
@@ -323,12 +334,16 @@ export const GameView = ({handlerFullscreen}) => {
                 top: '50px',
                 right: '50px'
             }} onClick={handlerFullscreen}>fullscreen</button>*/}
-            <input value={stage} style={{
+            <input value={stage}
+                   ref={refDebugg}
+                   style={{
                 position: 'fixed',
                 zIndex: '999',
                 top: 0,
                 right: 0
-            }} type="text" onChange={(e) => {
+            }} type="text" onClick={e => {
+                //refDebugg.current = 'active'
+            }} onChange={(e) => {
                 if (+e.target.value) {
                     const value = e.target.value;
                     if (stagesData[+value]) {

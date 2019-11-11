@@ -96,8 +96,14 @@ const InputWithState = ({question, answer, handler}) => {
 
 
     useEffect(() => {
-        setValue('')
-        inputRef.current.focus()
+        if (question) {
+            setValue('');
+        }
+     /*   if (inputRef.current) {
+            console.log(inputRef)
+
+            inputRef.current.focus()
+        }*/
     }, [question]);
 
     useEffect(() => {
