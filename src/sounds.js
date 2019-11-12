@@ -12,6 +12,9 @@ const data = {
     fail: [
         require('./assets/sound/error_mixdown_2.aac'),
         require('./assets/sound/error_mixdown_2.mp3'),
+    ],
+    mouseclick: [
+        require('./assets/sound/mouseclick.mp3'),
     ]
 };
 
@@ -26,5 +29,8 @@ export const sounds = {
         src: data.background,
         autoplay: true,
         loop: true,
-    })
+    }),
+    mouseclick: new Howl({
+        src: data.mouseclick,
+    }),
 };

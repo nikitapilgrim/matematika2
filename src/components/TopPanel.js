@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Sound} from "./Sound";
 import {Menu} from "./Menu";
 import {Help} from "./Help";
+import {sounds} from "../sounds";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -14,7 +15,7 @@ const Wrapper = styled.div`
   & > div {
     transition: all 0.2s ease;
     &:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
     &:not(:first-child) {
       margin-left: 0.5rem;
@@ -22,10 +23,19 @@ const Wrapper = styled.div`
   }
 `;
 
-const HiddenWrapp = styled.div`
+const HiddenWrapper = styled.div`
     transition: filter 1s;
     ${props => props.hide ? 'filter: blur(10px) brightness(0.70) saturate(130%);' : ''};
 `;
+const HiddenWrapp = ({children, hide}) => {
+    return (
+        <HiddenWrapper onClick={e => {
+            sounds.mouseclick.play()
+        }} hide={hide}>
+            {children}
+        </HiddenWrapper>
+    )
+};
 
 export function TopPanel({data}) {
     const [showElems, setShowElems] = useState([]);

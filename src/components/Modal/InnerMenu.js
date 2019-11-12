@@ -6,6 +6,7 @@ import stagesData from "../../data/stages";
 import {LAYOUTS} from "../../data/stages";
 import {TextWithBorders} from "../TextWithBorders";
 import useClickAway from "react-use/lib/useClickAway";
+import {sounds} from "../../sounds";
 
 const Buttons = styled.div`
     margin-top: 3rem;
@@ -86,6 +87,7 @@ export const InnerMenu = (props) => {
     }, [stage]);
 
     const handlerStage = (next, number) => () => {
+        sounds.mouseclick.play();
         dispatch('kviz/set', number);
         dispatch('kviz/show');
         dispatch('stage/to', next);

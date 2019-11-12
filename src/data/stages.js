@@ -455,13 +455,6 @@ export default [
                 right: false
             },
         ],
-        speech: [
-            {
-                layout: LAYOUTS.speech,
-                phrase: `Klikni na najmanji broj!`,
-                audio: [require('../assets/sound/speech/speech9.aac')]
-            },
-        ]
     },
     {
         id: 42,

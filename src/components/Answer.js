@@ -55,7 +55,7 @@ const Wrapper = styled.div`
     height: 100vh;
     width: 100vw;
     animation-name: ${props => props.right ? Bravo : Wrong};
-    animation-duration: ${props => props.right ? '1s' : '0.6s'};
+    animation-duration: ${props => props.right ? '1s' : '1s'};
     animation-timing-function: ${props => !props.right && 'ease-out'};
     animation-iteration-count: ${props => !props.right && 'infinite'};
     font-weight: bold;
@@ -79,7 +79,7 @@ export const Answer = ({answer, last}) => {
             if (answer.right === false) {
                 setTimeout(() => {
                     setShow(false)
-                }, 600)
+                }, 1000)
             }
         }
     }, [answer]);
