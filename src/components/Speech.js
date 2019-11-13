@@ -96,7 +96,7 @@ export const Speech = ({data, teacherInit, show}) => {
     }, [countSpeech, data]);
 
     useEffect(() => {
-        if (speech && speech.hasOwnProperty('audio')) {
+        if (delayShow && speech && speech.hasOwnProperty('audio')) {
             const howl = new Howl({
                 src: speech.audio,
                 autoplay: true,
@@ -108,7 +108,7 @@ export const Speech = ({data, teacherInit, show}) => {
                 Howler._howls = Howler._howls.filter(h => h !== howl)
             })
         }
-    }, [speech]);
+    }, [speech, delayShow]);
 
 
     useEffect(() => {

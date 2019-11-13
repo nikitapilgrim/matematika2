@@ -161,7 +161,7 @@ export const GameView = ({handlerFullscreen}) => {
         if (stageData.id) {
             document.title = `ID = ${stageData.id}`
         }
-        if (stageData.layout === LAYOUTS.quiz) {
+        if (stageData.layout === LAYOUTS.quiz && stage !== 0) {
             dispatch('kviz/show');
         }
         if (stagesData[stage - 1] && stagesData[stage].layout === LAYOUTS.quiz) {
