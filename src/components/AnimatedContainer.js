@@ -261,11 +261,11 @@ const Boy = creatorPerson(setting, 'boy');
 const Teacher = creatorPerson(setting, 'teacher');
 
 
-export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,showCharacters, onAnimationEnd, onLoadedSprites, confety}) => {
+export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay, showCharacters, onAnimationEnd, onLoadedSprites, confety}) => {
     const [state, setState] = useState({name: 'idle', stage: 0});
     const {dispatch, kviz} = useStoreon('kviz');
     const [confettiShow, setConfettiShow] = useState(null);
-    const { width, height } = useWindowSize();
+    const {width, height} = useWindowSize();
     const [animations, setAnimations] = useState({
         teacher: null,
         child: null,
@@ -278,13 +278,21 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
     });
 
     useEffect(() => {
-        if (state.stage === 2) {
+        /*if (state.stage === 2) {
             setConfettiShow(true);
             setTimeout(() => {
                 setConfettiShow(false)
             }, 2500)
+        }*/
+        if (kviz.show && confety) {
+            setConfettiShow(true)
+        } else {
+            setTimeout(() => {
+                setConfettiShow(false)
+
+            }, 1000);
         }
-    }, [state])
+    }, [kviz.show, confety]);
 
 
     const handlerAnimationEnd = (name) => () => {
@@ -342,12 +350,13 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay,show
     return (
         <>
             <ConfettiWrapper>
-                
+
                 <Fade when={kviz.show && confety}>
                     <Confetti
-                    width={width}
-                    height={height}
-                />
+                        run={confettiShow}
+                        width={width}
+                        height={height}
+                    />
                 </Fade>
             </ConfettiWrapper>
             <NewSlide when={showCharacters} left onReveal={memoHandlerAnimationEnd('teacher')}>

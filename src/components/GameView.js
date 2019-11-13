@@ -57,7 +57,7 @@ const Bg = styled.div`
     transition: filter 1s;
     //pointer-events: none;
     ${props => props.tutorial ? 'filter: blur(10px) brightness(0.70) saturate(130%);' : ''}
-`
+`;
 
 const Inner = styled.div`
     display: flex;
@@ -295,7 +295,7 @@ export const GameView = ({handlerFullscreen}) => {
 
     return (
         <Wrapper>
-            <Bg tutorial={showTutorial}/>
+            <Bg tutorial={showTutorial || modal}/>
             <TopPanel data={tutorialData[countTutorial]}/>
 
             <CurrentStage>{stageData.id && stageData.id}</CurrentStage>

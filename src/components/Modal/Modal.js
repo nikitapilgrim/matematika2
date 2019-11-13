@@ -33,16 +33,6 @@ export const Modal = ({children, style, inner}) => {
     const onCloseModal = () => dispatch('modal/hide');
 
     useEffect(() => {
-        const root = document.querySelector('#root');
-        if (modal) {
-            root.style.filter = 'blur(10px) brightness(0.70) saturate(130%)';
-        } else {
-            root.style.filter = 'none';
-            root.style.transform = 'none';
-        }
-    }, [modal]);
-
-    useEffect(() => {
         if (!modal) {
             setTimeout(() => {
                 setAnimationEnd(false)
