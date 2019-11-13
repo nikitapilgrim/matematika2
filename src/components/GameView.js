@@ -100,7 +100,7 @@ export const GameView = ({handlerFullscreen}) => {
     const [spritePlay, setSpritePlay] = useState(null);
     const [deskAnimationEnd, setDeskAnimationEnd] = useState(null);
     const [showGameView, setShowGameView] = useState(null);
-    const [tutorial, setTutorial] = useState(false);
+    const [tutorial, setTutorial] = useState(true);
     const [showTutorial, setShowTutorial] = useState(false);
     const [countTutorial, setCountTutorial] = useState(0);
     const [speech, setSpeech] = useState(null);

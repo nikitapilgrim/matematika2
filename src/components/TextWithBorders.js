@@ -1,8 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import useComponentSize from '@rehooks/component-size'
-import { Stage, Layer, Rect, Text } from 'react-konva';
-import Konva from 'konva';
 import useWindowSize from "react-use/lib/useWindowSize";
 
 const Wrapper = styled.div`
@@ -45,7 +43,9 @@ const HiddenText = styled.div`
     font-size: ${props => `${props.size}rem`};
     font-family: 'Luckiest Guy', cursive;
     font-weight: bold;
-    color: transparent;
+    text-shadow: 0rem 0.05em 0rem #000,0rem 0rem 2.5rem white;
+    -webkit-text-stroke: ${props => props.stroke}px white;
+    color: ${props => props.color || 'white'};
     //z-index: -1;
     //color: transparent;
     //text-shadow: 2px 2px 20px white;
@@ -64,11 +64,10 @@ export const TextWithBorders = ({children, color, text, size = 6, center, storeW
         setFontSize(getFontSize());
     }, [windowSize]);
 
-
     return (
         <Wrapper center={center}>
-            <HiddenText size={size} color={color} ref={ref}>{text}</HiddenText>
-            <Stage width={width+20} height={height+20}>
+            <HiddenText size={size} color={color} stroke={storeWidth || fontSize / 3} ref={ref}>{text}</HiddenText>
+           {/* <Stage width={width+20} height={height+20}>
                 <Layer>
                     <Text fontFamily={"Luckiest Guy"}
                           fontSize={fontSize * size}
@@ -81,7 +80,7 @@ export const TextWithBorders = ({children, color, text, size = 6, center, storeW
                           padding={10}
                     />
                 </Layer>
-            </Stage>
+            </Stage>*/}
         </Wrapper>
     )
 };

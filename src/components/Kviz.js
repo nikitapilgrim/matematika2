@@ -41,7 +41,7 @@ export const Kviz = ({order, show}) => {
             <animated.div style={{
                 transform: x.interpolate({
                     range: [0, 1],
-                    output: [-60, 0]
+                    output: [-70, 0]
                 }).interpolate(x => `translateY(${x}vh)`),
             }}>
                 <TextWithBorders storeWidth={10} size={20} color="#3a6269" text={`Kviz ${order}`}/>

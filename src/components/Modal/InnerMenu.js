@@ -88,7 +88,7 @@ export const InnerMenu = (props) => {
 
     const handlerStage = (next, number) => () => {
         sounds.mouseclick.play();
-        dispatch('kviz/set', number);
+        dispatch('kviz/set', number === 1 ? number : number - 1);
         dispatch('kviz/show');
         dispatch('stage/to', next);
         dispatch('modal/hide');
