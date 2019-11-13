@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect,useLayoutEffect, useRef} from 'react';
 import styled from 'styled-components';
 import useMount from "react-use/lib/useMount";
 import useStoreon from "storeon/react";
@@ -36,19 +36,26 @@ export const ManyInputs = ({data, handler}) => {
     const {dispatch, help} = useStoreon('help');
     const ref = useRef(null);
     const [inputsRef, setInputsRef] = useState([]);
+    const [init, setInit] = useState(null);
 
 
     useEffect(() => {
         if (ref.current) {
             const wrapper = ref.current;
             setInputsRef([...wrapper.querySelectorAll('input')].filter(input => !input.placeholder))
+            setTimeout(() => setInit(true), 300)
+
         }
     }, [ref, inputs]);
 
 
     useEffect(() => {
         if (data) {
-            setInputs([...data])
+            setInputs([...data].map((input, i) => {
+                input.value = '';
+                input.id = i;
+                return input
+            }))
         }
     }, [data]);
 
@@ -77,19 +84,43 @@ export const ManyInputs = ({data, handler}) => {
     };
 
     useEffect(() => {
+        if (inputsRef.length > 0 && !init) {
+            //  console.log(inputsRef, 'test')
+            inputsRef.find(ref => !ref.placeholder).focus();
+        }
+    }, [inputsRef]);
+
+    useEffect(() => {
         if (inputs && inputsRef.length > 0) {
             const check = inputs.every((input, i, arr) => {
                 if (input.value === input.answer.toString() || input.answer === input.placeholder) {
                     return true;
                 }
             });
-            inputs.filter(input => !input.placeholder).some((input, i, arr) => {
-                if (input.value && input.value.length === input.answer.toString().length) {
-                    if (inputsRef[i + 1]) {
-                        inputsRef[i + 1].focus();
+            [...inputs].filter(input => !input.placeholder).reverse().some((input, i, arr) => {
+                if (
+                    input.value.length > 0
+                ) {
+                    if (input.value.length === input.answer.toString().length) {
+                        if (inputsRef[arr.length - i]) {
+                            inputsRef[arr.length - i].focus();
+                        }
                     }
+                    return true
                 }
             });
+
+            /*  if (!input.placeholder &&
+                  input.value &&
+                  input.value.length === input.answer.toString().length &&
+                  input.value.length > 1 &&
+                  i !== arr.length - 1
+              ) {
+                  if (inputsRef[i + 1] && !arr[arr.length - 1].value) {
+                      inputsRef[i + 1].focus();
+                  }
+              }*/
+
             handler(check || inputs.reduce((acc, item, index) => `${acc}${index > 0 && ',' || ''}${item.answer || item.placeholder}`, ``))
         }
     }, [inputs, inputsRef]);
@@ -100,7 +131,7 @@ export const ManyInputs = ({data, handler}) => {
                 const answer = !data.placeholder && data.answer;
                 return (
                     <Input
-                        maxLength ={answer.toString().length}
+                        maxLength={answer.toString().length}
                         value={inputs[i].value || ''}
                         key={i}
                         disabled={!!data.placeholder || help}
