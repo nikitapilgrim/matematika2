@@ -353,7 +353,7 @@ export const AnimatedContainer = React.memo(({tutorial, animate, spritePlay, sho
 
                 <Fade when={kviz.show && confety}>
                     <Confetti
-                        run={confettiShow}
+                        run={confettiShow && confety}
                         width={width}
                         height={height}
                     />

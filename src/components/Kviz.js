@@ -39,6 +39,7 @@ export const Kviz = ({order, show}) => {
     return (
         <Wrapper>
             <animated.div style={{
+                willChange: 'transform',
                 transform: x.interpolate({
                     range: [0, 1],
                     output: [-70, 0]

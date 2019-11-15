@@ -2,7 +2,7 @@ import {animated, useSpring} from "react-spring";
 import React from "react";
 import {easeCubic} from "d3-ease";
 
-export const Slide = ({children, left, when, onReveal}) => {
+export const Slide = React.memo(({children, left, when, onReveal}) => {
     const { x } = useSpring({
         onStart: onReveal,
         config: {
@@ -19,6 +19,7 @@ export const Slide = ({children, left, when, onReveal}) => {
 
     return (
         <animated.div style={{
+            willChange: 'transform',
             transform: x.interpolate({
                 range: [0, 1],
                 output: [left ? -60: +60, 0]
@@ -27,4 +28,4 @@ export const Slide = ({children, left, when, onReveal}) => {
             {children}
         </animated.div>
     )
-}
+});

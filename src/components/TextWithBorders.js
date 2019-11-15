@@ -7,6 +7,7 @@ const Wrapper = styled.div`
   display: inline-block;
   position: relative;
   pointer-events: none;
+  filter: drop-shadow(0px 0px 5px black);
   div  {
     &:not(:first-child) {
       position: absolute;
@@ -43,7 +44,7 @@ const HiddenText = styled.div`
     font-size: ${props => `${props.size}rem`};
     font-family: 'Luckiest Guy', cursive;
     font-weight: bold;
-    text-shadow: 0rem 0.05em 0rem #000,0rem 0rem 2.5rem white;
+    text-shadow: 0rem 0rem 2.5rem white;
     -webkit-text-stroke: ${props => props.stroke}px white;
     color: ${props => props.color || 'white'};
     //z-index: -1;
