@@ -15,13 +15,13 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Ako si zapeo negdje i treba ti pomoć, klikni ovdje.`,
+        phrase: `Klikni ovdje da bi direktno izabrao kviz koji želiš odigrati.`,
         type: 'tutorial',
         elem: 'menu'
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Klikni ovdje da bi direktno izabrao kviz koji želiš odigrati.`,
+        phrase: `Ako si zapeo negdje i treba ti pomoć, klikni ovdje.`,
         type: 'tutorial',
         elem: 'help'
     },
