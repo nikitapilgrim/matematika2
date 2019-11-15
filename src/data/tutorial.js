@@ -9,12 +9,6 @@ export default [
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Da bi uključio ili isključio muziku klikni na ovaj simbol. Klikni sada na njega.`,
-        type: 'tutorial',
-        elem: 'music'
-    },
-    {
-        layout: LAYOUTS.speech,
         phrase: `Ako si zapeo negdje i treba ti pomoć, klikni ovdje.`,
         type: 'tutorial',
         elem: 'menu'
@@ -24,6 +18,12 @@ export default [
         phrase: `Klikni ovdje da bi direktno izabrao kviz koji želiš odigrati.`,
         type: 'tutorial',
         elem: 'help'
+    },
+    {
+        layout: LAYOUTS.speech,
+        phrase: `Da bi uključio ili isključio muziku klikni na ovaj simbol. Klikni sada na njega.`,
+        type: 'tutorial',
+        elem: 'music'
     },
     {
         layout: LAYOUTS.speech,

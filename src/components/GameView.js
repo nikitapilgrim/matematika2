@@ -314,7 +314,7 @@ export const GameView = ({handlerFullscreen}) => {
                     tutorial={tutorial}
                     showCharacters={showGameView} spritePlay={spritePlay}
                     onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
-                    confety={true}
+                    confety={stage > 1}
                     onAnimationEnd={handlerAnimationEnd}/>
 
                 {final && <Final/>}
