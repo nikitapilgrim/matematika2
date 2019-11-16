@@ -29,6 +29,7 @@
     "@storeon/localstorage": "^0.6.2",
     "array-move": "^2.1.0",
     "d3-ease": "^1.0.5",
+    "detect-browser": "^4.8.0",
     "fontfaceobserver": "^2.1.0",
     "howler": "^2.1.2",
     "konva": "^4.0.16",

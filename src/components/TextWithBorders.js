@@ -2,12 +2,17 @@ import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import useComponentSize from '@rehooks/component-size'
 import useWindowSize from "react-use/lib/useWindowSize";
+const { detect } = require('detect-browser');
+const browser = detect();
 
 const Wrapper = styled.div`
   display: inline-block;
   position: relative;
   pointer-events: none;
-  filter: drop-shadow(0px 0px 5px black);
+  filter: ${props => {
+      if (props.answer) return false;
+      return props.background ? `drop-shadow(0px 0px 2px rgba(0,0,0,1))` : `drop-shadow(5px 5px 0px rgba(0, 0, 0, 0.5))`
+}};
   div  {
     &:not(:first-child) {
       position: absolute;
@@ -16,23 +21,6 @@ const Wrapper = styled.div`
       ${props => props.center && 'transform: translateY(100%);' }
     }
   }
-  //font-family: 'Luckiest Guy', cursive;
-  //font-size: 17px;
-  //transform: scale(1.5);
-  //left: 1rem;
-  //top: -50px;
-  //filter: drop-shadow(0px 0px 1px black);
-  /*svg {
-    &:not(:first-child) {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1;
-        width: 99%;
-        height: 99%;
-        filter: drop-shadow(0px 0px 10px white);
-    }
-  }*/
 `;
 
 const HiddenText = styled.div`
@@ -44,8 +32,17 @@ const HiddenText = styled.div`
     font-size: ${props => `${props.size}rem`};
     font-family: 'Luckiest Guy', cursive;
     font-weight: bold;
-    text-shadow: 0rem 0rem 2.5rem white;
-    -webkit-text-stroke: ${props => props.stroke}px white;
+    ${props => props.background && !props.answer && `text-shadow: 0rem 0rem 2.5rem white;`};
+    -webkit-text-stroke: ${props => {
+        //if (props.answer) return false;
+        if (browser.name === 'chrome' ) {
+            if (!props.background) {
+                return '5px'
+            }
+            return `0.01em`;
+        }
+        return `${props.stroke}px`
+    }} white;
     color: ${props => props.color || 'white'};
     //z-index: -1;
     //color: transparent;
@@ -54,7 +51,7 @@ const HiddenText = styled.div`
 
 const getFontSize = () => parseInt(getComputedStyle(document.documentElement).fontSize);
 
-export const TextWithBorders = ({children, color, text, size = 6, center, storeWidth}) => {
+export const TextWithBorders = ({children, color, text, size = 6, center, storeWidth, background = true, answer}) => {
     const ref = useRef(null);
     const componentSize = useComponentSize(ref);
     const { width, height } = componentSize;
@@ -66,8 +63,8 @@ export const TextWithBorders = ({children, color, text, size = 6, center, storeW
     }, [windowSize]);
 
     return (
-        <Wrapper center={center}>
-            <HiddenText size={size} color={color} stroke={storeWidth || fontSize / 3} ref={ref}>{text}</HiddenText>
+        <Wrapper answer={answer} background={background} center={center}>
+            <HiddenText answer={answer} background={background} size={size} color={color} stroke={storeWidth || fontSize / 3} ref={ref}>{text}</HiddenText>
            {/* <Stage width={width+20} height={height+20}>
                 <Layer>
                     <Text fontFamily={"Luckiest Guy"}

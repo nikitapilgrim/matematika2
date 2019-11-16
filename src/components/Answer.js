@@ -89,8 +89,8 @@ export const Answer = ({answer, last}) => {
             {show &&
             <Wrapper right={answer.right}>
                 {!answer.right ?
-                    <TextWithBorders color="red" size={7} text={answer.value}/> :
-                    <TextWithBorders color="#1dc91d" size={10} text="BRAVO!"/>}
+                    <TextWithBorders answer={true} color="red" size={7} text={answer.value}/> :
+                    <TextWithBorders answer={true} color="#1dc91d" size={10} text="BRAVO!"/>}
             </Wrapper>
             }
         </>
