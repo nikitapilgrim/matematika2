@@ -1,8 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import styled from "styled-components";
+import styled, {css, keyframes} from "styled-components";
 import {TextWithBorders} from "./TextWithBorders";
-import {easeCubic} from 'd3-ease'
-import {useSpring, animated} from 'react-spring'
+import useStoreon from "storeon/react";
+
+const SlideTop = keyframes`
+  0% {
+    transform: translateY(-100vh);
+  }
+  100% {
+    transform: translateY(0vh);
+  }
+`;
+
+const SlideBottom = keyframes`
+  0% {
+    transform: translateY(0vh);
+  }
+  100% {
+    transform: translateY(-100vh);
+  }
+`;
+const SlideVert = props => css`
+  animation: ${props.show ? SlideTop : SlideBottom} 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+`;
+
 
 const Wrapper = styled.div`
   position: fixed;
@@ -14,39 +35,50 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Luckiest Guy', cursive;
-  color: #3a6269; 
   font-weight: bold;
-  font-size: 20rem;
-  pointer-events: none;
+  filter: drop-shadow(0 0 0.3em black);
+  transform: translateY(-100vh);
+  ${props => props.show !== null && SlideVert};
 `;
 
-export const Kviz = ({order, show}) => {
+export const Kviz = ({order}) => {
+    const [show, setShow] = useState(null);
     const [number, setNumber] = useState(order);
-    const { x } = useSpring({
-        config: {
-            duration: 1000,
-            easing: easeCubic
-        },
-        from: { xy: [0, 0]},
-        x: show ? 1 : 0,
-    });
+    const {dispatch, stage, start, kviz, modal, preloader, final} = useStoreon(
+        'stage',
+        'start',
+        'kviz',
+        'modal',
+        'preloader',
+        'final'
+    );
+    useEffect(() => {
+        if (start && kviz.show) {
+            setShow(true);
+            setTimeout(() => {
+                dispatch('kviz/hide');
+            }, 800);
+            setTimeout(() => {
+                dispatch('stage/next');
+            }, 1000)
+        } else {
+            setShow(false)
+        }
+
+    }, [kviz.show, start]);
 
     useEffect(() => {
         setNumber(order)
     }, [order]);
 
     return (
-        <Wrapper>
-            <animated.div style={{
-                willChange: 'transform',
-                transform: x.interpolate({
-                    range: [0, 1],
-                    output: [-70, 0]
-                }).interpolate(x => `translateY(${x}vh)`),
-            }}>
-                <TextWithBorders background={false} storeWidth={10} size={20} color="#3a6269" text={`Kviz ${order}`}/>
-            </animated.div>
+        <Wrapper show={show}>
+            <TextWithBorders
+                strokeColor={'#ffd2ba'}
+                strokeWidth={'0.1em'}
+                size={6}
+                color="#662c0c"
+                text={`Kviz ${order || 1}`}/>
         </Wrapper>
     )
 };

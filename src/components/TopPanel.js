@@ -4,14 +4,18 @@ import {Sound} from "./Sound";
 import {Menu} from "./Menu";
 import {Help} from "./Help";
 import {sounds} from "../sounds";
+import useStoreon from "storeon/react";
 
 const Wrapper = styled.div`
-  position: fixed;
+  position: absolute;
+  right: 4rem;
+  top: -21rem;
   display: flex;
-  z-index: 2;
-  padding: 2rem;
-  top: 0;
-  left: 0;
+  align-items: center;
+  z-index: 0;
+  transition: filter 1s;
+    //pointer-events: none;
+  ${props => props.hide ? 'filter: blur(10px)' : ''}; //brightness(0.70) saturate(130%);
   & > div {
     transition: all 0.2s ease;
     &:hover {
@@ -24,12 +28,25 @@ const Wrapper = styled.div`
 `;
 
 const HiddenWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    padding: 0.5em;
     transition: filter 1s;
-    ${props => props.hide ? 'filter: blur(10px) brightness(0.70) saturate(130%);' : ''};
+    ${props => props.hide ? 'filter: blur(10px)' : ''};
+    &:before {
+      content: '';
+      position: absolute;
+      height: 130%;
+      width: 130%;
+      border-radius: 50% 50%;
+      ${props => props.round ? 'border: solid 0.3em red' : ''};
+    }
 `;
-const HiddenWrapp = ({children, hide}) => {
+const HiddenWrapp = ({children, hide, round}) => {
     return (
-        <HiddenWrapper onClick={e => {
+        <HiddenWrapper round={round} onClick={e => {
             sounds.mouseclick.play()
         }} hide={hide}>
             {children}
@@ -38,6 +55,9 @@ const HiddenWrapp = ({children, hide}) => {
 };
 
 export function TopPanel({data}) {
+    const {dispatch, modal} = useStoreon(
+        'modal',
+    );
     const [showElems, setShowElems] = useState([]);
     const elems = ['music', 'menu', 'help'];
 
@@ -48,14 +68,14 @@ export function TopPanel({data}) {
     }, [data]);
 
     return (
-        <Wrapper>
-            <HiddenWrapp hide={!showElems.includes('music')}>
+        <Wrapper hide={modal}>
+            <HiddenWrapp round={data.elem === 'music'} hide={!showElems.includes('music')}>
                 <Sound/>
             </HiddenWrapp>
-            <HiddenWrapp hide={!showElems.includes('menu')}>
+            <HiddenWrapp round={data.elem === 'menu'} hide={!showElems.includes('menu')}>
                 <Menu/>
             </HiddenWrapp>
-            <HiddenWrapp hide={!showElems.includes('help')}>
+            <HiddenWrapp round={data.elem === 'help'} hide={!showElems.includes('help')}>
                 <Help/>
             </HiddenWrapp>
         </Wrapper>

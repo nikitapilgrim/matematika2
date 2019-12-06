@@ -3,34 +3,42 @@ import {LAYOUTS} from "./stages";
 export default [
     {
         layout: LAYOUTS.speech,
-        phrase: `Zdravo!
-        Pokazaću ti kako se koristi ovaj program! Klikni da bismo išli dalje.`,
+        title: 'Zdravo!',
+        phrase: `Hoćemo li malo vježbati matematiku? Ne brini, nije teško! Više je zabavno nego teško!`,
         type: 'tutorial',
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Da bi uključio ili isključio muziku klikni na ovaj simbol. Klikni sada na njega.`,
+        title: 'Zdravo!',
+        phrase: `Sad ću ti pokazati kako se koristi ovaj digitalni udžbenik.`,
+        type: 'tutorial',
+    },
+    {
+        layout: LAYOUTS.speech,
+        title: 'Zdravo!',
+        phrase: `Klikni ovdje da uključiš ili isključiš muziku. Klikni sada da isprobaš.`,
         type: 'tutorial',
         elem: 'music'
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Klikni ovdje da bi direktno izabrao kviz koji želiš odigrati.`,
+        title: 'Zdravo!',
+        phrase: `Klikni ovdje da preskočiš lekcije ako želiš.`,
         type: 'tutorial',
         elem: 'menu'
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Ako si zapeo negdje i treba ti pomoć, klikni ovdje.`,
+        title: 'Zdravo!',
+        phrase: `Klikni ovdje ako ti je negdje zapelo. Dobićeš pomoć.`,
         type: 'tutorial',
         elem: 'help'
+
     },
     {
         layout: LAYOUTS.speech,
-        phrase: `Ako si spreman, krenućemo sada sa prvim kvizom!`,
+        title: 'Zdravo!',
+        phrase: `Hoćeš li da počnemo sa prvom lekcijom?`,
         type: 'tutorial'
-    },
-    {
-       animation: 'kviz'
     }
 ]

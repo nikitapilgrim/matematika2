@@ -4,8 +4,8 @@ import HelpIcon from '../assets/svg/help.svg'
 import useStoreon from "storeon/react";
 
 const Wrapper = styled.div`
-    width: 5rem;
-    height: 5rem;
+    width: 2.5rem;
+    height: 2.5rem;
     z-index: 300;
     cursor: pointer;
     background-size: cover;

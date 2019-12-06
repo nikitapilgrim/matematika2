@@ -1,52 +1,66 @@
 import React, {useEffect, useRef, useState} from "react";
 import useStoreon from 'storeon/react';
-import useClickAway from 'react-use/lib/useClickAway'
 import tutorialData from "../data/tutorial";
+
+import useClickAway from 'react-use/lib/useClickAway'
 import Fullscreen from "react-full-screen";
-import Slide from 'react-reveal/Slide';
-import useTimeout from "react-use/lib/useTimeout";
-import desk from '../assets/image/classroom_blackboard_cube.png'
+import {SlideVert} from "./Animate/Slide";
+import notebook from '../assets/image/papersheet@3x.png'
 import styled from "styled-components";
-import {AnimatedContainer} from "./AnimatedContainer";
+import {Intro} from './Intro'
 import stagesData, {LAYOUTS} from "../data/stages";
 import {TopPanel} from "./TopPanel";
+import {Tutorial} from "./Tutorial";
 import {Stage} from "./Stage";
 import {Answer} from "./Answer";
 import {sounds} from "../sounds";
-import {Sound} from "./Sound";
-import {Menu} from "./Menu";
-import {Help} from "./Help";
+
 import {Kviz} from "./Kviz";
 import {Final} from "./Final";
-import {Speech} from "./Speech";
-import bg from '../assets/image/classroom_bg.jpg'
+import bg from '../assets/image/wood-background.jpeg'
+import {useMount} from "react-use";
 
 const Wrapper = styled.div`
     width: 50rem;
     min-width: 300px;
-    max-width: 450px;
+    max-width: 700px;
     display: flex;
     justify-content: center;
     position: relative;
+    z-index: 1;
     pointer-events: auto;
+    transform: translateY(-100vh);
+    ${props => props.show !== false && SlideVert}
 `;
 
 const DeskWrapper = styled.div`
   width: 100%;
-  padding-top: 56.25%;
   position: relative;
-  top: 1rem;
-  //top: -7rem;
   pointer-events: auto;
   img {
     display: inline-block;
-    filter: drop-shadow(0 0 3px);
+    //filter: drop-shadow(0 0 3px);
     max-width: 100%;
+    user-select: none;
   }
 `;
 
-const Bg = styled.div`
+const WrapperApp = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+`;
+
+const Bg = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: -1;
     top: 0;
     left: 0;
     height: 100%;
@@ -56,7 +70,24 @@ const Bg = styled.div`
     background-position: 50% 50%;
     transition: filter 1s;
     //pointer-events: none;
-    ${props => props.tutorial ? 'filter: blur(10px) brightness(0.70) saturate(130%);' : ''}
+    ${props => props.tutorial ? 'filter: blur(10px)' : ''} //brightness(0.70) saturate(130%);
+`;
+
+const Blur = styled.div`
+    ${props => props.tutorial ? 'filter: blur(10px)' : ''}; //brightness(0.70) saturate(130%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: ${props => props.zIndex || '-1'};
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transition: filter 1s;
+    ${props => !props.bgNone && `background: url(${bg});`}
+    background-size: cover;
+    background-position: 50% 50%;
 `;
 
 const Inner = styled.div`
@@ -65,9 +96,9 @@ const Inner = styled.div`
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 39%;
+    top: 0;
     width: 100%;
-    height: 32%;
+    height: 100%;
     pointer-events: auto;
     transition: opacity 0.2s linear;
     transition-delay: ${props => props.show ? '1s' : '0'};
@@ -83,260 +114,116 @@ const CurrentStage = styled.div`
   opacity: 0.8;
 `;
 
+const initialState = {count: 0};
 
-const FullscreenButton = styled.div`
+function reducer(state, action) {
+    switch (action.type) {
+        case 'increment':
+            return {count: state.count + 1};
+        case 'decrement':
+            return {count: state.count - 1};
+        default:
+            throw new Error();
+    }
+}
 
-`;
 
-export const GameView = ({handlerFullscreen}) => {
-    const {dispatch, stage, kviz, modal, preloader, final} = useStoreon('stage', 'kviz', 'modal', 'preloader', 'final');
+export function GameView({handlerFullscreen}) {
+    const {dispatch, stage, start, kviz, modal, preloader, final} = useStoreon(
+        'stage',
+        'start',
+        'kviz',
+        'modal',
+        'preloader',
+        'final'
+    );
     const [stageData, setStageData] = useState(stagesData[stage]);
-    const [combo, setCombo] = useState(0);
-    const [animate, setAnimate] = useState(null);
-    const [answer, setAnswer] = useState(null);
-    const [isReady, cancel, reset] = useTimeout(200);
-    const [animationDone, setAnimationDone] = useState(null);
-    const [spriteLoaded, setSpriteLoaded] = useState(null);
-    const [spritePlay, setSpritePlay] = useState(null);
-    const [deskAnimationEnd, setDeskAnimationEnd] = useState(null);
-    const [showGameView, setShowGameView] = useState(null);
-    const [tutorial, setTutorial] = useState(true);
+    const [tutorialCount, setTutorialCount] = useState(0);
     const [showTutorial, setShowTutorial] = useState(false);
-    const [countTutorial, setCountTutorial] = useState(0);
-    const [speech, setSpeech] = useState(null);
-    const refDebugg = useRef(null);
 
-
-    useClickAway(refDebugg, () => {
-        const input = document.querySelector('.desk-wrapper input');
-        if (input && stageData.layout  === 'simple') {
-            setTimeout(() => {
-                input.focus();
-            }, 300)
+    useEffect(() => {
+        if (start) {
+            setShowTutorial(true);
         }
-    });
-
+    }, [start]);
 
     useEffect(() => {
         setStageData(stagesData[stage]);
     }, [stage]);
+    useMount(() => {
+        dispatch('preload/set', 100);
 
-    // set Speech
-    useEffect(() => {
-        if (stageData.hasOwnProperty('speech') && !tutorial) {
-            setSpeech(stageData.speech)
-        }
-        if (tutorial) {
-            setSpeech(tutorialData[countTutorial])
-        }
-        if (!tutorial && !stageData.hasOwnProperty('speech')) {
-            setSpeech(null)
-        }
-    }, [stageData, tutorial, countTutorial]);
-
-    // show kviz animation tutorial
-    useEffect(() => {
-        if (tutorialData[countTutorial] && tutorialData[countTutorial].hasOwnProperty('animation')) {
-            dispatch('kviz/show');
-            setTimeout(() => {
-                setTimeout(() => {
-                    dispatch('stage/to', 1); //fix TODO
-                }, 2000);
-                setTutorial(false);
-                setShowTutorial(false)
-            }, 1000)
-        }
-    }, [tutorialData, countTutorial]);
-
-
-    // animation if modal show
-    useEffect(() => {
-        if (!tutorial && !kviz.show && spriteLoaded && preloader.count === 100) {
-            setShowGameView(!modal);
-        }
-    }, [modal, kviz, spriteLoaded, preloader, tutorial]);
-
-    // show kviz
-    useEffect(() => {
-        if (stageData.id) {
-            document.title = `ID = ${stageData.id}`
-        }
-        if (stageData.layout === LAYOUTS.quiz && stage !== 0) {
-            dispatch('kviz/show');
-        }
-        if (stagesData[stage - 1] && stagesData[stage].layout === LAYOUTS.quiz) {
-            dispatch('kviz/set', kviz.order + 1);
-        }
-    }, [stageData]);
-
-    useEffect(() => {
-        if (kviz.show) {
-            document.querySelector('body').style.pointerEvents = 'none';
-            setShowGameView(false);
-            if (!modal) {
-                setTimeout(() => {
-                    document.querySelector('body').style.pointerEvents = 'auto';
-                    dispatch('stage/next');
-                    dispatch('kviz/hide');
-                    setShowGameView(true);
-                }, 2000);
-            }
-        }
-    }, [modal, kviz]);
-
-
-    useEffect(() => {
-        if (!showGameView) {
-            setDeskAnimationEnd(false)
-        }
-    }, [showGameView]);
-
-    const handlerAnswer = (answer) => {
-        console.log(answer, 'asnwer')
-        if (true/*isReady()*/) {
-            setAnswer(answer);
-            if (answer.right === true) {
-                setCombo(prev => prev + 1);
-                sounds.success.play()
-            } else {
-                setCombo(0);
-                sounds.fail.play()
-            }
-            dispatch('stage/next', {
-                answer: answer.right
-            });
-        }
-    };
-
-    useEffect(() => {
-        if (combo >= 3) {
-            setAnimate({
-                stage: 2,
-                name: 'right'
-            })
-        }
-        if (combo === 2) {
-            setAnimate({
-                stage: 1,
-                name: 'right'
-            })
-        }
-        if (combo === 1) {
-            setAnimate({
-                stage: 0,
-                name: 'right'
-            })
-        }
-    }, [combo, stage]);
-
-    const handlerAnimationEnd = (state) => {
-        setAnimationDone(true);
-    };
-
-    const handlerSpriteLoaded = () => {
-        setSpriteLoaded(true);
-        let count = 0;
+        /*let count = 0;
         const setPreload = i => () => {
             count = i + 1;
             dispatch('preload/set', i);
             if (i < 100) {
-                setTimeout(setPreload(count), 20)
+                setTimeout(setPreload(count), 10)
             }
         };
-        setTimeout(setPreload(count), 0);
+        setTimeout(setPreload(count), 0);*/
+    });
+
+    // show kviz
+    useEffect(() => {
+        if (stageData.layout === 'quiz') {
+            dispatch('kviz/show')
+        }
+    }, [stageData]);
+
+
+    const handlerNextTutorial = () => {
+        if (tutorialData[tutorialCount + 1]) {
+            setTutorialCount((prev) => prev + 1);
+        } else {
+            setShowTutorial(false)
+        }
     };
-
-    useEffect(() => {
-        if (preloader.count === 100) {
-            if (tutorial) {
-                setTimeout(() => {
-                    setShowTutorial(true)
-                    setTimeout(() => {
-                        setShowGameView(true)
-                    }, 1000)
-                }, 500)
-            }
-        }
-    }, [preloader.count]);
-
-
-    const handlerDeskShow = () => {
-        setTimeout(() => {
-            setDeskAnimationEnd(true)
-        }, 1000);
-    };
-
-
-    useEffect(() => {
-        if (animationDone && deskAnimationEnd || tutorial) {
-            setTimeout(() => {
-                setSpritePlay(true);
-            }, 500)
-        }
-    }, [animationDone, deskAnimationEnd, tutorial]);
-
-    useEffect(() => {
-        if (tutorial) {
-            const handlerClickWindow = (e) => {
-                if (tutorialData[countTutorial + 1]) {
-                    setCountTutorial(count => count + 1);
-                } else {
-                    setTutorial(false);
-                    setShowTutorial(false)
-                }
-            };
-            window.addEventListener("click", handlerClickWindow);
-            return () => {
-                window.removeEventListener("click", handlerClickWindow);
-            };
-        }
-    }, [tutorial, countTutorial, showGameView]);
-
 
     return (
-        <Wrapper>
-            <Bg tutorial={showTutorial || modal}/>
-            <TopPanel data={tutorialData[countTutorial]}/>
+        <>
+            <WrapperApp>
+                {/*<Blur zIndex={1} tutorial={showTutorial}/>*/}
+                <Blur bgNone={true} zIndex={2} tutorial={modal}>
+                    <Intro/>
+                    <Kviz/>
+                    {/*<Tutorial handler={handlerNextTutorial} active={showTutorial && !kviz.show}
+                              data={tutorialData[tutorialCount]}/>*/}
+                    <CurrentStage>{stageData.id && stageData.id}</CurrentStage>
 
-            <CurrentStage>{stageData.id && stageData.id}</CurrentStage>
-            <Kviz show={kviz.show} order={kviz.order}/>
+                    <Wrapper show={start && !kviz.show}>
+                        <DeskWrapper className="desk-wrapper">
+                            <TopPanel data={tutorialData[tutorialCount]}/>
+                            <Bg tutorial={/*showTutorial || */modal}>
+                                <img src={notebook} alt="notebook"/>
+                                <Inner show={true}>
+                                    <Stage onNext={e => e} data={stageData}/>
+                                </Inner>
+                            </Bg>
 
-            <DeskWrapper className="desk-wrapper">
-                <Slide when={!tutorial && showGameView} bottom onReveal={handlerDeskShow}>
-                    <img src={desk} alt="desk"/>
-                </Slide>
+                        </DeskWrapper>
+                    </Wrapper>
+                </Blur>
 
-                <Speech show={showGameView || tutorial}
-                        teacherInit={spriteLoaded}
-                        data={speech}/>
 
-                <AnimatedContainer
-                    tutorial={tutorial}
-                    showCharacters={showGameView} spritePlay={spritePlay}
-                    onLoadedSprites={handlerSpriteLoaded} data={stageData} animate={animate}
-                    confety={stage > 1}
-                    onAnimationEnd={handlerAnimationEnd}/>
+            </WrapperApp>
 
-                {final && <Final/>}
-                <Inner show={!tutorial && !final && showGameView}>
-                    {!tutorial && <Stage onNext={handlerAnswer} data={stageData} spriteLoaded={spriteLoaded}/>}
-                </Inner>
-            </DeskWrapper>
-
-            {/*<button style={{
+            <button style={{
                 position: 'fixed',
                 zIndex: '999',
-                top: '50px',
-                right: '50px'
-            }} onClick={handlerFullscreen}>fullscreen</button>*/}
+                top: '2rem',
+                right: '2rem'
+            }} onClick={e => {
+                dispatch('stage/to', stage + 1);
+            }}>next
+            </button>
             <input value={stage}
-                   ref={refDebugg}
                    style={{
-                position: 'fixed',
-                zIndex: '999',
-                top: 0,
-                right: 0
-            }} type="text" onClick={e => {
+                       position: 'fixed',
+                       zIndex: '999',
+                       top: 0,
+                       right: 0
+                   }} type="text" onClick={e => {
                 //refDebugg.current = 'active'
             }} onChange={(e) => {
                 if (+e.target.value) {
@@ -349,7 +236,7 @@ export const GameView = ({handlerFullscreen}) => {
                     dispatch('stage/to', 0)
                 }
             }}/>
-            <Answer last={stagesData[stage].layout === 'quiz'} answer={answer}/>
-        </Wrapper>
+            {/*<Answer last={stagesData[stage].layout === 'quiz'} answer={answer}/>*/}
+        </>
     )
 };

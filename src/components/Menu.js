@@ -6,15 +6,15 @@ import {InnerMenu} from "./Modal/InnerMenu";
 import MenuIcon from '../assets/svg/menu.svg'
 
 const Wrapper = styled.div`
-    width: 5rem;
-    height: 5rem;
+    width: ${props => props.size.width || '2.5rem'};
+    height: ${props => props.size.height || '2.5rem'};
     z-index: 300;
     cursor: pointer;
     background-size: cover;
 
     svg {
+      fill: ${props => props.color};
       width: 100%;    
-      filter: drop-shadow(0 0 3px #FFF);
     }
 `;
 
@@ -34,9 +34,9 @@ const style = {
     }
 };
 
-export const Menu = () => {
+export const Menu = ({color, size = {width: '2.5rem', height: '2.5rem'}}) => {
     return (
-        <Wrapper>
+        <Wrapper color={color} size={size}>
             <Modal style={style} inner={<InnerMenu/>}>
                 <MenuIcon/>
             </Modal>

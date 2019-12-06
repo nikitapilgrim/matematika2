@@ -11,21 +11,19 @@ const Wrapper = styled.div`
     width: 4rem;
     height: 4rem;
     color: #fff;
-    background-color: #5C9700;
+    background-color: #f70400;
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 900;
     font-size: 2rem;
     text-align: center;
     cursor: pointer;
-    text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
-    border: solid #fff 3px;
-    
+    border-radius: 0.5rem;    
 `;
 
 
 export const  DraggableElem = ({ item, index }) => {
     return (
-        <Draggable draggableId={item.id} index={index}>
+        <Draggable draggableId={item.id + ''} index={index}>
             {provided => (
                 <Wrapper
                     ref={provided.innerRef}

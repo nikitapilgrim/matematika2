@@ -9,19 +9,18 @@ import useClickAway from "react-use/lib/useClickAway";
 import {sounds} from "../../sounds";
 
 const Buttons = styled.div`
-    margin-top: 3rem;
+    margin-top: 1rem;
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 0.3rem;
-    filter: drop-shadow(0px 0px 10px white);
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 1rem;
+    filter: drop-shadow(0px 0px 0.2rem #896549);  
+
 `;
 
 const Wrapper = styled.div`
   position: relative;
   z-index: 5;
-  height: 100vh;
-  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,19 +29,23 @@ const Wrapper = styled.div`
 `;
 
 const stagesColor = {
-    current: '#b76d26',
-    some: '#4a822b',
+    current: '#e9c78d',
+    some: '#fce4be',
     hover: '#d89d57'
 };
 
 const Button = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   z-index: 1;
-  padding: 0.9rem;
+  padding: 0.5rem 0;
   background-color: ${props => props.current ? stagesColor.current : stagesColor.some};
-  border-radius: 5px;
-  font-size: 2rem;
-  color: #FFF;
+  border-radius: 0.3em;
+  border: 2px solid #896549;
+  font-size: 3rem;
+  color: #896549;
   font-weight: 900;
   transition: background-color 0.3s ease;
   cursor: pointer;
@@ -53,7 +56,7 @@ const Button = styled.div`
 `;
 
 const Title = styled.div`
-  
+  filter: drop-shadow(0px 0px 10px white);  
 `;
 const Inner = styled.div`
 
@@ -63,9 +66,6 @@ export const InnerMenu = (props) => {
     const {dispatch, modal, kviz, stage} = useStoreon('stage', 'kviz', 'modal');
     const [buttons, setButtons] = useState(null);
     const ref = useRef(null);
-    useClickAway(ref, () => {
-        dispatch('modal/hide')
-    });
 
     useMount(() => {
         const prepareButtons = stagesData.reduce((acc, stage, stageNumber) => {
@@ -99,7 +99,7 @@ export const InnerMenu = (props) => {
         <Wrapper>
             <Inner ref={ref}>
                 <Title>
-                    <TextWithBorders color='#4a822b' text="Izaberi kviz!"/>
+                    <TextWithBorders strokeWidth={"0.15em"} strokeColor={"#896549"} color='#fce4be' text="Izaberi kviz!"/>
                 </Title>
                 <Buttons>
                     {
@@ -108,7 +108,7 @@ export const InnerMenu = (props) => {
                             return (
                                 <Button current={kviz.order === index + 1} onClick={handlerStage(button.id, index + 1)}
                                         key={button.id}>
-                                    KVIZ {index + 1}
+                                    {index + 1}
                                 </Button>
                             )
                         })
