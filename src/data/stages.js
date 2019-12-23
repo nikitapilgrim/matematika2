@@ -5,38 +5,376 @@ export const LAYOUTS = {
     sortable: 'sortable',
     choice: 'choice',
     speech: 'speech',
-    quiz: 'quiz'
+    quiz: 'quiz',
+    table: 'table',
+    graph: 'graph',
+    editCorrect: 'editCorrect'
 };
 
 export default [
+    {layout: LAYOUTS.quiz},
     {
-        layout: LAYOUTS.quiz
+        id: 1,
+        layout: LAYOUTS.manyInputs,
+        title: require('../assets/image/headline/headline-01.png'),
+        questions: [
+            {
+                question: '20 + 60 - 30 - 10 = {{40}}'
+            },
+            {
+                question: '70 - 40 + 20 + 10 = {{60}}'
+            },
+            {
+                question: '40 + 60 - 20 - 40 = {{40}}'
+            },
+            {
+                question: '70 + 20 - 30 - 60 = {{0}}'
+            },
+        ],
     },
     {
         id: 1,
-        layout: LAYOUTS.simple,
-        question: "4 + 5 = {{input}}",
-        answer: 9,
-        speech: [
+        layout: LAYOUTS.manyInputs,
+        title: require('../assets/image/headline/headline-01.png'),
+        questions: [
             {
-                layout: LAYOUTS.speech,
-                phrase: `Ponavljanje sabiranja i oduzimanja u prvoj desetici. Ukucaj tačan odgovor i pritisni ENTER ili klikni na "Dalje".`,
-                audio: [require('../assets/sound/speech/speech2.aac')]
+                question: '50 + 10 - 30 = {{30}}'
             },
-        ]
+            {
+                question: '90 - 40 + 10 = {{60}}'
+            },
+            {
+                question: '30 + 40 - 50 = {{40}}'
+            },
+            {
+                question: '90 - 40 - 50 = {{0}}'
+            },
+        ],
     },
     {
         id: 2,
-        layout: LAYOUTS.simple,
-        question: "2 + 7 = {{input}}",
-        answer: 9
+        layout: LAYOUTS.manyInputs,
+        title: require('../assets/image/headline/headline-01.png'),
+        questions: [
+            {
+                question: '70 + 30 - 40 = {{60}}'
+            },
+            {
+                question: '20 + 60 - 70 = {{10}}'
+            },
+            {
+                question: '50 + 30 - 40 = {{40}}'
+            },
+            {
+                question: '60 + 10 + 30 = {{100}}'
+            },
+            {
+                question: '70 - 50 + 60 = {{80}}'
+            },
+        ],
     },
     {
         id: 3,
-        layout: LAYOUTS.simple,
-        question: "8 + 2 = {{input}}",
-        answer: 10
+        layout: LAYOUTS.manyInputs,
+        title: require('../assets/image/headline/headline-01.png'),
+        questions: [
+
+            {
+                question: '20 + 60 - 30 - 10 = {{40}}'
+            },
+            {
+                question: '70 - 40 + 20 + 10 = {{60}}'
+            },
+            {
+                question: '40 + 60 - 20 - 40 = {{40}}'
+            },
+            {
+                question: '70 + 20 - 30 - 60 = {{0}}'
+            },
+        ],
     },
+    {
+        id: 4,
+        layout: LAYOUTS.simple,
+        title: 'Odgovori',
+        text: `Od razlike brojeva 90 i 30 oduzmi 40.`,
+        question: "{{input}}",
+        answer: 20,
+    },
+    {
+        id: 5,
+        layout: LAYOUTS.simple,
+        title: 'Odgovori',
+        text: `Koji broj je za 30 manji od zbira brojeva 80 i 20?`,
+        question: "{{input}}",
+        answer: 70,
+    },
+    {
+        id: 6,
+        layout: LAYOUTS.simple,
+        title: 'Odgovori',
+        text: `Saša ima 50 KM,
+         a Nevena 20 KM manje od njega.
+          Koliko KM imaju zajedno? `,
+        question: "{{input}} KM",
+        answer: 80,
+    },
+    {
+        id: 7,
+        layout: LAYOUTS.manyInputs,
+        title: 'Upiši tačno rješenje!',
+        questions: [
+            {
+                question: '37 + 2 = {{39}}'
+            },
+            {
+                question: '62 + 5 = {{67}}'
+            },
+            {
+                question: '58 - 6 = {{52}}'
+            },
+            {
+                question: '29 - 7 = {{22}}'
+            },
+        ],
+    },
+    {
+        id: 8,
+        layout: LAYOUTS.manyInputs,
+        title: 'Upiši tačno rješenje!',
+        questions: [
+            {
+                question: '23 + 6 = {{29}}'
+            },
+            {
+                question: '76 + 3 = {{79}}'
+            },
+            {
+                question: '45 - 4 = {{41}}'
+            },
+            {
+                question: '88 - 6 = {{82}}'
+            },
+        ],
+    },
+    {
+        id: 9,
+        layout: LAYOUTS.manyInputs,
+        title: 'Upiši tačno rješenje!',
+        questions: [
+            {
+                question: '54 + 5 = {{59}}'
+            },
+            {
+                question: '81 + 8 = {{89}}'
+            },
+            {
+                question: '76 - 5 = {{71}}'
+            },
+            {
+                question: '27 - 4 = {{23}}'
+            },
+        ],
+    },
+    {
+        id: 10,
+        layout: LAYOUTS.simple,
+        title: 'Odgovori',
+        text: `Broj 97 umanji za 6, a to što dobiješ uvećaj za 8.`,
+        question: "{{input}}",
+        answer: 99,
+    },
+    {
+        id: 11,
+        layout: LAYOUTS.simple,
+        title: 'Odgovori',
+        text: `Goran je zasadio u voćnjaku 12 šljiva i 5 jabuka manje nego šljiva.
+         Koliko je jabuka i šljiva zasadio ukupno?`,
+        question: "{{input}}",
+        answer: 19,
+    },
+    {
+        id: 3,
+        title: 'Računaj!',
+        layout: LAYOUTS.table,
+        example: [
+            [21, 16, 37],
+            [42, 20, 62],
+            [63, 36, 99]
+        ],
+        question: [
+            ['52!', 24, '76!'],
+            [11, '12!', '23!'],
+            [63, 36, 99]
+        ],
+    },
+    {
+        id: 4,
+        layout: LAYOUTS.table,
+        question: [
+            ['-!', '23!', '45!', '34!'],
+            ['58!', 35, 13, 24],
+            ['89!', 66, 44, 55]
+        ],
+    },
+    {
+        id: 5,
+        layout: LAYOUTS.graph,
+        tree: {
+            elem: '51',
+            children: [
+                {
+                    elem: '+!',
+                    children: [
+                        {
+                            elem: '25!',
+                        },
+                        {
+                            elem: '26!',
+                        }
+                    ]
+                },
+            ]
+        }
+    },
+    {
+        id: 6,
+        layout: LAYOUTS.editCorrect,
+        text: `Upotrijebi zagrade tako da izraz:
+               bude jednak 32`,
+        question: "93-42+19",
+        answer: '93-(42+19)'
+    },
+    {
+        id: 7,
+        layout: LAYOUTS.simple,
+        text: `x+23=65`,
+        question: "{{input}}",
+        answer: 'x=42'
+    },
+    {
+        id: 8,
+        layout: LAYOUTS.manyInputs,
+        direction: 'row',
+        questions: [
+            {
+                question: '{{IX}}'
+            },
+            {
+                question: '{{X}}'
+            },
+            {
+                question: '{{XI}}'
+            }
+        ],
+    },
+    {
+        id: 9,
+        layout: LAYOUTS.manyInputs,
+        direction: 'row',
+        questions: [
+            {
+                question: '12 {{XII}}'
+            },
+            {
+                question: '8 {{XIII}}'
+            },
+            {
+                question: '15 {{XV}}'
+            },
+            {
+                question: '17 {{XVII}}'
+            },
+            {
+                question: '19 {{XIX}}'
+            }
+        ],
+    },
+    {
+        id: 10,
+        layout: LAYOUTS.simple,
+        text: `Broj 54 napiši riječima.`,
+        question: "Odgovor {{input}}",
+        answer: 'pedeset četvrti'
+    },
+    {
+        id: 11,
+        layout: LAYOUTS.choice,
+        text: `Kakve su ivice uglastih tijela:`,
+        items: [
+            {
+                placeholder: 'prave linije',
+                right: false,
+            },
+            {
+                placeholder: `zakrivljene linije?`,
+                right: false
+            },
+        ],
+    },
+    {
+        id: 12,
+        layout: LAYOUTS.dragAndDrop,
+        question: "15-9{{drop(<)}}8",
+        items: [
+            {
+                placeholder: '<',
+                id: 1,
+            },
+            {
+                placeholder: '=',
+                id: 2
+            },
+            {
+                placeholder: '>',
+                id: 3
+            }
+        ],
+    },
+    {
+        id: 13,
+        layout: LAYOUTS.manyInputs,
+        title: 'Napiši broj!',
+        direction: 'row',
+        questions: [
+            {
+                question: '12 {{28}}'
+            },
+            {
+                question: '8 {{11}}'
+            },
+        ],
+    },
+
+    {
+        id: 14,
+        layout: LAYOUTS.manyInputs,
+        direction: 'row',
+        text: `Zec može živjeti 10 godina, vuk 5 godina
+         više od zeca, medvjed 5 puta više od zeca
+          i konj dva puta više od vuka.
+           Koliko mogu živjeti vuk, medvjed i konj?`,
+        questions: [
+            {
+                img: {
+                    src: require('../assets/questionsImages/animal-figure-1.png'),
+                    width: '10rem'
+                },
+                question: '{{28}}'
+            },
+            {
+                img: {
+                    src: require('../assets/questionsImages/animal-figure-2.png'),
+                    width: '16rem'
+                },
+                question: '{{11}}'
+            },
+        ],
+    },
+
+
+
+
     {
         id: 4,
         layout: LAYOUTS.simple,

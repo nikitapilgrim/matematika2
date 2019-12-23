@@ -1,31 +1,23 @@
-import {animated, useSpring} from "react-spring";
-import React from "react";
-import {easeCubic} from "d3-ease";
+import {css, keyframes} from "styled-components";
 
-export const Slide = React.memo(({children, left, when, onReveal}) => {
-    const { x } = useSpring({
-        onStart: onReveal,
-        config: {
-            duration: 1000,
-            easing: easeCubic
-        },
-        from: { xy: [0, 0]},
-        x: when ? 1 : 0,
-    });
-    const config = {
-        range: [0, 1],
-        output: [left ? -60: +60, 0]
-    };
+const SlideTop = keyframes`
+  0% {
+    transform: translateY(-100vh);
+  }
+  100% {
+    transform: translateY(0vh);
+  }
+`;
 
-    return (
-        <animated.div style={{
-            willChange: 'transform',
-            transform: x.interpolate({
-                range: [0, 1],
-                output: [left ? -60: +60, 0]
-            }).interpolate(x => `translateX(${x}vw)`),
-        }}>
-            {children}
-        </animated.div>
-    )
-});
+const SlideBottom = keyframes`
+  0% {
+    transform: translateY(0vh);
+  }
+  100% {
+    transform: translateY(+100vh);
+  }
+`;
+
+export const SlideVert = props => css`
+  animation: ${props.show ? SlideTop : SlideBottom} 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+`;

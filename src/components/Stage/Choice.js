@@ -2,13 +2,11 @@ import React, {Fragment, useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  /* display: flex;
+   display: flex;
+   flex-direction: column;
    justify-content: flex-start;
    align-items: center;
-   flex-wrap: wrap;*/
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+   flex-wrap: wrap;
 `;
 
 const Elem = styled.div`
@@ -16,24 +14,27 @@ const Elem = styled.div`
     align-items: center;
     justify-content: center;
     color: #fff;
-    background-color: #5C9700;
+    background-color: #fe0002;
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 900;
-    border: solid #fff 3px;
-    font-size: 50px;
+    //border: solid #fff 3px;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 2rem;
     cursor: pointer;
-    width: 7rem;
-    height: 7rem;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
     transition: all 0.2s ease-in;
-    &:hover {
+    /*&:hover {
       background-color: #70b800;
+    }*/
+    &:not(:first-child) {
+      margin-top: 1rem;
     }
 `;
 const Span = styled.span`
   position: relative;
-  top: -0.4rem
-`
+  top: -0.2rem
+`;
 
 export const Choice = ({data, handler}) => {
     const [answer, setAnswer] = useState(null);

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import ReactDOM from 'react-dom';
 import styled from "styled-components";
 import {Howl, Howler} from 'howler';
 import {LAYOUTS} from "../data/stages";
@@ -7,25 +6,31 @@ import {LAYOUTS} from "../data/stages";
 const Text = styled.p`
       margin: 0;
       padding: 0;
-      min-width: 300px;
-    max-width: 500px;
+      //min-width: 300px;
+    //max-width: 500px;
     //min-height: ${props => props.type ? '150px' : 'auto'};
-max-height: 160px;
+    //max-height: 160px;
 `;
 
 const Wrapper = styled.div`
     background-color:#fff;
     position: absolute;
+    top: -10rem;
+    left: 19rem;
     display: flex;
-       width: fit-content;
-    bottom: 103%;
-    left: 59%;
-    padding: 32px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 20rem;
+    padding: 2rem;
+    padding-bottom: 4rem;
     z-index: 300;
-    font-family: 'McLaren', cursive;
-    font-size: 24px;
-    color:#000;
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.5rem;
+    color:#523217;
     border-radius: 10px;
+    filter: drop-shadow(0 0.1em 0.15em #523217);
+    cursor: pointer;
     ${props => {
     if (props.show === true) {
         return 'opacity: 1'
@@ -41,7 +46,7 @@ const Wrapper = styled.div`
         //filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0.87));
         content: '';
         position: absolute;
-        bottom: 0;
+        bottom: 0.2em;
         left: 15%;
         width: 0;
         height: 0;
@@ -55,14 +60,19 @@ const Wrapper = styled.div`
     }
 `;
 
+const Title = styled.div`
+  font-size: 2rem;
+  margin-bottom: 1rem;
+`;
+
 const Klik = styled.div`
   position: absolute;
-  bottom: 15px;
-  right: 15px;
+  bottom: 1rem;
+  right: 1rem;
 `;
 
 
-export const Speech = ({data, teacherInit, show}) => {
+export const Speech = ({data, show, onClick}) => {
     const [delayShow, setDelayShow] = useState(null);
     const [countSpeech, setCountSpeech] = useState(null);
     const [speech, setSpeech] = useState(null);
@@ -126,17 +136,16 @@ export const Speech = ({data, teacherInit, show}) => {
 
     return (
         <>
-            {speech && speech.phrase && teacherInit && data &&
-            <>
-                {ReactDOM.createPortal(
-                    <Wrapper show={delayShow} type={data.type}>
-                        <Text>
-                            {speech.phrase}
-                        </Text>
-                    </Wrapper>,
-                    document.querySelector('.teacher-sprite')
-                )}
-            </>
+            {speech && speech.phrase && data &&
+            <Wrapper onClick={onClick} show={delayShow} type={data.type}>
+                {data.title && <Title>
+                    {data.title}
+                </Title>}
+                <Text>
+                    {speech.phrase}
+                </Text>
+                <Klik>{'> Klikni <'}</Klik>
+            </Wrapper>
             }
         </>
     )

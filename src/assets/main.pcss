@@ -1,5 +1,7 @@
 @charset "UTF-8";
 @import "modern-normalize";
+@import "./font/stylesheet.css";
+
 html {
     touch-action: manipulation;
 }
@@ -24,10 +26,10 @@ body {
 }
 
 #preload {
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -35,32 +37,58 @@ body {
     height: 100%;
     width: 100%;
     z-index: 999;
-    background-color: #b3d0d6;
+    background: url("./image/wood-background.jpeg");
+    background-size: cover;
+    background-position: 50% 50%;
     transition: 0.5s;
 }
-
-#preload__characters {
-    position: relative;
+#preload__inner {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 50%;
+    height: 50%;
 }
+
+#preload__characters {
+    position: absolute;
+    z-index: -1;
+    top: -180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        position: absolute;
+        top: 0;
+        width: 280px;
+    }
+}
+#preload__progress-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
 #preload__progress {
+    position: relative;
+    z-index: 3;
     display: flex;
     justify-content: center;
     align-items: center;
     //font-family: 'Luckiest Guy', cursive;
     font-family: 'Courier', monospace;
     font-weight: bold;
-    font-size: 91px;
-    position: absolute;
-    bottom: 170px;
-    width: 100%;
+    font-size: 5rem;
+    width: 50%;
+    min-width: 235px;
     height: 100px;
-    border: 5px solid white;
+    border: 5px solid #966a39;
     border-radius: 1rem;
-    background-color: #b3d0d6;
-    //padding: 5px 10px;
+    background-color: #cebca6;
+    filter: drop-shadow(0px 0px 10px white);
+
+//padding: 5px 10px;
 
     progress:not(value) {
     }
@@ -73,14 +101,17 @@ body {
         border: none;
         width: 100%; height: 100%;
         background-color: transparent;
-        color: #eee;
+        color: #b08656;
+        border-radius: 0.5rem;
     }
     progress::-webkit-progress-value {
-        background-color: #eee;
+        background-color: #b08656;
+        border-radius: 0.5rem;
     }
 
     progress::-moz-progress-bar{
-        background-color: #eee;
+        background-color: #b08656;
+        border-radius: 0.5rem;
     }
 
 }
@@ -90,9 +121,8 @@ body {
 #preload__percent {
     position: relative;
     z-index: 1;
-    left: 15px;
+    //left: 15px;
     color: #FFF;
-    text-shadow: 1px 1px 1px black, 0 0 0em black;
     //filter: drop-shadow(0px 0px 1px black);
 }
 
@@ -112,7 +142,7 @@ body {
         width: 100vw;
         z-index: -1;
         content: '';
-        background: url("./image/classroom_bg.jpg");
+        background: url("./image/wood-background.jpeg");
         background-size: cover;
         background-position: 50% 50%;
     }

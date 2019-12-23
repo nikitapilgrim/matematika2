@@ -5,19 +5,19 @@ import SoundOn from '../assets/svg/volume_on.svg';
 import SoundOff from '../assets/svg/volume_off.svg';
 
 const Wrapper = styled.div`
-    width: 5rem;
-    height: 5rem;
+    width: ${props => props.size.width || '2.5rem'};
+    height: ${props => props.size.height || '2.5rem'};
     z-index: 300;
     cursor: pointer;
     background-size: cover;
 
     svg {
+      fill: ${props => props.color};
       width: 100%;    
-      filter: drop-shadow(0 0 3px #FFF);
     }
 `;
 
-export const Sound = () => {
+export const Sound = ({color, size = {width: '2.5rem', height: '2.5rem'}}) => {
     const [state, setState] = useState(false);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export const Sound = () => {
     const handlerClick = () => setState(!state);
 
     return (
-        <Wrapper onClick={handlerClick}>
+        <Wrapper color={color} size={size} onClick={handlerClick}>
             {state ? <SoundOn/> : <SoundOff/>}
         </Wrapper>
     )

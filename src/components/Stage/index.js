@@ -6,8 +6,12 @@ import {Simple} from "./Simple";
 import {ManyInputs} from "./ManyInputs";
 import {DragAndDrop} from "./DragAndDrop";
 import {Sortable} from "./Sortable/Sortable";
+import {WithAdditional} from "./WithAdditional";
 import {Choice} from "./Choice";
+import {Table} from "./Table";
+import {EditCorrect} from "./EditCorrect";
 import {LAYOUTS} from "../../data/stages";
+import {Graph} from "./Graph";
 import {Speech} from "../Speech";
 
 
@@ -40,121 +44,23 @@ const NextButton = styled.button`
     }
 `;
 
-export const Stage = ({data, onNext, spriteLoaded}) => {
-    const [answer, setAnswer] = useState(null);
+export const Stage = ({data}) => {
     const {dispatch, modal, kviz, preloader} = useStoreon('modal', 'kviz', 'preloader');
-    const [canPressEnter, setCanPressEnter] = useState(false);
-
-
-    useEffect(() => {
-        if (preloader.count === 100 && !kviz.show) {
-            setTimeout(() => {
-                setCanPressEnter(true)
-            }, 1500)
-        } else {
-            setCanPressEnter(false)
-        }
-    }, [preloader.count, kviz.show]);
-
-    useEffect(() => {
-        setAnswer(null)
-    }, [data]);
-
-    const handlerNext = () => {
-        if (canPressEnter) {
-            onNext(answer || {
-                value: data.answer,
-                right: false
-            })
-
-        }
-    };
-    useKeyPressEvent('Enter', handlerNext);
-
-    useEffect(() => {
-        if (!kviz.show) {
-            const handlerClickWindow = (e) => {
-                if (data.layout === LAYOUTS.speech && !modal) {
-                    handlerNext();
-                }
-            };
-            window.addEventListener("click", handlerClickWindow);
-            return () => {
-                window.removeEventListener("click", handlerClickWindow);
-            };
-        }
-    }, [data, modal, kviz]);
-
-
-    const handlerInput = (value) => {
-        if (typeof data.answer === 'number') {
-            if (+value === data.answer) {
-                setAnswer({
-                    value: value,
-                    right: true
-                });
-            }
-            return;
-        }
-        if (Array.isArray(data.answer)) {
-            if (data.answer.includes(value.toLowerCase())) {
-                setAnswer({
-                    value: value,
-                    right: true
-                });
-            }
-            return;
-        }
-        if (value === data.answer) {
-            setAnswer({
-                value: value,
-                right: true
-            });
-        } else {
-            setAnswer({
-                value: data.answer,
-                right: false
-            });
-        }
-    };
-
-    const handlerManyInputs = (values) => {
-        if (values === true) {
-            setAnswer(values)
-        } else {
-            setAnswer({
-                value: values,
-                right: false
-            });
-        }
-    };
-
-    const handlerSortable = (values) => {
-        setAnswer(values)
-    };
-
-    const handlerDragAndDrop = value => {
-        setAnswer(value)
-    };
-
-    const handlerChoice = (answer) => {
-        onNext(answer || {
-            value: data.answer,
-            right: false
-        })
-    };
 
 
     return (
-        <>
+        <WithAdditional data={data}>
             {data.layout === LAYOUTS.simple &&
-            <Simple question={data.question} answer={data.answer} handlerInput={handlerInput}/>}
-            {data.layout === LAYOUTS.manyInputs && <ManyInputs handler={handlerManyInputs} data={data.inputs}/>}
-            {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data} handler={handlerDragAndDrop}/>}
-            {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={handlerSortable}/>}
-            {data.layout === LAYOUTS.choice && <Choice data={data} handler={handlerChoice}/>}
-            {data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice &&
-            <NextButton onClick={handlerNext}>Dalje</NextButton>}
-        </>
+            <Simple solo={true} question={data.question} answer={data.answer} handlerInput={e => e}/>}
+            {data.layout === LAYOUTS.manyInputs && <ManyInputs handler={e => e} data={data}/>}
+            {data.layout === LAYOUTS.table && <Table handler={e => e} data={data}/>}
+            {data.layout === LAYOUTS.graph && <Graph handler={e => e} data={data}/>}
+            {data.layout === LAYOUTS.editCorrect && <EditCorrect handler={e => e} data={data}/>}
+            {data.layout === LAYOUTS.dragAndDrop && <DragAndDrop data={data} handler={e => e}/>}
+            {data.layout === LAYOUTS.sortable && <Sortable data={data} handler={e => e}/>}
+            {data.layout === LAYOUTS.choice && <Choice data={data} handler={e => e}/>}
+            {/*{data.layout !== LAYOUTS.speech && data.layout !== LAYOUTS.choice &&
+            <NextButton onClick={e => e}>Dalje</NextButton>}*/}
+        </WithAdditional>
     )
 };

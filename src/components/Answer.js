@@ -1,9 +1,9 @@
 import React, {useEffect, useState, useRef} from "react";
 import styled, {keyframes} from "styled-components";
-import ResponsiveCanvas from 'react-responsive-canvas';
+/*import ResponsiveCanvas from 'react-responsive-canvas';
 import useMount from "react-use/lib/useMount";
 import FontFaceObserver from 'fontfaceobserver';
-import useComponentSize from '@rehooks/component-size'
+import useComponentSize from '@rehooks/component-size'*/
 import {TextWithBorders} from "./TextWithBorders";
 
 

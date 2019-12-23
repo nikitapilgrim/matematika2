@@ -9,6 +9,7 @@ const stage = store => {
     stage: 0,
     final: false,
     modal: false,
+    start: false,
     preloader: {
       container: preloader,
       count: 0,
@@ -20,8 +21,14 @@ const stage = store => {
       order: 1,
       show: false,
     },
-    help: false
+    help: false,
+    tutorial: true,
   }));
+  store.on('tutorial', () => {
+    return ({start: true});
+  }); store.on('game/start', () => {
+    return ({start: true});
+  });
   store.on('modal/show', ({quiz}, state) => {
     return ({modal: true});
   });
@@ -33,7 +40,7 @@ const stage = store => {
   });
 
   store.on('preload/set', ({preloader}, state) => {
-    preloader.container.innerHTML = `${state}%`;
+    preloader.container.innerHTML = `${state}`;
     document.querySelector('#preload progress').value = state;
     if (state === 100) {
       document.querySelector('#preload').style.opacity = 0;
@@ -84,45 +91,6 @@ const stage = store => {
     return ({stage: stage + 1});
   });
 };
-/*
 
-const audio = store => {
-  store.on('@init', () => ({
-    audio: {
-      intro: false,
-      win: false,
-    },
-  }));
 
-  store.on('intro/on', ({audio}) => {
-    return ({audio: {...audio, intro: true}});
-  });
-  store.on('intro/off', ({audio}) => {
-    return ({audio: {...audio, intro: false}});
-  });
-};
-
-const progress = store => {
-  store.on('@init', () => ({progress: 0}));
-  store.on('setProgress', ({progress}, count) => {
-    return ({progress: count});
-  });
-};
-
-const articles = store => {
-  store.on('@init', () => ({articles: {}}));
-  store.on('articles/addMedal', ({articles}, data) => {
-    const [id, medal, percent] = data;
-    return {
-      articles: {
-        ...articles, [id]: {
-          medal: medal,
-          percent: percent
-        },
-      },
-    };
-  });
-};
-*/
-
-export const store = createStore([stage]);
+export const store = createStore([stage, /*persistState(['stage'])*/]);

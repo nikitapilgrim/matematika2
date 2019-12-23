@@ -23,7 +23,9 @@ const DroppedPlaceholder = styled.div`
     width: 4rem;
     height: 4rem;
     text-align: center;
-    border: dashed #fff 3px;
+    border: dashed #434f4c 3px;
+    border-radius: 0.5rem;
+    background: linear-gradient(rgba(247, 4, 0, .3), transparent);
 
     & > div {
       &:nth-child(1) {
@@ -126,6 +128,7 @@ export const DragAndDrop = React.memo(({data, handler}) => {
     }, [data]);
 
     const onDragEnd = (result) => {
+        console.log(result)
 
         if (!result.destination) {
             return;
@@ -175,7 +178,7 @@ export const DragAndDrop = React.memo(({data, handler}) => {
                 <Question>
                     {reactStringReplace(question, /{{([^}]+)}}/g, (match, i) => {
                         return (
-                            <Droppable key={i} droppableId={'result'}>
+                            <Droppable key={i} droppableId={'result'+i}>
                                 {provided => (
                                     <DroppedPlaceholder ref={provided.innerRef} {...provided.droppableProps}>
                                         {help && <HiddenWrapper help={help}>
